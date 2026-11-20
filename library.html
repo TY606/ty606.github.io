@@ -872,6 +872,434 @@ function sbBoot(){
  }).catch(function(){sbBadge('云端不可达，使用本地缓存')});
 }
 
+/* ===== EXT v2 ===== */
+/* ================= 扩展模块 v2：预约取书 / 荐购 / 罚金 / 书评 / 消息 / 日志 / 报表 ================= */
+let reserves=[
+ {id:'RS001',acc:'20240112',name:'陶云',book:'围城',code:'I246.5/Q456',date:'2024-11-22',status:'待取书',time:'2024-11-20 19:05'}
+];
+let suggests=[
+ {id:'SG001',acc:'20240131',name:'孙浩然',title:'深入理解计算机系统（第 3 版）',author:'Randal E. Bryant',reason:'课程需要，馆藏没有，建议采购 3 册。',status:'待审批',time:'2024-11-19 14:20'}
+];
+let fineRc=[
+ {id:'FN001',acc:'20210037',name:'周清越',book:'数据结构与算法分析',days:8,amount:1.6,status:'已缴纳',time:'2024-11-15 10:30'}
+];
+let reviews=[
+ {id:'RV001',book:'三体',acc:'20240112',name:'陶云',score:5,text:'想象力极强，读完对宇宙尺度有了新的认识。',time:'2024-10-12 21:40'},
+ {id:'RV002',book:'活着',acc:'20230008',name:'李承宇',score:5,text:'短小但厚重，适合反复阅读。',time:'2024-10-20 18:15'}
+];
+let libMsgs=[
+ {id:'LM001',to:'all',title:'图书馆延长开放至 22:30',body:'期末复习月（11.20–12.31），二层自习区与三层阅览室同步延长开放。',kind:'通知',time:'2024-11-20 08:00',read:false},
+ {id:'LM002',to:'20240112',title:'预约到书提醒：《围城》',body:'你预约的《围城》已到馆，请在 3 天内到二层服务台取书，逾期自动释放。',kind:'预约',time:'2024-11-21 09:10',read:false}
+];
+let libLogs=[
+ {id:'LL001',acc:'librarian',name:'周敏',action:'办理借出《数据库系统概论（第 5 版）》',time:'2024-11-21 09:30'},
+ {id:'LL002',acc:'20240112',name:'陶云',action:'预约《围城》，取书日期 2024-11-22',time:'2024-11-20 19:05'}
+];
+const FINE_RATE=0.2,FINE_CAP=20;
+
+function libNow(){return new Date().toLocaleString('zh-CN',{hour12:false})}
+function libUid(p){return p+String(Date.now()).slice(-6)}
+function libLog(a){libLogs.unshift({id:libUid('LL'),acc:(S.user||{}).acc||'-',name:(S.user||{}).name||'-',action:a,time:libNow()});if(libLogs.length>200)libLogs.length=200}
+function libMsg(to,title,body,kind){libMsgs.unshift({id:libUid('LM'),to:to,title:title,body:body,kind:kind||'通知',time:libNow(),read:false})}
+function myLibMsgs(){var me=S.user||{};return libMsgs.filter(function(m){return m.to==='all'||m.to===me.acc})}
+function libUnread(){return myLibMsgs().filter(function(m){return !m.read}).length}
+function libSub(items,cur,fn){
+ return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">'+items.map(function(it){
+  return '<button class="btn '+(it[0]===cur?'btn-p':'btn-g')+'" onclick="'+fn+'(\''+it[0]+'\')">'+it[1]+'</button>';
+ }).join('')+'</div>';
+}
+function goLibSub(k){S.sub=k;render()}
+function noneRow(n){return '<tr><td colspan="'+(n||6)+'" style="text-align:center;color:#948d82;padding:18px">暂无记录</td></tr>'}
+function fineOf(l){
+ var d=l.status==='逾期'?daysBetween(l.due,TODAY):0;
+ if(d<=0)return 0;
+ return Math.min(FINE_CAP,Math.round(d*100)*FINE_RATE/100);
+}
+function myFine(){var me=S.user||{};return loans.filter(function(l){return (l.owner||'20240112')===me.acc}).filter(function(l){return fineOf(l)>0})}
+
+/* ---------- 预约取书 ---------- */
+function viewReserve(){
+ var me=S.user||{};
+ var mine=reserves.filter(function(r){return r.acc===me.acc});
+ var avail=books.filter(function(b){return b.left>=0}).slice(0,12);
+ var pick=S.reserveBook||'';
+ var b=books.find(function(x){return x.title===pick});
+ return head('预约取书','到馆后保留 3 天，超期自动释放；已借完的图书也可预约','')+
+ '<div class="panel"><div class="hd"><h3>新建预约</h3><span class="chip c-ok">线上预约 · 到馆取书</span></div><div class="bd">'+
+ '<div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px">'+
+ '<label class="lf">图书<select id="rv-book" onchange="pickBook(this.value)">'+books.map(function(x){return '<option value="'+x.title+'" '+(x.title===pick?'selected':'')+'>'+x.title+'（在架 '+x.left+' / 共 '+x.total+'）</option>'}).join('')+'</select></label>'+
+ '<label class="lf">取书日期<input id="rv-date" type="date" value="2024-11-22"></label>'+
+ '<label class="lf">联系方式<input id="rv-tel" maxlength="11" value="'+(me.tel||'')+'" placeholder="手机号"></label>'+
+ '</div><div style="margin-top:16px;display:flex;gap:10px;align-items:center">'+
+ '<button class="btn btn-p" onclick="submitReserve()">提交预约</button>'+
+ '<span style="font-size:11.5px;color:#948d82">'+(b?('索书号 '+b.code+' · 馆藏 '+b.total+' 册 · 在架 '+b.left+' 册'):'')+'</span></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>我的预约</h3><span class="chip c-ok">'+mine.length+' 条</span></div>'+
+ '<table><thead><tr><th>图书</th><th>索书号</th><th>取书日期</th><th>提交时间</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (mine.map(function(r){var i=reserves.indexOf(r);
+  return '<tr><td>'+r.book+'</td><td>'+r.code+'</td><td>'+r.date+'</td><td>'+r.time+'</td>'+
+  '<td><span class="chip '+(r.status==='已借出'?'c-gray':r.status==='已到书'?'c-ok':r.status==='已取消'?'c-over':'c-warn')+'">'+r.status+'</span></td>'+
+  '<td style="text-align:right">'+(r.status==='待取书'?'<button class="btn btn-g" onclick="cancelReserve('+i+')">取消预约</button>':'—')+'</td></tr>';
+ }).join('')||noneRow())+'</tbody></table></div>';
+}
+function pickBook(t){S.reserveBook=t;render()}
+function submitReserve(){
+ var me=S.user||{},b=books.find(function(x){return x.title===document.getElementById('rv-book').value});
+ var d=document.getElementById('rv-date').value;
+ if(!b){toast('请选择图书');return}
+ if(!d){toast('请选择取书日期');return}
+ if(reserves.some(function(r){return r.acc===me.acc&&r.book===b.title&&r.status==='待取书'})){toast('你已预约《'+b.title+'》，请等待到馆通知');return}
+ reserves.unshift({id:libUid('RS'),acc:me.acc,name:me.name,book:b.title,code:b.code,date:d,status:'待取书',time:libNow()});
+ libMsg(me.acc,'预约成功：《'+b.title+'》','请在 '+d+' 起到二层服务台取书，到馆保留 3 天。','预约');
+ libLog('预约《'+b.title+'》，取书日期 '+d);
+ dbSave();toast('《'+b.title+'》预约成功，到馆后消息中心会提醒');render();
+}
+function cancelReserve(i){
+ var r=reserves[i];if(!r)return;
+ if(!confirm('确定取消《'+r.book+'》的预约？'))return;
+ r.status='已取消';libLog('取消预约《'+r.book+'》');dbSave();toast('预约已取消');render();
+}
+
+/* ---------- 荐购 ---------- */
+function viewSuggest(){
+ var me=S.user||{};
+ var mine=suggests.filter(function(s){return s.acc===me.acc});
+ return head('图书荐购','读者推荐 → 馆员审批 → 审批通过自动入藏并生成索书号','')+
+ '<div class="panel"><div class="hd"><h3>提交荐购</h3><span class="chip c-ok">写入 suggests 表</span></div><div class="bd">'+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+ '<label class="lf">书名<input id="sg-title" value="深入理解计算机系统（第 3 版）"></label>'+
+ '<label class="lf">作者 / 出版社<input id="sg-author" value="Randal E. Bryant / 机械工业出版社"></label>'+
+ '<label class="lf" style="grid-column:1/3">荐购理由<textarea id="sg-reason" rows="3">课程需要，馆藏没有对应版本，建议采购 3 册。</textarea></label>'+
+ '</div><div style="margin-top:16px"><button class="btn btn-p" onclick="submitSuggest()">提交荐购</button></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>我的荐购记录</h3><span class="chip c-ok">'+mine.length+' 条</span></div>'+
+ '<table><thead><tr><th>书名</th><th>作者</th><th>理由</th><th>状态</th><th>提交时间</th></tr></thead><tbody>'+
+ (mine.map(function(s){
+  return '<tr><td>'+s.title+'</td><td>'+s.author+'</td><td style="font-size:12px">'+s.reason+'</td>'+
+  '<td><span class="chip '+(s.status==='已采纳'?'c-ok':s.status==='已驳回'?'c-over':'c-warn')+'">'+s.status+'</span></td><td>'+s.time+'</td></tr>';
+ }).join('')||noneRow(5))+'</tbody></table></div>';
+}
+function submitSuggest(){
+ var me=S.user||{};
+ var t=(document.getElementById('sg-title').value||'').trim();
+ var a=(document.getElementById('sg-author').value||'').trim();
+ var r=(document.getElementById('sg-reason').value||'').trim();
+ if(!t){toast('请填写书名');return}
+ suggests.unshift({id:libUid('SG'),acc:me.acc,name:me.name,title:t,author:a,reason:r,status:'待审批',time:libNow()});
+ libLog('提交荐购《'+t+'》');
+ dbSave();toast('荐购已提交，馆员审批后会通知你');render();
+}
+
+/* ---------- 罚金 ---------- */
+function viewFine(){
+ var me=S.user||{};
+ var cur=myFine();
+ var paid=fineRc.filter(function(f){return f.acc===me.acc});
+ var total=cur.reduce(function(s,l){return s+fineOf(l)},0);
+ return head('我的罚金','逾期按每天 0.2 元计，单册上限 20 元；缴清后自动恢复借阅权限','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">待缴金额</div><div class="v" style="font-size:19px">¥'+total.toFixed(2)+'</div><div class="t">'+cur.length+' 册逾期</div></div>'+
+ '<div class="card"><div class="k">历史缴纳</div><div class="v" style="font-size:19px">¥'+paid.reduce(function(s,f){return s+f.amount},0).toFixed(2)+'</div><div class="t">'+paid.length+' 笔</div></div>'+
+ '<div class="card"><div class="k">计费规则</div><div class="v" style="font-size:15px">0.2 元 / 天</div><div class="t">上限 20 元 / 册</div></div>'+
+ '<div class="card"><div class="k">借阅权限</div><div class="v" style="font-size:15px">'+(cur.length?'受限':'正常')+'</div><div class="t">逾期即冻结</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>待缴明细</h3><span class="chip c-over">按当前日期实时计算</span></div>'+
+ '<table><thead><tr><th>图书</th><th>应还日期</th><th>逾期天数</th><th>金额</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (cur.map(function(l){var i=loans.indexOf(l);
+  return '<tr><td>'+l.book+'</td><td>'+l.due+'</td><td>'+daysBetween(l.due,TODAY)+' 天</td><td>¥'+fineOf(l).toFixed(2)+'</td>'+
+  '<td style="text-align:right"><button class="btn btn-p" onclick="payFine('+i+')">在线缴纳</button></td></tr>';
+ }).join('')||noneRow(5))+'</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>缴纳记录</h3></div>'+
+ '<table><thead><tr><th>图书</th><th>天数</th><th>金额</th><th>状态</th><th>时间</th></tr></thead><tbody>'+
+ (paid.map(function(f){return '<tr><td>'+f.book+'</td><td>'+f.days+' 天</td><td>¥'+f.amount.toFixed(2)+'</td><td><span class="chip c-ok">'+f.status+'</span></td><td>'+f.time+'</td></tr>'}).join('')||noneRow(5))+'</tbody></table></div>';
+}
+function payFine(i){
+ var l=loans[i],me=S.user||{};if(!l)return;
+ var amt=fineOf(l);
+ if(!confirm('确认缴纳《'+l.book+'》逾期罚金 ¥'+amt.toFixed(2)+'？'))return;
+ fineRc.unshift({id:libUid('FN'),acc:me.acc,name:me.name,book:l.book,days:daysBetween(l.due,TODAY),amount:amt,status:'已缴纳',time:libNow()});
+ l.finePaid=true;
+ var u=accounts.find(function(x){return x.acc===me.acc});if(u&&u.status==='冻结')u.status='正常';
+ libMsg(me.acc,'罚金缴纳成功','《'+l.book+'》¥'+amt.toFixed(2)+' 已缴纳，借阅权限已恢复。','罚金');
+ libLog('缴纳罚金 ¥'+amt.toFixed(2)+'（'+l.book+'）');
+ dbSave();toast('罚金已缴纳，借阅权限已恢复');render();
+}
+
+/* ---------- 书评 ---------- */
+function viewReview(){
+ var me=S.user||{};
+ var pick=S.revBook||books[0].title;
+ var list=reviews.filter(function(r){return r.book===pick});
+ var all=reviews.slice(0,10);
+ var avg=list.length?(list.reduce(function(s,r){return s+r.score},0)/list.length).toFixed(1):'—';
+ return head('图书书评','共享阅读体验，评分参与馆藏推荐排序','')+
+ '<div class="panel"><div class="hd"><h3>写书评</h3><span class="chip c-ok">'+books.length+' 种可选</span></div><div class="bd">'+
+ '<div style="display:grid;grid-template-columns:1.6fr .6fr;gap:14px">'+
+ '<label class="lf">图书<select id="rv2-book" onchange="pickRev(this.value)">'+books.map(function(b){return '<option '+(b.title===pick?'selected':'')+'>'+b.title+'</option>'}).join('')+'</select></label>'+
+ '<label class="lf">评分<select id="rv2-score"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label>'+
+ '<label class="lf" style="grid-column:1/3">书评内容<textarea id="rv2-text" rows="3">专业、易读、适合作为课程配套读物。</textarea></label>'+
+ '</div><div style="margin-top:16px"><button class="btn btn-p" onclick="submitReview()">发布书评</button></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>《'+pick+'》的书评</h3><span class="chip c-ok">平均 '+avg+' 分 · '+list.length+' 条</span></div>'+
+ '<table><thead><tr><th>读者</th><th>评分</th><th>内容</th><th>时间</th></tr></thead><tbody>'+
+ (list.map(function(r){return '<tr><td>'+r.name+'</td><td><span class="chip c-ok">'+r.score+' 分</span></td><td style="font-size:12.5px">'+r.text+'</td><td>'+r.time+'</td></tr>'}).join('')||noneRow(4))+'</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>最新书评</h3></div>'+
+ '<table><thead><tr><th>图书</th><th>读者</th><th>评分</th><th>内容</th></tr></thead><tbody>'+
+ all.map(function(r){return '<tr><td>'+r.book+'</td><td>'+r.name+'</td><td>'+r.score+' 分</td><td style="font-size:12.5px">'+r.text+'</td></tr>'}).join('')+'</tbody></table></div>';
+}
+function pickRev(t){S.revBook=t;render()}
+function submitReview(){
+ var me=S.user||{},b=document.getElementById('rv2-book').value;
+ var sc=Number(document.getElementById('rv2-score').value);
+ var tx=(document.getElementById('rv2-text').value||'').trim();
+ if(!tx){toast('请填写书评内容');return}
+ reviews.unshift({id:libUid('RV'),book:b,acc:me.acc,score:sc,text:tx,time:libNow()});
+ libLog('发布书评《'+b+'》'+sc+' 分');
+ dbSave();toast('书评已发布');render();
+}
+
+/* ---------- 消息中心 ---------- */
+function viewLibMsg(){
+ var list=myLibMsgs(),un=libUnread();
+ var kc={'通知':'c-ok','预约':'c-warn','罚金':'c-over','到书':'c-ok'};
+ return head('消息中心','共 '+list.length+' 条 · 未读 '+un+' 条','<button class="btn btn-g" onclick="libReadAll()">全部标为已读</button>')+
+ '<div class="panel"><div class="bd">'+
+ (list.map(function(m){var i=libMsgs.indexOf(m);
+  return '<div class="list-row" style="align-items:flex-start"><span class="chip '+(kc[m.kind]||'c-ok')+'" style="margin-top:2px">'+(m.kind||'通知')+'</span>'+
+  '<div class="t" style="font-weight:'+(m.read?'500':'700')+'">'+m.title+'<div class="d" style="line-height:1.8">'+m.body+'<br><span style="color:#a8a198">'+m.time+(m.read?' · 已读':' · 未读')+'</span></div></div>'+
+  '<div style="display:flex;gap:6px">'+(m.read?'':'<button class="btn btn-g" onclick="libReadOne('+i+')">标为已读</button>')+
+  '<button class="btn btn-g" onclick="libDelMsg('+i+')">删除</button></div></div>';
+ }).join('')||'<div class="list-row"><div class="t" style="color:#948d82">暂无消息</div></div>')+
+ '</div></div>';
+}
+function libReadOne(i){if(libMsgs[i])libMsgs[i].read=true;dbSave();render()}
+function libReadAll(){myLibMsgs().forEach(function(m){m.read=true});dbSave();toast('已全部标为已读');render()}
+function libDelMsg(i){if(!libMsgs[i])return;libMsgs.splice(i,1);dbSave();toast('消息已删除');render()}
+
+/* ---------- 馆员：预约处理 ---------- */
+function viewReserveDesk(){
+ var pending=reserves.filter(function(r){return r.status==='待取书'});
+ return head('预约处理','到书通知 / 取消 / 办理借出，状态实时同步到读者消息中心','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">待取书</div><div class="v">'+pending.length+'</div><div class="t">保留 3 天</div></div>'+
+ '<div class="card"><div class="k">已到书</div><div class="v">'+reserves.filter(function(r){return r.status==='已到书'}).length+'</div><div class="t">待读者到馆</div></div>'+
+ '<div class="card"><div class="k">已借出</div><div class="v">'+reserves.filter(function(r){return r.status==='已借出'}).length+'</div><div class="t">转借阅记录</div></div>'+
+ '<div class="card"><div class="k">已取消</div><div class="v">'+reserves.filter(function(r){return r.status==='已取消'}).length+'</div><div class="t">释放库存</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>预约队列</h3><span class="chip c-warn">'+pending.length+' 条待处理</span></div>'+
+ '<table><thead><tr><th>读者</th><th>图书</th><th>索书号</th><th>取书日期</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (reserves.map(function(r){var i=reserves.indexOf(r);
+  return '<tr><td>'+r.name+'<div style="font-size:11px;color:#948d82">'+r.acc+'</div></td><td>'+r.book+'</td><td>'+r.code+'</td><td>'+r.date+'</td>'+
+  '<td><span class="chip '+(r.status==='已借出'?'c-gray':r.status==='已到书'?'c-ok':r.status==='已取消'?'c-over':'c-warn')+'">'+r.status+'</span></td>'+
+  '<td style="text-align:right">'+(r.status==='待取书'?'<button class="btn btn-p" onclick="arrive('+i+')">到书通知</button> <button class="btn btn-g" onclick="dropReserve('+i+')">取消</button>':
+   r.status==='已到书'?'<button class="btn btn-p" onclick="lendReserve('+i+')">办理借出</button>':'—')+'</td></tr>';
+ }).join('')||noneRow())+'</tbody></table></div>';
+}
+function arrive(i){
+ var r=reserves[i];if(!r)return;
+ r.status='已到书';
+ libMsg(r.acc,'预约到书提醒：《'+r.book+'》','你预约的《'+r.book+'》已到馆，请在 3 天内到二层服务台取书。','到书');
+ libLog('发出到书通知：'+r.book+'（'+r.acc+'）');
+ dbSave();toast('已通知 '+r.name+' 到馆取书');render();
+}
+function dropReserve(i){
+ var r=reserves[i];if(!r)return;
+ r.status='已取消';
+ libMsg(r.acc,'预约已释放：《'+r.book+'》','因超期未取，预约已释放，可重新预约。','预约');
+ libLog('取消预约 '+r.book);
+ dbSave();toast('预约已取消');render();
+}
+function lendReserve(i){
+ var r=reserves[i];if(!r)return;
+ var b=books.find(function(x){return x.title===r.book});
+ r.status='已借出';
+ if(b&&b.left>0)b.left--;
+ loans.unshift({id:'L'+String(1000+loans.length),book:r.book,code:r.code,out:TODAY,due:'2024-12-21',status:'借阅中',owner:r.acc});
+ libMsg(r.acc,'借阅成功：《'+r.book+'》','应还日期 2024-12-21，可续借 1 次。','通知');
+ libLog('预约转借出：'+r.book+'（'+r.acc+'）');
+ dbSave();toast('已为 '+r.name+' 办理《'+r.book+'》借出');render();
+}
+
+/* ---------- 馆员：荐购审批 ---------- */
+function viewSuggestAudit(){
+ var pending=suggests.filter(function(s){return s.status==='待审批'});
+ return head('荐购审批','采纳后自动入藏（默认 3 册）并生成临时索书号','')+
+ '<div class="panel"><div class="hd"><h3>荐购队列</h3><span class="chip c-warn">'+pending.length+' 条待审批</span></div>'+
+ '<table><thead><tr><th>书名</th><th>作者</th><th>推荐人</th><th>理由</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (suggests.map(function(s){var i=suggests.indexOf(s);
+  return '<tr><td>'+s.title+'</td><td>'+s.author+'</td><td>'+s.name+'<div style="font-size:11px;color:#948d82">'+s.acc+'</div></td><td style="font-size:12px">'+s.reason+'</td>'+
+  '<td><span class="chip '+(s.status==='已采纳'?'c-ok':s.status==='已驳回'?'c-over':'c-warn')+'">'+s.status+'</span></td>'+
+  '<td style="text-align:right">'+(s.status==='待审批'?'<button class="btn btn-p" onclick="acceptSuggest('+i+')">采纳并入藏</button> <button class="btn btn-g" onclick="rejectSuggest('+i+')">驳回</button>':'—')+'</td></tr>';
+ }).join('')||noneRow())+'</tbody></table></div>';
+}
+function acceptSuggest(i){
+ var s=suggests[i];if(!s)return;
+ s.status='已采纳';
+ var cls='荐购入藏',code='ZZ'+String(books.length+1).padStart(3,'0')+'/T';
+ books.push({id:books.length+1,title:s.title,author:s.author,pub:'待补 · 2024',cls:cls,code:code,total:3,left:3,img:'',abs:'读者荐购入藏：'+(s.reason||'读者推荐')});
+ libMsg(s.acc,'荐购已采纳：《'+s.title+'》','图书馆已采购《'+s.title+'》3 册，索书号 '+code+'，可到馆借阅。','通知');
+ libLog('采纳荐购《'+s.title+'》并入藏');
+ dbSave();toast('《'+s.title+'》已入藏 3 册');render();
+}
+function rejectSuggest(i){
+ var s=suggests[i];if(!s)return;
+ s.status='已驳回';
+ libMsg(s.acc,'荐购未通过：《'+s.title+'》','当前采购计划已排满，下季度会优先评估该荐购。','通知');
+ libLog('驳回荐购《'+s.title+'》');
+ dbSave();toast('已驳回该荐购');render();
+}
+
+/* ---------- 馆员：罚金管理 ---------- */
+function viewFineDesk(){
+ var live=[];
+ loans.forEach(function(l){var f=fineOf(l);if(f>0&&!l.finePaid)live.push({l:l,amt:f})});
+ var sum=live.reduce(function(s,o){return s+o.amt},0);
+ return head('罚金管理','逾期实时计费，可减免或标记已缴，记录全部写入日志','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">待收金额</div><div class="v" style="font-size:19px">¥'+sum.toFixed(2)+'</div><div class="t">'+live.length+' 册逾期</div></div>'+
+ '<div class="card"><div class="k">已收金额</div><div class="v" style="font-size:19px">¥'+fineRc.reduce(function(s,f){return s+f.amount},0).toFixed(2)+'</div><div class="t">'+fineRc.length+' 笔</div></div>'+
+ '<div class="card"><div class="k">计费标准</div><div class="v" style="font-size:15px">0.2 元 / 天</div><div class="t">上限 20 元 / 册</div></div>'+
+ '<div class="card"><div class="k">冻结读者</div><div class="v">'+accounts.filter(function(u){return u.status==='冻结'}).length+'</div><div class="t">缴清后自动解冻</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>逾期明细</h3><span class="chip c-over">实时计算</span></div>'+
+ '<table><thead><tr><th>读者</th><th>图书</th><th>应还</th><th>逾期</th><th>金额</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (live.map(function(o){var i=loans.indexOf(o.l);
+  var u=accounts.find(function(x){return x.acc===(o.l.owner||'20240112')});
+  return '<tr><td>'+(u?u.name:'—')+'</td><td>'+o.l.book+'</td><td>'+o.l.due+'</td><td>'+daysBetween(o.l.due,TODAY)+' 天</td><td>¥'+o.amt.toFixed(2)+'</td>'+
+  '<td style="text-align:right"><button class="btn btn-p" onclick="waiveFine('+i+')">减免</button> <button class="btn btn-g" onclick="markPaid('+i+')">标记已缴</button></td></tr>';
+ }).join('')||noneRow())+'</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>收缴记录</h3></div>'+
+ '<table><thead><tr><th>读者</th><th>图书</th><th>天数</th><th>金额</th><th>时间</th></tr></thead><tbody>'+
+ (fineRc.map(function(f){return '<tr><td>'+f.name+'</td><td>'+f.book+'</td><td>'+f.days+'</td><td>¥'+f.amount.toFixed(2)+'</td><td>'+f.time+'</td></tr>'}).join('')||noneRow(5))+'</tbody></table></div>';
+}
+function waiveFine(i){
+ var l=loans[i];if(!l)return;
+ if(!confirm('确定对该读者减免罚金？'))return;
+ l.finePaid=true;
+ libLog('减免罚金：'+l.book);
+ dbSave();toast('已减免该册罚金，读者权限恢复');render();
+}
+function markPaid(i){
+ var l=loans[i];if(!l)return;
+ var amt=fineOf(l),u=accounts.find(function(x){return x.acc===(l.owner||'20240112')});
+ fineRc.unshift({id:libUid('FN'),acc:l.owner||'20240112',name:u?u.name:'读者',book:l.book,days:daysBetween(l.due,TODAY),amount:amt,status:'已缴纳',time:libNow()});
+ l.finePaid=true;if(u&&u.status==='冻结')u.status='正常';
+ libLog('窗口收缴罚金 ¥'+amt.toFixed(2)+'（'+l.book+'）');
+ dbSave();toast('已登记缴纳 ¥'+amt.toFixed(2));render();
+}
+
+/* ---------- 馆员：日志 / 报表 ---------- */
+function viewLibLogs(){
+ return head('操作日志','记录借还、预约、荐购、罚金等全部写操作','<button class="btn btn-g" onclick="libExport(\'logs\')">导出日志 CSV</button>')+
+ '<div class="panel"><div class="hd"><h3>最近操作</h3><span class="chip c-ok">'+libLogs.length+' 条</span></div>'+
+ '<table><thead><tr><th>时间</th><th>操作人</th><th>账号</th><th>内容</th></tr></thead><tbody>'+
+ (libLogs.slice(0,60).map(function(l){return '<tr><td style="white-space:nowrap">'+l.time+'</td><td>'+l.name+'</td><td>'+l.acc+'</td><td>'+l.action+'</td></tr>'}).join('')||noneRow(4))+'</tbody></table></div>';
+}
+function viewLibReport(){
+ var tot=books.reduce(function(s,b){return s+b.total},0);
+ var act=loans.filter(function(l){return l.status!=='已归还'}).length;
+ return head('馆务报表','导出 CSV 可直接作为实训报告的数据附录','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">馆藏总册</div><div class="v">'+tot+'</div><div class="t">'+books.length+' 种</div></div>'+
+ '<div class="card"><div class="k">在借册数</div><div class="v">'+act+'</div><div class="t">含逾期</div></div>'+
+ '<div class="card"><div class="k">预约单</div><div class="v">'+reserves.length+'</div><div class="t">待取 '+reserves.filter(function(r){return r.status==='待取书'}).length+'</div></div>'+
+ '<div class="card"><div class="k">荐购单</div><div class="v">'+suggests.length+'</div><div class="t">待审 '+suggests.filter(function(s){return s.status==='待审批'}).length+'</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>导出中心</h3><span class="chip c-ok">UTF-8 CSV</span></div><div class="bd" style="display:flex;gap:10px;flex-wrap:wrap">'+
+ '<button class="btn btn-p" onclick="libExport(\'books\')">馆藏清单</button>'+
+ '<button class="btn btn-p" onclick="libExport(\'loans\')">借阅记录</button>'+
+ '<button class="btn btn-p" onclick="libExport(\'reserves\')">预约单</button>'+
+ '<button class="btn btn-p" onclick="libExport(\'suggests\')">荐购单</button>'+
+ '<button class="btn btn-g" onclick="libExport(\'fines\')">罚金记录</button>'+
+ '<button class="btn btn-g" onclick="libExport(\'logs\')">操作日志</button></div></div>'+
+ '<div class="panel"><div class="hd"><h3>分类馆藏分布</h3></div>'+
+ '<table><thead><tr><th>分类</th><th>种数</th><th>册数</th><th>在架</th></tr></thead><tbody>'+
+ ['计算机','文学','历史','荐购入藏'].map(function(c){
+  var bs=books.filter(function(b){return b.cls===c});
+  return '<tr><td>'+c+'</td><td>'+bs.length+'</td><td>'+bs.reduce(function(s,b){return s+b.total},0)+'</td><td>'+bs.reduce(function(s,b){return s+b.left},0)+'</td></tr>';
+ }).join('')+'</tbody></table></div>';
+}
+function libExport(type){
+ var rows=[],name='export.csv';
+ if(type==='books'){rows=[['书名','作者','出版','分类','索书号','总册','在架']].concat(books.map(function(b){return [b.title,b.author,b.pub,b.cls,b.code,b.total,b.left]}));name='馆藏清单.csv'}
+ else if(type==='loans'){rows=[['条码','书名','借出','应还','状态','读者']].concat(loans.map(function(l){return [l.code,l.book,l.out,l.due,l.status,l.owner||'20240112']}));name='借阅记录.csv'}
+ else if(type==='reserves'){rows=[['读者','账号','图书','取书日期','状态','时间']].concat(reserves.map(function(r){return [r.name,r.acc,r.book,r.date,r.status,r.time]}));name='预约单.csv'}
+ else if(type==='suggests'){rows=[['书名','作者','推荐人','理由','状态']].concat(suggests.map(function(s){return [s.title,s.author,s.name,s.reason,s.status]}));name='荐购单.csv'}
+ else if(type==='fines'){rows=[['读者','图书','天数','金额','状态','时间']].concat(fineRc.map(function(f){return [f.name,f.book,f.days,f.amount,f.status,f.time]}));name='罚金记录.csv'}
+ else {rows=[['时间','操作人','账号','操作']].concat(libLogs.map(function(l){return [l.time,l.name,l.acc,l.action]}));name='操作日志.csv'}
+ var csv='\ufeff'+rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\r\n');
+ var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+ var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
+ toast('已导出 '+name+'（'+rows.length+' 行）');
+}
+
+/* ---------- 读者服务 / 馆务中心 ---------- */
+function viewService(){
+ var sub=S.sub||'reserve';
+ return head('读者服务','预约取书 · 图书荐购 · 罚金缴纳 · 图书书评','')+
+ libSub([['reserve','预约取书'],['suggest','图书荐购'],['fine','我的罚金'],['review','图书书评']],sub,'goLibSub')+
+ (sub==='suggest'?viewSuggest():sub==='fine'?viewFine():sub==='review'?viewReview():viewReserve());
+}
+function viewLibOps(){
+ var sub=S.sub||'reserve';
+ return head('馆务中心','预约处理 · 荐购审批 · 罚金管理 · 操作日志 · 馆务报表','')+
+ libSub([['reserve','预约处理'],['suggest','荐购审批'],['fine','罚金管理'],['logs','操作日志'],['report','馆务报表']],sub,'goLibSub')+
+ (sub==='suggest'?viewSuggestAudit():sub==='fine'?viewFineDesk():sub==='logs'?viewLibLogs():sub==='report'?viewLibReport():viewReserveDesk());
+}
+
+/* ---------- 挂载导航 ---------- */
+(function(){
+ function add(role,item,afterKey){
+  if(TABS[role].some(function(t){return t[0]===item[0]}))return;
+  var idx=TABS[role].findIndex(function(t){return t[0]===afterKey});
+  TABS[role].splice(idx<0?TABS[role].length:idx+1,0,item);
+ }
+ add('reader',['service','读者服务'],'history');
+ add('reader',['msg','消息中心'],'service');
+ add('clerk',['libops','馆务中心'],'stat');
+ add('clerk',['msg','消息中心'],'libops');
+})();
+
+/* ---------- 覆盖渲染与持久化 ---------- */
+function render(){
+ var map={search:vSearch,mine:vMine,history:vHistory,rule:vRule,desk:vDesk,stock:vStock,
+  over:vOver,stat:vStat,cat:vCat,readers:vReaders,profile:vProfile,
+  service:viewService,libops:viewLibOps,msg:viewLibMsg,reserve:viewReserve,libreport:viewLibReport};
+ document.getElementById('content').innerHTML=(map[S.tab]||vSearch)();
+ document.querySelectorAll('.bars .b').forEach(function(b){var h=parseInt(b.dataset.h,10);b.style.height='0';b.style.transition='height .7s ease';requestAnimationFrame(function(){b.style.height=(h*0.85)+'%'})});
+ var tb=document.querySelectorAll('#tabs button');
+ for(var i=0;i<tb.length;i++){if(tb[i].dataset.t==='msg'&&libUnread()>0){tb[i].textContent='消息中心 '+libUnread()}}
+}
+function libState(){return {books:books,loans:loans,history:history,users:accounts,
+ reserves:reserves,suggests:suggests,fineRc:fineRc,reviews:reviews,libMsgs:libMsgs,libLogs:libLogs}}
+function dbSave(){
+ try{localStorage.setItem(DBK,JSON.stringify({books:books,loans:loans,history:history,users:accounts,
+  reserves:reserves,suggests:suggests,fineRc:fineRc,reviews:reviews,libMsgs:libMsgs,libLogs:libLogs,ts:Date.now()}))}catch(e){}
+ flashLib();sbPush();
+}
+function sbApply(d){
+ if(!d)return false;
+ if(d.books&&d.books.length){books.length=0;d.books.forEach(function(b){books.push(b)})}
+ if(d.loans){loans.length=0;d.loans.forEach(function(l){loans.push(l)})}
+ if(d.history){history.length=0;d.history.forEach(function(h){history.push(h)})}
+ if(d.users&&d.users.length){accounts.length=0;d.users.forEach(function(u){accounts.push(u)})}
+ if(d.reserves){reserves.length=0;d.reserves.forEach(function(x){reserves.push(x)})}
+ if(d.suggests){suggests.length=0;d.suggests.forEach(function(x){suggests.push(x)})}
+ if(d.fineRc){fineRc.length=0;d.fineRc.forEach(function(x){fineRc.push(x)})}
+ if(d.reviews){reviews.length=0;d.reviews.forEach(function(x){reviews.push(x)})}
+ if(d.libMsgs){libMsgs.length=0;d.libMsgs.forEach(function(x){libMsgs.push(x)})}
+ if(d.libLogs){libLogs.length=0;d.libLogs.forEach(function(x){libLogs.push(x)})}
+ return true;
+}
+(function libLocalExtra(){
+ try{
+  var r=JSON.parse(localStorage.getItem(DBK)||'null');if(!r)return;
+  if(r.reserves){reserves.length=0;r.reserves.forEach(function(x){reserves.push(x)})}
+  if(r.suggests){suggests.length=0;r.suggests.forEach(function(x){suggests.push(x)})}
+  if(r.fineRc){fineRc.length=0;r.fineRc.forEach(function(x){fineRc.push(x)})}
+  if(r.reviews){reviews.length=0;r.reviews.forEach(function(x){reviews.push(x)})}
+  if(r.libMsgs){libMsgs.length=0;r.libMsgs.forEach(function(x){libMsgs.push(x)})}
+  if(r.libLogs){libLogs.length=0;r.libLogs.forEach(function(x){libLogs.push(x)})}
+ }catch(e){}
+})();
+
 sbBoot();
 
 /* 隐藏托管页注入的品牌角标文案 */
