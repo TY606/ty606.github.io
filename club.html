@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社团云 ClubHub · 校园学生社团管理系统</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6fa;color:#1d2a3d;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+/* ---------- 登录 ---------- */
+/* ---------- 登录 ---------- */
+#login{min-height:100vh;display:grid;grid-template-columns:1.02fr .98fr;background:#0d1c2e}
+.lg-left{position:relative;color:#fff;padding:54px 52px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.lg-left .bgimg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.34}
+.lg-left .veil{position:absolute;inset:0;background:linear-gradient(125deg,rgba(10,22,37,.94) 0%,rgba(10,22,37,.62) 52%,rgba(17,40,66,.9) 100%)}
+.lg-left .inner{position:relative;z-index:2;max-width:430px}
+.logo-row{display:flex;align-items:center;gap:12px}
+.logo-row .mk{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#4c8dff,#2d6be0);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.logo-row h1{font-size:24px;letter-spacing:1px}
+.logo-row .sub{font-size:10.5px;color:#8fa6c4;letter-spacing:2.6px;margin-top:3px}
+.lg-left .tag{font-size:14px;color:#cfdcec;line-height:2;margin:28px 0 22px}
+.feat{list-style:none;font-size:12.5px;color:#a9bdd6;line-height:2.35}
+.feat li{display:flex;gap:9px}
+.feat li b{color:#6aa1ff;font-weight:600}
+.lg-left .meta{margin-top:36px;font-size:11px;color:#7f95b5;line-height:1.95;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.lg-right{background:#fff;display:flex;align-items:center;justify-content:center;padding:34px 28px}
+.form-card{width:400px;max-width:100%}
+.switch{display:flex;gap:6px;background:#f1f5fb;border-radius:10px;padding:4px;margin-bottom:24px}
+.switch button{flex:1;border:none;background:none;font-family:inherit;font-size:13px;padding:9px;border-radius:8px;color:#66768c;cursor:pointer}
+.switch button.on{background:#fff;color:#2d6be0;font-weight:600;box-shadow:0 2px 8px rgba(45,107,224,.14)}
+.switch button.off{background:transparent}
+.fld{display:block;margin-bottom:15px}
+.fld>span{font-size:12px;color:#5f7089;display:block;margin-bottom:6px}
+.fld input{width:100%;padding:11px 13px;border:1px solid #dae3f1;border-radius:9px;font-family:inherit;font-size:13.5px;color:#1d2a3d;outline:none;transition:.15s;background:#fbfdff}
+.fld input:focus{border-color:#2d6be0;background:#fff;box-shadow:0 0 0 3px rgba(45,107,224,.1)}
+.fld input.bad{border-color:#e08585;background:#fffafa}
+.err{display:block;font-size:11px;color:#cf4a4a;font-style:normal;line-height:1.6;margin-top:5px;min-height:0}
+.pwd{position:relative}
+.pwd i{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11.5px;color:#8496ad;cursor:pointer;font-style:normal}
+.cap{display:flex;gap:9px;align-items:center}
+.cap input{flex:1}
+.cap canvas{border:1px solid #dae3f1;border-radius:8px;cursor:pointer;background:#f7faff;flex:none}
+.row{display:flex;align-items:center;justify-content:space-between;margin:2px 0 18px;font-size:12px;color:#8496ad}
+.chk{display:flex;align-items:center;gap:6px;cursor:pointer}
+.chk input{width:14px;height:14px;accent-color:#2d6be0}
+.lnk{color:#2d6be0;cursor:pointer}
+.submit{width:100%;border:none;border-radius:10px;padding:12px;font-family:inherit;font-size:14px;font-weight:600;letter-spacing:2px;background:linear-gradient(135deg,#3f83f0,#2a63d4);color:#fff;cursor:pointer;transition:.18s}
+.submit:hover{box-shadow:0 10px 24px rgba(45,107,224,.28)}
+.submit:disabled{opacity:.72;cursor:progress;box-shadow:none}
+.tip{margin-top:16px;font-size:10.5px;color:#9aa9bd;line-height:1.9;background:#f7faff;border:1px dashed #dae3f1;border-radius:8px;padding:9px 11px}
+@media(max-width:920px){#login{grid-template-columns:1fr}.lg-left{display:none}.lg-right{padding:28px 18px}}
+.app{display:none}
+.topbar{background:#fff;border-bottom:1px solid #e6ecf5;position:sticky;top:0;z-index:30}
+.topbar .inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;height:64px;gap:22px;padding:0 24px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px}
+.brand .m{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#4c8dff,#2d6be0);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.tabs{display:flex;gap:4px;margin-left:8px}
+.tabs button{border:none;background:none;font-family:inherit;font-size:13px;color:#66768c;padding:8px 14px;border-radius:8px;cursor:pointer}
+.tabs button.on{background:#eaf2ff;color:#2d6be0;font-weight:600}
+.topbar .sp{flex:1}
+.who{display:flex;align-items:center;gap:10px;font-size:12px;color:#5a6a80}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4c8dff,#7bb0ff);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.badge{font-size:10.5px;padding:3px 9px;border-radius:20px;background:#eaf2ff;color:#2d6be0}
+.logout{font-size:11.5px;color:#8496ad;cursor:pointer;margin-left:6px}
+.wrap{max-width:1280px;margin:0 auto;padding:26px 24px 60px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+.page-head h2{font-size:20px;font-weight:700}
+.page-head p{font-size:12px;color:#7c8b9f;margin-top:5px}
+.btn{border:none;font-family:inherit;font-size:12.5px;padding:8px 15px;border-radius:8px;cursor:pointer;transition:.15s}
+.btn-p{background:#2d6be0;color:#fff}.btn-p:hover{background:#2159c4}
+.btn-g{background:#fff;border:1px solid #dae3f1;color:#5f7089}.btn-g:hover{border-color:#2d6be0;color:#2d6be0}
+.btn-s{background:#eaf2ff;color:#2d6be0}
+.btn-r{background:#fdeaea;color:#cf4a4a}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.card{background:#fff;border:1px solid #e6ecf5;border-radius:13px;padding:16px 18px}
+.card .k{font-size:11.5px;color:#8496ad}
+.card .v{font-size:25px;font-weight:700;margin:7px 0 3px}
+.card .t{font-size:11px;color:#9aa9bd}
+.panel{background:#fff;border:1px solid #e6ecf5;border-radius:14px;overflow:hidden;margin-bottom:18px}
+.panel .hd{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;border-bottom:1px solid #eff3fa}
+.panel .hd h3{font-size:14px;font-weight:700}
+.panel .bd{padding:16px 20px}
+.chip{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.c-ok{background:#e8f7f0;color:#12986a}.c-wait{background:#fff5e6;color:#cf7d13}.c-no{background:#fdeaea;color:#cb4a4a}.c-blue{background:#eaf2ff;color:#2d6be0}
+/* ---------- 社团广场 ---------- */
+.banner{display:grid;grid-template-columns:1.35fr 1fr;border-radius:16px;overflow:hidden;background:#0f2136;color:#fff;margin-bottom:20px}
+.banner .txt{padding:34px 36px}
+.banner h3{font-size:22px;letter-spacing:.5px;line-height:1.5}
+.banner p{font-size:12.5px;color:#a9bdd6;margin:12px 0 18px;line-height:1.9}
+.banner img{width:100%;height:100%;object-fit:cover;min-height:230px}
+.club-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.club{background:#fff;border:1px solid #e6ecf5;border-radius:14px;overflow:hidden;transition:.2s;cursor:pointer}
+.club:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(29,42,61,.1)}
+.club img{width:100%;height:132px;object-fit:cover}
+.club .info{padding:14px 16px 16px}
+.club h4{font-size:14px;font-weight:700}
+.club .meta{display:flex;align-items:center;gap:8px;margin:7px 0 9px;font-size:11.5px;color:#8496ad}
+.club .intro{font-size:11.5px;color:#7c8b9f;line-height:1.75;height:40px;overflow:hidden}
+.club .act{margin-top:12px;display:flex;gap:8px}
+/* ---------- 表格 ---------- */
+table{width:100%;border-collapse:collapse}
+th{font-size:11.5px;color:#8496ad;font-weight:600;text-align:left;padding:11px 18px;background:#f7faff}
+td{font-size:12.5px;padding:13px 18px;border-top:1px solid #f1f5fb;color:#2a3a4e}
+tr:hover td{background:#fbfdff}
+.pager{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-top:1px solid #f1f5fb;font-size:12px;color:#8496ad}
+.pager button{border:1px solid #dae3f1;background:#fff;border-radius:7px;padding:5px 11px;font-size:12px;font-family:inherit;color:#5f7089;cursor:pointer;margin-left:6px}
+.pager button:disabled{color:#c3ccd9;cursor:not-allowed}
+/* 图表 */
+.bars{display:flex;align-items:flex-end;gap:22px;height:190px;padding:18px 4px 0}
+.bars .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end}
+.bars .b{width:100%;max-width:44px;background:linear-gradient(180deg,#4c8dff,#8bb4ff);border-radius:7px 7px 0 0}
+.bars .n{font-size:11px;color:#5b6c85;font-weight:600}
+.bars .lb{font-size:11px;color:#8b9bb2}
+.split{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+.donut{display:flex;gap:20px;align-items:center;padding:8px 0}
+.donut .ring{width:130px;height:130px;border-radius:50%;background:conic-gradient(#2d6be0 0 52%,#25b98a 52% 78%,#f0a13c 78% 92%,#8b6bf0 92% 100%)}
+.lg{font-size:11.5px;color:#66768c;line-height:2.1}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px}
+/* 详情弹层 */
+.modal{position:fixed;inset:0;background:rgba(15,33,54,.5);display:none;align-items:center;justify-content:center;z-index:60;padding:20px}
+.modal.on{display:flex}
+.sheet{background:#fff;border-radius:16px;width:640px;max-width:94vw;max-height:86vh;overflow:auto}
+.sheet .top{height:150px;position:relative}
+.sheet .top img{width:100%;height:100%;object-fit:cover}
+.sheet .top .close{position:absolute;right:14px;top:12px;background:rgba(0,0,0,.45);color:#fff;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px}
+.sheet .body{padding:22px 24px}
+.sheet h3{font-size:17px}
+.sheet .tags{margin:9px 0 14px;display:flex;gap:8px;flex-wrap:wrap}
+.sheet p{font-size:12.5px;color:#5f7089;line-height:1.95}
+.sheet .rows{margin:16px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#66768c}
+.sheet .rows b{color:#1d2a3d}
+/* toast */
+.toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,16px);background:#132a45;color:#fff;font-size:12.5px;padding:11px 20px;border-radius:10px;opacity:0;transition:.24s;pointer-events:none;z-index:80}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.hide{display:none!important}
+.list-row{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid #f1f5fb;font-size:12.5px;align-items:center}
+.list-row:last-child{border:none}
+.list-row .t{flex:1}
+.list-row .d{font-size:11px;color:#94a3b8}
+@media(max-width:900px){.roles,.club-grid,.cards,.split,.banner{grid-template-columns:1fr}.tabs{overflow:auto}}
+label.lf{font-size:12px;color:#5f7089;display:block}label.lf input,label.lf select,label.lf textarea{width:100%;margin-top:6px;padding:10px 12px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:13px;outline:none}
+</style>
+</head>
+<body>
+
+<!-- ================= 登录 ================= -->
+<!-- ================= 登录 ================= -->
+<section id="login">
+  <div class="lg-left">
+    <div class="bgimg" style="background-image:url('https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/OOQibvV3dop9ebxKv6zcAH4Gnwb')"></div>
+    <div class="veil"></div>
+    <div class="inner">
+      <div class="logo-row"><div class="mk">云</div><div><h1>社团云 ClubHub</h1><div class="sub">CAMPUS CLUB MANAGEMENT SYSTEM</div></div></div>
+      <p class="tag">学生社团一体化管理平台<br>备案 · 活动审批 · 成员档案 · 签到统计</p>
+      <ul class="feat">
+        <li><b>01</b><span>全校 42 个社团在线备案，年审材料一键提交</span></li>
+        <li><b>02</b><span>活动申报 → 校团委 → 场地，三级审批流转</span></li>
+        <li><b>03</b><span>签到数据实时汇总，自动换算第二课堂时长</span></li>
+      </ul>
+      <div class="meta">西南交通大学希望学院 · 校团委<br>v1.4.2　SpringBoot 2.7 / MyBatis / MySQL 8.0</div>
+    </div>
+  </div>
+  <div class="lg-right"><div class="form-card">
+    <div class="switch">
+      <button id="swLogin" class="on" onclick="switchTab('login')">账号登录</button>
+      <button id="swReg" onclick="switchTab('reg')">注册账号</button>
+    </div>
+    <form id="loginForm" onsubmit="return doLogin(event)">
+      <label class="fld"><span>账号</span>
+        <input id="acc" autocomplete="username" placeholder="学号 / 管理员账号">
+        <em class="err" id="e-acc"></em>
+      </label>
+      <label class="fld"><span>密码</span>
+        <div class="pwd"><input id="pwd" type="password" autocomplete="current-password" placeholder="请输入登录密码"><i id="eye" onclick="togglePwd()">显示</i></div>
+        <em class="err" id="e-pwd"></em>
+      </label>
+      <label class="fld"><span>验证码</span>
+        <div class="cap"><input id="cap" maxlength="4" placeholder="输入右侧 4 位字符"><canvas id="capImg" width="106" height="38" onclick="drawCap()"></canvas></div>
+        <em class="err" id="e-cap"></em>
+      </label>
+      <div class="row"><label class="chk"><input type="checkbox" id="rem" checked>记住账号</label><span class="lnk" onclick="toast('请携学生证至校团委 3F 重置密码')">忘记密码？</span></div>
+      <button class="submit" id="btnLogin" type="submit">登 录</button>
+      <div class="tip">演示账号　学生 20240112 / 123456　·　负责人 20230008 / 123456　·　管理员 admin / admin123</div>
+    </form>
+    <form id="regForm" class="hide" onsubmit="return doRegister(event)">
+      <label class="fld"><span>学号</span><input id="r-acc" placeholder="8–10 位学号"><em class="err" id="e-racc"></em></label>
+      <label class="fld"><span>姓名</span><input id="r-name" placeholder="请输入真实姓名"><em class="err" id="e-rname"></em></label>
+      <label class="fld"><span>院系</span><input id="r-dept" placeholder="如 计算机科学与技术"><em class="err" id="e-rdept"></em></label>
+      <label class="fld"><span>手机号</span><input id="r-tel" maxlength="11" placeholder="用于接收活动通知"><em class="err" id="e-rtel"></em></label>
+      <label class="fld"><span>设置密码</span><input id="r-pwd" type="password" placeholder="6–16 位字母或数字"><em class="err" id="e-rpwd"></em></label>
+      <label class="fld"><span>确认密码</span><input id="r-pwd2" type="password" placeholder="再次输入密码"><em class="err" id="e-rpwd2"></em></label>
+      <label class="fld"><span>验证码</span><div class="cap"><input id="r-cap" maxlength="4" placeholder="输入右侧 4 位字符"><canvas id="capImg2" width="106" height="38" onclick="drawCap2()"></canvas></div><em class="err" id="e-rcap"></em></label>
+      <button class="submit" type="submit" style="margin-top:6px">注 册 并 登 录</button>
+      <div class="tip">注册信息将提交至校团委审核，审核通过后自动开通社团报名与活动签到权限。</div>
+    </form>
+  </div></div>
+</section>
+
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="inner">
+      <div class="brand"><div class="m">云</div>社团云</div>
+      <div class="tabs" id="tabs"></div>
+      <div class="sp"></div>
+      <div class="who"><span id="roleName" onclick="openProfile()" style="cursor:pointer" title="个人中心">学生</span><span class="av" id="avName" onclick="openProfile()" title="个人中心" style="cursor:pointer">陶</span><span class="badge" id="roleBadge">学生</span><span class="logout" onclick="logout()">退出</span></div>
+    </div>
+  </div>
+  <div class="wrap" id="content"></div>
+</div>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========== 数据 ========== */
+const IMG={
+ zhaoxin:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/OOQibvV3dop9ebxKv6zcAH4Gnwb',
+ dance:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CPdpbWnN0oHpf1xXLecc2U7Pn2d',
+ ball:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/H4fJbwqtOo9SvvxcqkAc4txOnub',
+ volunteer:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/XCfAbSQPIoCERRxkfH6cSXuXnLg',
+ guitar:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/E0Rxb7QSooLKQfxmO2acGNEAnDb',
+ lib:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/NizrbFIrFo2dGVxHaUbcPjtgnuf'
+};
+const clubs=[
+ {id:1,name:'开源技术协会',cat:'学术科技',members:126,leader:'李承宇',img:IMG.zhaoxin,status:'运行中',founded:'2016-09',intro:'面向全校的技术交流社团，每周固定技术分享与开源项目共建，覆盖前端、后端与嵌入式方向。'},
+ {id:2,name:'街舞社',cat:'文化艺术',members:98,leader:'周清越',img:IMG.dance,status:'运行中',founded:'2013-10',intro:'校内外演出经验丰富，常规开设 Hiphop、Jazz、Breaking 三个队训班，每学期举办专场晚会。'},
+ {id:3,name:'篮球联盟',cat:'体育竞技',members:215,leader:'王展鹏',img:IMG.ball,status:'运行中',founded:'2011-04',intro:'承办院际篮球联赛与新生杯，分设男队、女队与裁判组，负责赛程编排与场地协调。'},
+ {id:4,name:'青年志愿者协会',cat:'公益实践',members:342,leader:'陈艺涵',img:IMG.volunteer,status:'运行中',founded:'2009-09',intro:'长期开展社区支教、敬老服务与校园公益市集，志愿时长统一录入第二课堂系统。'},
+ {id:5,name:'吉他社',cat:'文化艺术',members:156,leader:'刘一诺',img:IMG.guitar,status:'运行中',founded:'2010-11',intro:'以民谣与乐队为主要方向，每学期举办草地音乐节，为校内乐队提供排练场地与设备。'},
+ {id:6,name:'读书会',cat:'学术科技',members:74,leader:'赵梓涵',img:IMG.lib,status:'年审待审',founded:'2019-03',intro:'每月共读一本书并组织线下分享，与图书馆合作开展书展与荐书活动。'}
+];
+let events=[
+ {id:'E01',name:'开源之夜 · 技术分享会',club:'开源技术协会',date:'2024-11-26 19:00',place:'图书馆报告厅',people:180,status:'待审批'},
+ {id:'E02',name:'冬季校园义卖',club:'青年志愿者协会',date:'2024-11-28 09:00',place:'中心广场',people:420,status:'待审批'},
+ {id:'E03',name:'话剧《雷雨》排练开放日',club:'街舞社',date:'2024-11-30 14:30',place:'大学生活动中心',people:120,status:'待审批'},
+ {id:'E04',name:'新生杯篮球联赛决赛',club:'篮球联盟',date:'2024-12-05 16:00',place:'东区篮球场',people:600,status:'已通过'},
+ {id:'E05',name:'草地音乐节',club:'吉他社',date:'2024-11-15 19:30',place:'第二田径场',people:520,status:'已通过'},
+ {id:'E06',name:'社区支教 · 周末课堂',club:'青年志愿者协会',date:'2024-11-09 08:30',place:'柳林社区',people:35,status:'已通过'}
+];
+const namePool=['李承宇','周清越','王展鹏','陈艺涵','刘一诺','赵梓涵','孙浩然','吴静怡','郑博文','冯若曦','蒋子墨','韩雨桐','许嘉言','邓雅琪','罗文昊','黄思远','曹梦瑶','方启航','钟婉清','谢明轩','袁若彤','唐子昂','钱玉婷','董泽宇','宋佳怡','程亦凡','熊梓涵','石晓雨','顾言','黎思琪'];
+const depts=['计算机科学与技术','软件工程','汉语言文学','社会工作','体育教育','视觉传达','财务管理','外国语'];
+const members=namePool.map((n,i)=>({name:n,no:(i%2?2023:2024)+'XXXX'+String(10+i).padStart(2,'0'),dept:depts[i%depts.length],club:clubs[i%clubs.length].name,join:'202'+(3+i%2)+'-09-'+String(1+i%28).padStart(2,'0'),status:i%9===0?'资料待补':'在册'}));
+const notices=[
+ {t:'关于开展 2024 年学生社团年审工作的通知',d:'2024-11-18',from:'校团委'},
+ {t:'社团活动场地申请流程调整说明',d:'2024-11-12',from:'学生工作部'},
+ {t:'第二课堂志愿时长录入截止提醒',d:'2024-11-05',from:'青年志愿者协会'}
+];
+const monthly=[612,405,186,894,1057,742];
+
+/* ========== 状态 ========== */
+let S={role:'student',tab:'',msg:[]};
+const TABS={
+ student:[['plaza','社团广场'],['events','活动广场'],['mine','我的社团'],['notice','消息通知']],
+ leader:[['myclub','我的社团'],['pub','活动申报'],['mem','成员管理'],['notice','消息通知']],
+ admin:[['dash','数据看板'],['audit','社团审核'],['approve','活动审批'],['mem','成员档案'],['notice','公告管理']]
+};
+const ROLE={student:'学生',leader:'社团负责人',admin:'校管理员'};
+/* ========== 账号与登录 ========== */
+const userSeed=[
+ ['20240112','陶云','student','计算机科学与技术','开源技术协会','2024-09-02','在册'],
+ ['20230008','李承宇','leader','软件工程','开源技术协会','2023-09-11','在册'],
+ ['20230015','陈艺涵','student','社会工作','青年志愿者协会','2023-09-14','在册'],
+ ['20240118','周清越','student','视觉传达','街舞社','2024-09-05','在册'],
+ ['20230021','王展鹏','student','体育教育','篮球联盟','2023-09-18','在册'],
+ ['20240126','刘一诺','student','汉语言文学','吉他社','2024-09-08','在册'],
+ ['20230033','赵梓涵','student','汉语言文学','读书会','2023-09-20','资料待补'],
+ ['20240131','孙浩然','student','计算机科学与技术','开源技术协会','2024-09-12','在册'],
+ ['20230038','吴静怡','student','财务管理','青年志愿者协会','2023-09-22','在册'],
+ ['20240137','郑博文','student','软件工程','开源技术协会','2024-09-15','在册'],
+ ['20230042','冯若曦','student','外国语','街舞社','2023-09-25','在册'],
+ ['20240144','蒋子墨','student','计算机科学与技术','开源技术协会','2024-09-19','在册'],
+ ['20230047','韩雨桐','student','社会工作','青年志愿者协会','2023-10-08','在册'],
+ ['20240152','许嘉言','student','体育教育','篮球联盟','2024-09-23','在册'],
+ ['20230055','邓雅琪','student','视觉传达','吉他社','2023-10-11','资料待补'],
+ ['20240158','罗文昊','student','软件工程','开源技术协会','2024-10-09','在册'],
+ ['20230061','黄思远','student','财务管理','篮球联盟','2023-10-15','在册'],
+ ['20240163','曹梦瑶','student','汉语言文学','读书会','2024-10-16','在册']
+];
+let accounts=[{acc:'admin',pwd:'admin123',role:'admin',name:'陶云',title:'校团委管理员'}];
+userSeed.forEach(function(s){accounts.push({acc:s[0],pwd:'123456',role:s[2],name:s[1],
+ title:s[2]==='leader'?'社团负责人':'学生',dept:s[3],club:s[4],join:s[5],status:s[6]})});
+let capCode='',capCode2='';
+const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function randCode(){let s='';for(let i=0;i<4;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s}
+function drawCapOn(cv,code){
+ const ctx=cv.getContext('2d');const w=cv.width,h=cv.height;
+ ctx.clearRect(0,0,w,h);ctx.fillStyle='#f2f7ff';ctx.fillRect(0,0,w,h);
+ for(let i=0;i<6;i++){ctx.strokeStyle='rgba(76,141,255,.28)';ctx.beginPath();ctx.moveTo(Math.random()*w,Math.random()*h);ctx.lineTo(Math.random()*w,Math.random()*h);ctx.stroke();}
+ for(let i=0;i<26;i++){ctx.fillStyle='rgba(120,150,190,.35)';ctx.beginPath();ctx.arc(Math.random()*w,Math.random()*h,1.2,0,7);ctx.fill();}
+ ctx.font='bold 23px "Times New Roman", serif';ctx.textBaseline='middle';
+ for(let i=0;i<4;i++){ctx.save();ctx.translate(14+i*24,h/2+(Math.random()*6-3));ctx.rotate((Math.random()*26-13)*Math.PI/180);
+  ctx.fillStyle=['#2d6be0','#1b4a99','#3f83f0','#2159c4'][i%4];ctx.fillText(code[i],0,0);ctx.restore();}
+}
+function drawCap(){capCode=randCode();drawCapOn(document.getElementById('capImg'),capCode)}
+function drawCap2(){capCode2=randCode();drawCapOn(document.getElementById('capImg2'),capCode2)}
+function switchTab(m){
+ const l=m==='login';
+ document.getElementById('loginForm').classList.toggle('hide',!l);
+ document.getElementById('regForm').classList.toggle('hide',l);
+ document.getElementById('swLogin').classList.toggle('on',l);
+ document.getElementById('swReg').classList.toggle('on',!l);
+ if(!l)drawCap2();
+}
+function togglePwd(){const i=document.getElementById('pwd'),e=document.getElementById('eye');if(i.type==='password'){i.type='text';e.textContent='隐藏'}else{i.type='password';e.textContent='显示'}}
+function setErr(id,msg){const el=document.getElementById(id);el.textContent=msg||'';if(msg){el.previousElementSibling&&el.previousElementSibling.querySelector&&0}}
+function bad(input,b){input.classList.toggle('bad',b)}
+function doLogin(ev){
+ ev.preventDefault();
+ const acc=document.getElementById('acc'),pwd=document.getElementById('pwd'),cap=document.getElementById('cap');
+ setErr('e-acc','');setErr('e-pwd','');setErr('e-cap','');[acc,pwd,cap].forEach(i=>bad(i,false));
+ let ok=true;
+ if(!acc.value.trim()){setErr('e-acc','请输入账号');bad(acc,true);ok=false}
+ if(!pwd.value){setErr('e-pwd','请输入密码');bad(pwd,true);ok=false}
+ else if(pwd.value.length<6){setErr('e-pwd','密码长度不少于 6 位');bad(pwd,true);ok=false}
+ if(cap.value.trim().toUpperCase()!==capCode){setErr('e-cap','验证码不正确，请重新输入');bad(cap,true);ok=false}
+ if(!ok){
+
+drawCap();cap.value='';return false}
+ const user=accounts.find(u=>u.acc===acc.value.trim());
+ if(!user){setErr('e-acc','该账号不存在，请先注册');bad(acc,true);drawCap();cap.value='';return false}
+ if(user.pwd!==pwd.value){setErr('e-pwd','账号或密码错误');bad(pwd,true);drawCap();cap.value='';return false}
+ const btn=document.getElementById('btnLogin');btn.disabled=true;btn.textContent='登录中…';
+ setTimeout(()=>{btn.disabled=false;btn.textContent='登 录';enter(user)},520);
+ return false;
+}
+function doRegister(ev){
+ ev.preventDefault();
+ const f={acc:document.getElementById('r-acc'),name:document.getElementById('r-name'),dept:document.getElementById('r-dept'),tel:document.getElementById('r-tel'),pwd:document.getElementById('r-pwd'),pwd2:document.getElementById('r-pwd2'),cap:document.getElementById('r-cap')};
+ ['e-racc','e-rname','e-rdept','e-rtel','e-rpwd','e-rpwd2','e-rcap'].forEach(i=>setErr(i,''));
+ Object.values(f).forEach(i=>bad(i,false));
+ let ok=true;
+ if(!/^\d{8,10}$/.test(f.acc.value.trim())){setErr('e-racc','学号应为 8–10 位数字');bad(f.acc,true);ok=false}
+ if(!f.name.value.trim()){setErr('e-rname','请输入姓名');bad(f.name,true);ok=false}
+ if(!f.dept.value.trim()){setErr('e-rdept','请输入所在院系');bad(f.dept,true);ok=false}
+ if(!/^1\d{10}$/.test(f.tel.value.trim())){setErr('e-rtel','请输入 11 位手机号');bad(f.tel,true);ok=false}
+ if(!/^[A-Za-z0-9]{6,16}$/.test(f.pwd.value)){setErr('e-rpwd','密码为 6–16 位字母或数字');bad(f.pwd,true);ok=false}
+ else if(f.pwd.value!==f.pwd2.value){setErr('e-rpwd2','两次输入的密码不一致');bad(f.pwd2,true);ok=false}
+ if(f.cap.value.trim().toUpperCase()!==capCode2){setErr('e-rcap','验证码不正确');bad(f.cap,true);ok=false}
+ if(accounts.some(u=>u.acc===f.acc.value.trim())){setErr('e-racc','该学号已注册，请直接登录');bad(f.acc,true);ok=false}
+ if(!ok){drawCap2();f.cap.value='';return false}
+ const u={acc:f.acc.value.trim(),pwd:f.pwd.value,role:'student',name:f.name.value.trim(),title:'学生'};
+ accounts.push(u);toast('注册成功，已自动登录');
+ setTimeout(()=>enter(u),400);
+ return false;
+}
+function enter(u){
+ S.role=u.role;
+ document.getElementById('login').classList.add('hide');
+ document.getElementById('app').style.display='block';
+ document.getElementById('roleName').textContent=u.role==='admin'?u.name+'（管理员）':u.name;
+ document.getElementById('avName').textContent=u.name.slice(-1);
+ document.getElementById('roleBadge').textContent=ROLE[u.role];
+ document.getElementById('tabs').innerHTML=TABS[u.role].map((t,i)=>`<button onclick="go('${t[0]}')" class="${i===0?'on':''}" data-t="${t[0]}">${t[1]}</button>`).join('');
+ go(TABS[u.role][0][0]);
+}
+function logout(){location.reload()}
+function go(t){S.tab=t;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));render()}
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('on');clearTimeout(window._tt);window._tt=setTimeout(()=>el.classList.remove('on'),2200)}
+
+/* ========== 渲染 ========== */
+function render(){
+ const c=document.getElementById('content');
+ const map={plaza:viewPlaza,events:viewEvents,mine:viewMine,notice:viewNotice,myclub:viewMyClub,pub:viewPub,mem:viewMem,dash:viewDash,audit:viewAudit,approve:viewApprove};
+ c.innerHTML=(map[S.tab]||viewPlaza)();
+ bindCharts();
+}
+function head(title,sub,btn){return `<div class="page-head"><div><h2>${title}</h2><p>${sub}</p></div>${btn||''}</div>`}
+
+function viewPlaza(){
+ const total=clubs.reduce((a,b)=>a+b.members,0);
+ return head('社团广场','共 '+clubs.length+' 个在册社团 · 覆盖 '+total+' 名成员 · 数据来自社团备案库','')+`
+ <div class="banner">
+   <div class="txt"><h3>2024 年社团文化节<br>本周六 · 中心广场</h3><p>42 个社团现场设展，扫码即可报名加入；线上同步开放活动预约，报名成功后自动进入签到名单。</p>
+   <span class="btn btn-p" onclick="toast('已为你预约社团文化节，签到码将在活动当天推送')">立即预约</span></div>
+   <img src="${IMG.zhaoxin}" alt="社团招新现场">
+ </div>
+ <div class="club-grid">${clubs.map(c=>`
+   <div class="club" onclick="openClub(${c.id})">
+     <img src="${c.img}" alt="${c.name}">
+     <div class="info">
+       <h4>${c.name}</h4>
+       <div class="meta"><span class="chip c-blue">${c.cat}</span><span>${c.members} 成员</span><span>${c.founded} 成立</span></div>
+       <div class="intro">${c.intro}</div>
+       <div class="act"><button class="btn btn-p" onclick="event.stopPropagation();joinClub(${c.id})">申请加入</button><button class="btn btn-g" onclick="event.stopPropagation();openClub(${c.id})">详情</button></div>
+     </div>
+   </div>`).join('')}</div>`;
+}
+function openClub(id){
+ const c=clubs.find(x=>x.id===id);
+ document.getElementById('sheet').innerHTML=`
+  <div class="top"><img src="${c.img}"><button class="close" onclick="closeModal()">×</button></div>
+  <div class="body">
+   <h3>${c.name}</h3>
+   <div class="tags"><span class="chip c-blue">${c.cat}</span><span class="chip c-ok">${c.status}</span><span class="chip c-wait">${c.members} 名成员</span></div>
+   <p>${c.intro}</p>
+   <div class="rows">
+     <div>社团负责人：<b>${c.leader}</b></div><div>成立时间：<b>${c.founded}</b></div>
+     <div>办公室：<b>大学生活动中心 3F-${300+c.id}</b></div><div>年度活动：<b>${c.id%3+4} 场</b></div>
+   </div>
+   <p style="font-size:12px;color:#8496ad">近期活动</p>
+   <div>${events.filter(e=>e.club===c.name).map(e=>`<div class="list-row"><div class="t">${e.name}</div><div class="d">${e.date}</div></div>`).join('')||'<div class="list-row"><div class="t" style="color:#94a3b8">本学期暂无对外活动</div></div>'}</div>
+   <div style="display:flex;gap:10px;margin-top:18px"><button class="btn btn-p" onclick="joinClub(${c.id});closeModal()">申请加入</button><button class="btn btn-g" onclick="closeModal()">关闭</button></div>
+  </div>`;
+ document.getElementById('modal').classList.add('on');
+}
+function closeModal(){document.getElementById('modal').classList.remove('on')}
+
+function viewEvents(){
+ return head('活动广场','本月可报名活动 '+events.filter(e=>e.status!=='已驳回').length+' 场 · 报名后自动生成签到二维码','')+`
+ <div class="panel"><div class="hd"><h3>活动列表</h3><span class="chip c-blue">按时间排序</span></div>
+ <table><thead><tr><th style="width:34%">活动名称</th><th>主办社团</th><th>时间</th><th>地点</th><th>剩余名额</th><th style="text-align:right">操作</th></tr></thead>
+ <tbody>${events.map(e=>`<tr><td>${e.name}</td><td>${e.club}</td><td>${e.date}</td><td>${e.place}</td><td>${e.people} 人</td>
+ <td style="text-align:right"><button class="btn btn-s" onclick="applyEvent('${e.id}')">报名</button></td></tr>`).join('')}</tbody></table>
+ <div class="pager"><span>共 ${events.length} 条</span><div><button disabled>上一页</button><button disabled>下一页</button></div></div></div>`;
+}
+function viewMine(){
+ return head('我的社团','已加入 2 个社团 · 累计志愿时长 36 小时','')+`
+ <div class="cards">
+  <div class="card"><div class="k">我的社团</div><div class="v">2</div><div class="t">开源技术协会 · 青年志愿者协会</div></div>
+  <div class="card"><div class="k">本月活动</div><div class="v">3</div><div class="t">已签到 2 场</div></div>
+  <div class="card"><div class="k">志愿时长</div><div class="v">36h</div><div class="t">已同步第二课堂</div></div>
+  <div class="card"><div class="k">待办</div><div class="v">1</div><div class="t">活动反馈未提交</div></div>
+ </div>
+ <div class="panel"><div class="hd"><h3>我加入的社团</h3></div><div class="bd">
+  ${clubs.slice(0,2).map(c=>`<div class="list-row"><img src="${c.img}" style="width:64px;height:44px;border-radius:7px;object-fit:cover"><div class="t"><b>${c.name}</b><div class="d">${c.cat} · 负责人 ${c.leader}</div></div><button class="btn btn-g" onclick="openClub(${c.id})">进入</button></div>`).join('')}
+ </div></div>
+ <div class="panel"><div class="hd"><h3>我报名的活动</h3><span class="chip c-wait">1 场待签到</span></div>
+ <table><thead><tr><th>活动</th><th>时间</th><th>签到状态</th></tr></thead><tbody>
+ <tr><td>开源之夜 · 技术分享会</td><td>2024-11-26 19:00</td><td><span class="chip c-wait">待签到</span></td></tr>
+ <tr><td>草地音乐节</td><td>2024-11-15 19:30</td><td><span class="chip c-ok">已签到</span></td></tr>
+ </tbody></table></div>`;
+}
+function viewNotice(){
+ return head('消息通知','系统通知与社团公告','')+`
+ <div class="panel"><div class="bd">
+ ${notices.map(n=>`<div class="list-row"><span class="chip c-blue">${n.from}</span><div class="t">${n.t}<div class="d">${n.d}</div></div><button class="btn btn-g" onclick="toast('已标记为已读')">查看</button></div>`).join('')}
+ </div></div>`;
+}
+
+/* ---------- 负责人 ---------- */
+function viewMyClub(){
+ const c=clubs[0];
+ return head('我的社团 · '+c.name,'负责人视角 · 本月新增 12 名成员','<button class="btn btn-p" onclick="go(\'pub\')">申报活动</button>')+`
+ <div class="cards">
+  <div class="card"><div class="k">成员总数</div><div class="v">${c.members}</div><div class="t">本月 +12</div></div>
+  <div class="card"><div class="k">在办活动</div><div class="v">2</div><div class="t">1 场待审批</div></div>
+  <div class="card"><div class="k">本月签到率</div><div class="v">86%</div><div class="t">较上月 +4.2%</div></div>
+  <div class="card"><div class="k">社团评级</div><div class="v">A</div><div class="t">2023-2024 学年</div></div>
+ </div>
+ <div class="split">
+  <div class="panel"><div class="hd"><h3>近六月签到人次</h3></div><div class="bd"><div class="bars">${monthly.map((v,i)=>`<div class="col"><div class="n">${v}</div><div class="b" data-h="${v}"></div><div class="lb">${6+i}月</div></div>`).join('')}</div></div></div>
+  <div class="panel"><div class="hd"><h3>成员构成</h3></div><div class="bd"><div class="donut"><div class="ring"></div><div class="lg"><div><i class="dot" style="background:#2d6be0"></i>大一 52%</div><div><i class="dot" style="background:#25b98a"></i>大二 26%</div><div><i class="dot" style="background:#f0a13c"></i>大三 14%</div><div><i class="dot" style="background:#8b6bf0"></i>其他 8%</div></div></div></div></div>
+ </div>`;
+}
+function viewPub(){
+ return head('活动申报','提交后进入校团委审批队列，一般 2 个工作日内反馈','')+`
+ <div class="panel"><div class="bd" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+  <label style="font-size:12px;color:#66768c">活动名称<br><input id="f1" value="开源之夜 · 技术分享会" style="margin-top:6px;width:100%;padding:10px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:13px"></label>
+  <label style="font-size:12px;color:#66768c">活动类型<br><select style="margin-top:6px;width:100%;padding:10px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:13px"><option>学术讲座</option><option>文艺演出</option><option>体育赛事</option><option>公益实践</option></select></label>
+  <label style="font-size:12px;color:#66768c">活动时间<br><input type="date" value="2024-11-26" style="margin-top:6px;width:100%;padding:10px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:13px"></label>
+  <label style="font-size:12px;color:#66768c">场地<br><select style="margin-top:6px;width:100%;padding:10px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:13px"><option>图书馆报告厅</option><option>大学生活动中心</option><option>中心广场</option></select></label>
+  <label style="font-size:12px;color:#66768c;grid-column:1/3">活动说明<br><textarea rows="4" style="margin-top:6px;width:100%;padding:10px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:13px">面向全校技术爱好者，安排 3 场主题分享与现场答疑，预计参与 180 人，需投影与无线麦克风。</textarea></label>
+  <div style="grid-column:1/3;display:flex;gap:10px"><button class="btn btn-p" onclick="submitPub()">提交审批</button><button class="btn btn-g" onclick="toast('已保存为草稿')">保存草稿</button></div>
+ </div></div>
+ <div class="panel"><div class="hd"><h3>我的申报记录</h3></div>
+ <table><thead><tr><th>活动</th><th>时间</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>
+ <tr><td>开源之夜 · 技术分享会</td><td>2024-11-26</td><td><span class="chip c-wait">待审批</span></td><td style="text-align:right"><button class="btn btn-g" onclick="toast('已撤回申请')">撤回</button></td></tr>
+ <tr><td>秋季技术开放日</td><td>2024-10-18</td><td><span class="chip c-ok">已通过</span></td><td style="text-align:right"><button class="btn btn-g" onclick="toast('活动总结已提交')">总结</button></td></tr>
+ </tbody></table></div>`;
+}
+function submitPub(){const v=document.getElementById('f1').value||'新活动';events.unshift({id:'E'+(events.length+1),name:v,club:'开源技术协会',date:'2024-11-26 19:00',place:'图书馆报告厅',people:180,status:'待审批'});toast('《'+v+'》已提交，等待校团委审批');render()}
+function viewMem(){
+ const per=10,page=window._mp||0;
+ const rows=members.slice(page*per,page*per+per);
+ return head('成员档案','共 '+members.length+' 名成员 · 支持按姓名 / 学号检索','<input placeholder="搜索姓名或学号" oninput="filterMem(this.value)" style="padding:9px 13px;border:1px solid #dae3f1;border-radius:9px;font-family:inherit;font-size:12.5px;width:220px">')+`
+ <div class="panel"><div class="hd"><h3>成员列表</h3><span class="chip c-blue">${S.role==='admin'?'全校视图':'本社团视图'}</span></div>
+ <table><thead><tr><th>姓名</th><th>学号</th><th>院系</th><th>所属社团</th><th>入社时间</th><th>状态</th><th style="text-align:right">操作</th></tr></thead>
+ <tbody id="memBody">${rows.map(m=>`<tr><td>${m.name}</td><td>${m.no}</td><td>${m.dept}</td><td>${m.club}</td><td>${m.join}</td><td><span class="chip ${m.status==='在册'?'c-ok':'c-wait'}">${m.status}</span></td><td style="text-align:right"><button class="btn btn-g" onclick="toast('已打开 ${m.name} 的档案')">档案</button></td></tr>`).join('')}</tbody></table>
+ <div class="pager"><span>第 ${page+1} / ${Math.ceil(members.length/per)} 页 · 每页 10 条</span><div><button ${page===0?'disabled':''} onclick="page(${page-1})">上一页</button><button ${page>=Math.ceil(members.length/per)-1?'disabled':''} onclick="page(${page+1})">下一页</button></div></div></div>`;
+}
+function page(p){window._mp=p;render()}
+function filterMem(q){const rows=members.filter(m=>m.name.includes(q)||m.no.includes(q));document.getElementById('memBody').innerHTML=rows.map(m=>`<tr><td>${m.name}</td><td>${m.no}</td><td>${m.dept}</td><td>${m.club}</td><td>${m.join}</td><td><span class="chip ${m.status==='在册'?'c-ok':'c-wait'}">${m.status}</span></td><td style="text-align:right"><button class="btn btn-g" onclick="toast('已打开档案')">档案</button></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:#94a3b8">无匹配记录</td></tr>'}
+
+/* ---------- 管理员 ---------- */
+function viewDash(){
+ const pending=events.filter(e=>e.status==='待审批').length;
+ return head('数据看板','2024-11-21 更新 · 数据源：社团备案库 / 活动审批流水 / 签到记录','')+`
+ <div class="cards">
+  <div class="card"><div class="k">在册社团</div><div class="v">${clubs.length}</div><div class="t">覆盖 9 个院系</div></div>
+  <div class="card"><div class="k">社团成员</div><div class="v">${members.length*34+clubs.reduce((a,b)=>a+b.members,0)}</div><div class="t">去重后统计</div></div>
+  <div class="card"><div class="k">待审批活动</div><div class="v">${pending}</div><div class="t">其中 1 项今日到期</div></div>
+  <div class="card"><div class="k">本月签到率</div><div class="v">86%</div><div class="t">环比 +4.2%</div></div>
+ </div>
+ <div class="split">
+  <div class="panel"><div class="hd"><h3>近六月活动签到人次</h3><span class="chip c-blue">线下 + 线上</span></div><div class="bd"><div class="bars">${monthly.map((v,i)=>`<div class="col"><div class="n">${v}</div><div class="b" data-h="${v}"></div><div class="lb">${6+i}月</div></div>`).join('')}</div></div></div>
+  <div class="panel"><div class="hd"><h3>社团类别分布</h3></div><div class="bd"><div class="donut"><div class="ring"></div><div class="lg"><div><i class="dot" style="background:#2d6be0"></i>学术科技 52%</div><div><i class="dot" style="background:#25b98a"></i>文化艺术 26%</div><div><i class="dot" style="background:#f0a13c"></i>体育竞技 14%</div><div><i class="dot" style="background:#8b6bf0"></i>公益实践 8%</div></div></div></div></div>
+ </div>
+ <div class="panel"><div class="hd"><h3>待办事项</h3><span class="chip c-wait">${pending+1} 项</span></div><div class="bd">
+  <div class="list-row"><div class="t">活动审批：《开源之夜 · 技术分享会》等 ${pending} 项<div class="d">提交时间 2024-11-20 14:22</div></div><button class="btn btn-p" onclick="go('approve')">去处理</button></div>
+  <div class="list-row"><div class="t">社团审核：读书会提交年审材料<div class="d">提交时间 2024-11-19 09:10</div></div><button class="btn btn-p" onclick="go('audit')">去处理</button></div>
+ </div></div>`;
+}
+function viewAudit(){
+ return head('社团审核','年审与新建社团备案审核','')+`
+ <div class="panel"><div class="hd"><h3>待审核社团</h3><span class="chip c-wait">1 项</span></div>
+ <table><thead><tr><th>社团</th><th>类别</th><th>负责人</th><th>成员</th><th>提交材料</th><th style="text-align:right">审批</th></tr></thead><tbody>
+ <tr><td>读书会</td><td>学术科技</td><td>赵梓涵</td><td>74</td><td>年审表 / 成员名册 / 活动记录</td>
+ <td style="text-align:right"><button class="btn btn-p" onclick="audit(1)">通过</button> <button class="btn btn-g" onclick="audit(0)">退回</button></td></tr>
+ </tbody></table></div>
+ <div class="panel"><div class="hd"><h3>已审核社团</h3></div>
+ <table><thead><tr><th>社团</th><th>类别</th><th>负责人</th><th>成员</th><th>状态</th></tr></thead><tbody>
+ ${clubs.slice(0,5).map(c=>`<tr><td>${c.name}</td><td>${c.cat}</td><td>${c.leader}</td><td>${c.members}</td><td><span class="chip ${c.status==='运行中'?'c-ok':'c-wait'}">${c.status}</span></td></tr>`).join('')}
+ </tbody></table></div>`;
+}
+function audit(pass){clubs[5].status=pass?'运行中':'年审待审';toast(pass?'读书会年审已通过':'已退回补充材料');render()}
+function viewApprove(){
+ const rows=events;
+ return head('活动审批','共 '+rows.length+' 条申报记录','')+`
+ <div class="panel"><div class="hd"><h3>活动申报审批</h3><span class="chip c-wait" id="pchip">待处理 ${rows.filter(e=>e.status==='待审批').length} 项</span></div>
+ <table><thead><tr><th style="width:32%">活动名称</th><th>主办社团</th><th>时间</th><th>场地</th><th>状态</th><th style="text-align:right">审批</th></tr></thead>
+ <tbody>${rows.map((e,i)=>`<tr><td>${e.name}</td><td>${e.club}</td><td>${e.date}</td><td>${e.place}</td>
+ <td><span class="chip ${e.status==='已通过'?'c-ok':e.status==='待审批'?'c-wait':'c-no'}">${e.status}</span></td>
+ <td style="text-align:right">${e.status==='待审批'?`<button class="btn btn-p" onclick="decide(${i},1)">通过</button> <button class="btn btn-g" onclick="decide(${i},0)">驳回</button>`:'<button class="btn btn-g" onclick="toast(\'已查看审批详情\')">详情</button>'}</td></tr>`).join('')}</tbody></table>
+ <div class="pager"><span>审批结果实时写入数据库，并推送给社团负责人</span><div><button disabled>上一页</button><button disabled>下一页</button></div></div></div>`;
+}
+function decide(i,pass){events[i].status=pass?'已通过':'已驳回';toast('《'+events[i].name+'》'+(pass?'已通过':'已驳回'));render()}
+function bindCharts(){
+ document.querySelectorAll('.bars .b').forEach(b=>{const h=parseInt(b.dataset.h,10);b.style.height='0';b.style.transition='height .7s ease';requestAnimationFrame(()=>{b.style.height=(h*0.85)+'%'})});
+}
+
+/* ================= 本地数据库层（浏览器持久化） ================= */
+const DBK='clubhub_db_v3';
+let apps=[],joins=[];
+function dbSave(){
+ try{localStorage.setItem(DBK,JSON.stringify({users:accounts,events:events,notices:notices,apps:apps,joins:joins,ts:Date.now()}))}catch(e){}
+ flash();
+}
+function dbLoad(){
+ try{
+  var r=JSON.parse(localStorage.getItem(DBK)||'null');
+  if(r&&r.users&&r.users.length){
+   accounts.length=0;r.users.forEach(function(u){accounts.push(u)});
+   events.length=0;(r.events||[]).forEach(function(e){events.push(e)});
+   notices.length=0;(r.notices||[]).forEach(function(n){notices.push(n)});
+   apps=r.apps||[];joins=r.joins||[];
+   return true;
+  }
+ }catch(e){}
+ return false;
+}
+(function(){
+ var el=document.createElement('div');
+ el.id='dbs';
+ el.style.cssText='position:fixed;left:14px;bottom:12px;z-index:60;font-size:10.5px;color:#5f7089;background:#fff;border:1px solid #dbe4f2;border-radius:20px;padding:5px 11px;box-shadow:0 4px 12px rgba(20,40,80,.08);opacity:.55;transition:opacity .3s';
+ el.textContent='本地数据库 · 已载入';
+ document.body.appendChild(el);
+})();
+function flash(){
+ var el=document.getElementById('dbs');
+ if(!el)return;
+ el.style.opacity=1;
+ el.textContent='本地数据库 · 已写入 '+new Date().toLocaleTimeString('zh-CN',{hour12:false});
+ clearTimeout(window._f);
+ window._f=setTimeout(function(){el.style.opacity=.55},1600);
+}
+function dbReset(){localStorage.removeItem(DBK);toast('数据已重置，页面即将刷新');setTimeout(function(){location.reload()},600)}
+
+/* ================= 登录态 ================= */
+function enter(u){
+ S.user=u;S.role=u.role;
+ document.getElementById('login').classList.add('hide');
+ document.getElementById('app').style.display='block';
+ document.getElementById('roleName').textContent=u.role==='admin'?u.name+'（管理员）':u.name;
+ document.getElementById('avName').textContent=u.name.slice(-1);
+ document.getElementById('roleBadge').textContent=ROLE[u.role];
+ document.getElementById('tabs').innerHTML=TABS[u.role].map(function(t,i){
+  return '<button onclick="go(\''+t[0]+'\')" class="'+(i===0?'on':'')+'" data-t="'+t[0]+'">'+t[1]+'</button>';
+ }).join('');
+ go(TABS[u.role][0][0]);
+}
+
+/* ================= 学生侧写入 ================= */
+function joinClub(id){
+ var me=S.user||{};var c=clubs.find(function(x){return x.id===id});
+ if(!me.acc){toast('请先登录');return}
+ if(joins.some(function(j){return j.acc===me.acc&&j.club===c.name})){toast('你已提交过《'+c.name+'》的加入申请');return}
+ joins.push({acc:me.acc,name:me.name,club:c.name,time:new Date().toLocaleString('zh-CN',{hour12:false}),status:'待社长审核'});
+ dbSave();toast('《'+c.name+'》加入申请已提交，等待社长审核');render();
+}
+function applyEvent(id){
+ var me=S.user||{};var e=events.find(function(x){return x.id===id});
+ if(!me.acc){toast('请先登录');return}
+ if(apps.some(function(a){return a.acc===me.acc&&a.eid===id})){toast('你已报名《'+e.name+'》');return}
+ if(e.status==='已驳回'){toast('该活动已被驳回，暂不可报名');return}
+ apps.push({acc:me.acc,name:me.name,eid:id,event:e.name,date:e.date,place:e.place,status:'待签到',time:new Date().toLocaleString('zh-CN',{hour12:false})});
+ dbSave();toast('《'+e.name+'》报名成功，签到码已发送');render();
+}
+
+/* ================= 学生视图（真实数据） ================= */
+function viewMine(){
+ var me=S.user||{acc:'',name:''};
+ var my=apps.filter(function(a){return a.acc===me.acc});
+ var jo=joins.filter(function(j){return j.acc===me.acc});
+ return head('我的社团','账号 '+me.acc+' · 已报名 '+my.length+' 场活动 · 申请 '+jo.length+' 个社团','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">报名活动</div><div class="v">'+my.length+'</div><div class="t">已写入数据库</div></div>'+
+ '<div class="card"><div class="k">加入申请</div><div class="v">'+jo.length+'</div><div class="t">等待社长审核</div></div>'+
+ '<div class="card"><div class="k">志愿时长</div><div class="v">'+(my.filter(function(a){return a.status==='已签到'}).length*4)+'h</div><div class="t">按签到自动累计</div></div>'+
+ '<div class="card"><div class="k">账号状态</div><div class="v" style="font-size:16px">'+(me.status||'在册')+'</div><div class="t">'+me.acc+'</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>我报名的活动</h3><span class="chip c-blue">记录持久保存</span></div>'+
+ '<table><thead><tr><th>活动</th><th>时间</th><th>地点</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (my.map(function(a,i){return '<tr><td>'+a.event+'</td><td>'+a.date+'</td><td>'+a.place+'</td><td><span class="chip c-wait">'+a.status+'</span></td>'+
+ '<td style="text-align:right"><button class="btn btn-g" onclick="checkIn('+i+')">签到</button> <button class="btn btn-g" onclick="cancelApp('+i+')">取消</button></td></tr>'}).join('')||'<tr><td colspan="5" style="text-align:center;color:#94a3b8">还没有报名记录，去“活动广场”看看</td></tr>')+
+ '</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>我的加入申请</h3></div>'+
+ '<table><thead><tr><th>社团</th><th>提交时间</th><th>状态</th></tr></thead><tbody>'+
+ (jo.map(function(j){return '<tr><td>'+j.club+'</td><td>'+j.time+'</td><td><span class="chip c-wait">'+j.status+'</span></td></tr>'}).join('')||'<tr><td colspan="3" style="text-align:center;color:#94a3b8">暂无加入申请</td></tr>')+
+ '</tbody></table></div>';
+}
+function checkIn(i){
+ var me=S.user;var my=apps.filter(function(a){return a.acc===me.acc});
+ my[i].status='已签到';my[i].signTime=new Date().toLocaleString('zh-CN',{hour12:false});
+ dbSave();toast('《'+my[i].event+'》签到成功，志愿时长已记账');render();
+}
+function cancelApp(i){
+ var me=S.user;var my=apps.filter(function(a){return a.acc===me.acc});
+ var t=my[i].event;apps.splice(apps.indexOf(my[i]),1);dbSave();toast('已取消《'+t+'》的报名');render();
+}
+
+/* ================= 管理员：用户增删改查 ================= */
+function userList(){
+ var me=S.user||{};
+ var base=accounts.filter(function(u){return u.role!=='admin'});
+ if(me.role==='leader'&&me.club)base=base.filter(function(u){return u.club===me.club});
+ if(S.mq)base=base.filter(function(u){return u.name.indexOf(S.mq)>-1||u.acc.indexOf(S.mq)>-1});
+ return base;
+}
+function viewMem(){
+ var per=8,page=window._mp||0,list=userList(),pages=Math.max(1,Math.ceil(list.length/per));
+ if(page>=pages)page=pages-1;
+ var rows=list.slice(page*per,page*per+per);
+ var admin=S.role==='admin';
+ var addBtn=admin?'<button class="btn btn-p" onclick="editUser(\'\')">+ 新增成员</button>':'';
+ return head('成员档案','共 '+list.length+' 条用户记录 · 数据存于本地数据库','<div style="display:flex;gap:8px">'+
+ '<input placeholder="搜索姓名或账号" value="'+(S.mq||'')+'" oninput="filterMem(this.value)" style="padding:9px 13px;border:1px solid #dae3f1;border-radius:9px;font-family:inherit;font-size:12.5px;width:190px">'+addBtn+'</div>')+
+ '<div class="panel"><div class="hd"><h3>用户列表</h3><span class="chip c-blue">'+(admin?'全校视图':'本社团视图')+'</span></div>'+
+ '<table><thead><tr><th>姓名</th><th>账号</th><th>院系</th><th>所属社团</th><th>角色</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (rows.map(function(u){
+  var idx=accounts.indexOf(u);
+  return '<tr><td>'+u.name+'</td><td>'+u.acc+'</td><td>'+(u.dept||'—')+'</td><td>'+(u.club||'—')+'</td>'+
+  '<td>'+ROLE[u.role]+'</td><td><span class="chip '+(u.status==='在册'?'c-ok':'c-wait')+'">'+(u.status||'在册')+'</span></td>'+
+  '<td style="text-align:right"><button class="btn btn-g" onclick="editUser(\''+u.acc+'\')">编辑</button>'+
+  (admin?' <button class="btn btn-g" onclick="delUser('+idx+')" style="color:#c0392b">删除</button>':'')+'</td></tr>';
+ }).join('')||'<tr><td colspan="7" style="text-align:center;color:#94a3b8">无匹配记录</td></tr>')+
+ '</tbody></table><div class="pager"><span>第 '+(page+1)+' / '+pages+' 页 · 共 '+list.length+' 条</span><div>'+
+ '<button '+(page===0?'disabled':'')+' onclick="page('+(page-1)+')">上一页</button>'+
+ '<button '+(page>=pages-1?'disabled':'')+' onclick="page('+(page+1)+')">下一页</button></div></div></div>';
+}
+function filterMem(q){S.mq=q;window._mp=0;render()}
+function page(p){window._mp=p;render()}
+function editUser(acc){
+ var u=acc?accounts.find(function(x){return x.acc===acc}):{acc:'',name:'',dept:'',club:'',role:'student',pwd:'',status:'在册'};
+ var opts=clubs.map(function(c){return '<option '+(u.club===c.name?'selected':'')+'>'+c.name+'</option>'}).join('');
+ document.getElementById('sheet').innerHTML='<div class="body" style="padding:24px 26px">'+
+ '<h3 style="font-size:16px;margin-bottom:14px">'+(acc?'编辑用户资料':'新增成员账号')+'</h3>'+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'+
+ '<label class="lf">姓名<input id="u-name" value="'+(u.name||'')+'"></label>'+
+ '<label class="lf">账号（学号）<input id="u-acc" value="'+(u.acc||'')+'" '+(acc?'disabled':'')+'></label>'+
+ '<label class="lf">院系<input id="u-dept" value="'+(u.dept||'')+'"></label>'+
+ '<label class="lf">所属社团<select id="u-club"><option value="">未加入</option>'+opts+'</select></label>'+
+ '<label class="lf">角色<select id="u-role"><option value="student" '+(u.role==='student'?'selected':'')+'>学生</option>'+
+ '<option value="leader" '+(u.role==='leader'?'selected':'')+'>社团负责人</option></select></label>'+
+ '<label class="lf">状态<select id="u-status"><option '+(u.status==='在册'?'selected':'')+'>在册</option><option '+(u.status==='资料待补'?'selected':'')+'>资料待补</option><option '+(u.status==='已离校'?'selected':'')+'>已离校</option></select></label>'+
+ '<label class="lf" style="grid-column:1/3">登录密码<input id="u-pwd" value="'+(u.pwd||'123456')+'"></label>'+
+ '</div><div style="display:flex;gap:10px;margin-top:18px"><button class="btn btn-p" onclick="saveUser(\''+(acc||'')+'\')">保存到数据库</button>'+
+ '<button class="btn btn-g" onclick="closeModal()">取消</button></div></div>';
+ document.getElementById('modal').classList.add('on');
+}
+function saveUser(acc){
+ var name=(document.getElementById('u-name').value||'').trim();
+ var nos=(document.getElementById('u-acc').value||'').trim();
+ var dept=(document.getElementById('u-dept').value||'').trim();
+ var club=document.getElementById('u-club').value;
+ var role=document.getElementById('u-role').value;
+ var st=document.getElementById('u-status').value;
+ var pwd=(document.getElementById('u-pwd').value||'').trim();
+ if(!name){toast('请填写姓名');return}
+ if(!/^\d{8,10}$/.test(nos)){toast('账号需为 8–10 位学号');return}
+ if(!/^[A-Za-z0-9]{6,16}$/.test(pwd)){toast('密码需为 6–16 位字母或数字');return}
+ if(!acc&&accounts.some(function(u){return u.acc===nos})){toast('该账号已存在');return}
+ var u=acc?accounts.find(function(x){return x.acc===acc}):{acc:nos};
+ u.name=name;u.acc=nos;u.dept=dept;u.club=club;u.role=role;u.status=st;u.pwd=pwd;
+ u.title=role==='leader'?'社团负责人':'学生';
+ if(!acc)accounts.push(u);
+ dbSave();closeModal();toast(acc?'用户资料已更新并写入数据库':'成员「'+name+'」已新增，可用账号 '+nos+' 登录');render();
+}
+function delUser(idx){
+ var u=accounts[idx];if(!u)return;
+ if(!confirm('确定删除「'+u.name+'（'+u.acc+'）」？删除后该账号将无法登录。'))return;
+ accounts.splice(idx,1);
+ apps=apps.filter(function(a){return a.acc!==u.acc});
+ joins=joins.filter(function(j){return j.acc!==u.acc});
+ dbSave();toast('已删除用户「'+u.name+'」，其报名与加入申请同步清除');render();
+}
+
+/* ================= 公告增删改查 ================= */
+function viewNotice(){
+ var admin=S.role==='admin';
+ var addBtn=admin?'<button class="btn btn-p" onclick="editNotice(-1)">+ 发布公告</button>':'';
+ return head('消息通知',admin?'管理员可新增 / 编辑 / 删除公告，学生端实时同步':'系统通知与社团公告',''+addBtn)+
+ '<div class="panel"><div class="bd">'+
+ (notices.map(function(n,i){
+  return '<div class="list-row"><span class="chip c-blue">'+(n.from||'校团委')+'</span><div class="t">'+n.t+
+  '<div class="d">'+(n.d||'')+'</div></div>'+
+  (admin?'<div style="display:flex;gap:6px"><button class="btn btn-g" onclick="editNotice('+i+')">编辑</button><button class="btn btn-g" onclick="delNotice('+i+')" style="color:#c0392b">删除</button></div>':
+  '<button class="btn btn-g" onclick="toast(\'已标记为已读\')">查看</button>')+'</div>';
+ }).join('')||'<div class="list-row"><div class="t" style="color:#94a3b8">暂无公告</div></div>')+
+ '</div></div>';
+}
+function editNotice(i){
+ var n=i>=0?notices[i]:{t:'',from:'校团委',d:''};
+ document.getElementById('sheet').innerHTML='<div class="body" style="padding:24px 26px">'+
+ '<h3 style="font-size:16px;margin-bottom:14px">'+(i>=0?'编辑公告':'发布新公告')+'</h3>'+
+ '<label class="lf">标题<input id="nt" value="'+(n.t||'')+'"></label>'+
+ '<label class="lf" style="margin-top:12px">发布单位<input id="nf" value="'+(n.from||'校团委')+'"></label>'+
+ '<label class="lf" style="margin-top:12px">日期<input id="nd" type="date" value="'+(n.d||'2024-11-21')+'"></label>'+
+ '<div style="display:flex;gap:10px;margin-top:18px"><button class="btn btn-p" onclick="saveNotice('+i+')">保存并推送</button>'+
+ '<button class="btn btn-g" onclick="closeModal()">取消</button></div></div>';
+ document.getElementById('modal').classList.add('on');
+}
+function saveNotice(i){
+ var t=(document.getElementById('nt').value||'').trim();
+ if(!t){toast('请填写公告标题');return}
+ var obj={t:t,from:(document.getElementById('nf').value||'校团委').trim(),d:document.getElementById('nd').value};
+ if(i>=0)notices[i]=obj;else notices.unshift(obj);
+ dbSave();closeModal();toast(i>=0?'公告已更新':'公告已发布，已推送至全部学生账号');render();
+}
+function delNotice(i){
+ if(!confirm('确定删除公告「'+notices[i].t+'」？'))return;
+ notices.splice(i,1);dbSave();toast('公告已删除');render();
+}
+
+/* ================= 负责人申报 / 管理员审批（写库） ================= */
+function viewPub(){
+ var me=S.user||{};
+ var my=events.filter(function(e){return e.club===(me.club||clubs[0].name)});
+ return head('活动申报','提交后进入校团委审批队列，审批结果写入数据库','')+
+ '<div class="panel"><div class="bd" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+ '<label class="lf">活动名称<input id="f1" value="开源之夜 · 技术分享会"></label>'+
+ '<label class="lf">活动类型<select id="f4"><option>学术讲座</option><option>文艺演出</option><option>体育赛事</option><option>公益实践</option></select></label>'+
+ '<label class="lf">活动时间<input id="f2" type="date" value="2024-11-26"></label>'+
+ '<label class="lf">场地<select id="f3"><option>图书馆报告厅</option><option>大学生活动中心</option><option>中心广场</option></select></label>'+
+ '<label class="lf" style="grid-column:1/3">活动说明<textarea id="f5" rows="4">面向全校技术爱好者，安排 3 场主题分享与现场答疑，预计参与 180 人，需投影与无线麦克风。</textarea></label>'+
+ '<div style="grid-column:1/3;display:flex;gap:10px"><button class="btn btn-p" onclick="submitPub()">提交审批</button>'+
+ '<button class="btn btn-g" onclick="toast(\'草稿已保存到本地数据库\')">保存草稿</button></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>我的申报记录</h3><span class="chip c-blue">'+my.length+' 条</span></div>'+
+ '<table><thead><tr><th>活动</th><th>时间</th><th>场地</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (my.map(function(e){var i=events.indexOf(e);
+  return '<tr><td>'+e.name+'</td><td>'+e.date+'</td><td>'+e.place+'</td><td><span class="chip '+(e.status==='已通过'?'c-ok':e.status==='待审批'?'c-wait':'c-no')+'">'+e.status+'</span></td>'+
+  '<td style="text-align:right">'+(e.status==='待审批'?'<button class="btn btn-g" onclick="withdraw('+i+')">撤回</button>':'<button class="btn btn-g" onclick="toast(\'活动总结已提交\')">总结</button>')+'</td></tr>';
+ }).join('')||'<tr><td colspan="5" style="text-align:center;color:#94a3b8">暂无申报记录</td></tr>')+
+ '</tbody></table></div>';
+}
+function submitPub(){
+ var me=S.user||{};
+ var v=(document.getElementById('f1').value||'').trim()||'新活动';
+ var dt=document.getElementById('f2').value||'2024-11-26';
+ var pl=document.getElementById('f3').value;
+ events.unshift({id:'E'+Date.now().toString().slice(-5),name:v,club:me.club||clubs[0].name,date:dt+' 19:00',place:pl,people:180,status:'待审批'});
+ dbSave();toast('《'+v+'》已提交，等待校团委审批（已写入数据库）');render();
+}
+function withdraw(i){
+ var n=events[i].name;events.splice(i,1);dbSave();toast('《'+n+'》申报已撤回');render();
+}
+function decide(i,pass){
+ events[i].status=pass?'已通过':'已驳回';
+ dbSave();toast('《'+events[i].name+'》'+(pass?'已通过':'已驳回')+'，结果已推送负责人');render();
+}
+function audit(pass){
+ clubs[5].status=pass?'运行中':'年审待审';
+ dbSave();toast(pass?'读书会年审已通过':'已退回补充材料');render();
+}
+function viewDash(){
+ var pending=events.filter(function(e){return e.status==='待审批'}).length;
+ var users=accounts.filter(function(u){return u.role!=='admin'}).length;
+ var jw=joins.filter(function(j){return j.status==='待社长审核'}).length;
+ return head('数据看板','实时统计 · 数据源：本地数据库（用户表 / 活动表 / 报名表）','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">注册用户</div><div class="v">'+users+'</div><div class="t">'+apps.length+' 条报名记录</div></div>'+
+ '<div class="card"><div class="k">在册社团</div><div class="v">'+clubs.length+'</div><div class="t">覆盖 9 个院系</div></div>'+
+ '<div class="card"><div class="k">待审批活动</div><div class="v">'+pending+'</div><div class="t">社团加入申请 '+jw+' 条</div></div>'+
+ '<div class="card"><div class="k">公告数</div><div class="v">'+notices.length+'</div><div class="t">学生端同步可见</div></div>'+
+ '</div>'+
+ '<div class="split">'+
+ '<div class="panel"><div class="hd"><h3>近六月活动签到人次</h3><span class="chip c-blue">线下 + 线上</span></div><div class="bd"><div class="bars">'+
+ monthly.map(function(v,i){return '<div class="col"><div class="n">'+v+'</div><div class="b" data-h="'+v+'"></div><div class="lb">'+(6+i)+'月</div></div>'}).join('')+
+ '</div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>社团类别分布</h3></div><div class="bd"><div class="donut"><div class="ring"></div><div class="lg">'+
+ '<div><i class="dot" style="background:#2d6be0"></i>学术科技 52%</div><div><i class="dot" style="background:#25b98a"></i>文化艺术 26%</div>'+
+ '<div><i class="dot" style="background:#f0a13c"></i>体育竞技 14%</div><div><i class="dot" style="background:#8b6bf0"></i>公益实践 8%</div>'+
+ '</div></div></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>待办事项</h3><span class="chip c-wait">'+(pending+jw+1)+' 项</span></div><div class="bd">'+
+ '<div class="list-row"><div class="t">活动审批：'+pending+' 项待处理<div class="d">来自社团负责人申报</div></div><button class="btn btn-p" onclick="go(\'approve\')">去处理</button></div>'+
+ '<div class="list-row"><div class="t">社团加入申请：'+jw+' 条待社长审核<div class="d">学生提交，写入 joins 表</div></div><button class="btn btn-p" onclick="go(\'mem\')">去查看</button></div>'+
+ '<div class="list-row"><div class="t">社团审核：读书会提交年审材料<div class="d">提交时间 2024-11-19 09:10</div></div><button class="btn btn-p" onclick="go(\'audit\')">去处理</button></div>'+
+ '</div></div>';
+}
+
+/* 载入本地数据库 */
+if(!dbLoad()){/* 首次启动：等待云端数据，云端为空时再上传种子 */}
+
+drawCap();
+
+/* ================= 个人中心 ================= */
+['student','leader','admin'].forEach(function(r){
+ if(!TABS[r].some(function(t){return t[0]==='profile'}))TABS[r].push(['profile','个人中心']);
+});
+function openProfile(){go('profile')}
+function updateTopbar(){
+ var me=S.user||{};
+ document.getElementById('roleName').textContent=me.role==='admin'?me.name+'（管理员）':(me.name||'');
+ document.getElementById('avName').textContent=(me.name||'?').slice(-1);
+}
+function render(){
+ var c=document.getElementById('content');
+ var map={plaza:viewPlaza,events:viewEvents,mine:viewMine,notice:viewNotice,myclub:viewMyClub,pub:viewPub,
+  mem:viewMem,dash:viewDash,audit:viewAudit,approve:viewApprove,profile:viewProfile,joinreq:viewJoinReq};
+ c.innerHTML=(map[S.tab]||viewPlaza)();
+ bindCharts();
+}
+function viewProfile(){
+ var me=S.user||{};
+ var my=apps.filter(function(a){return a.acc===me.acc});
+ var jo=joins.filter(function(j){return j.acc===me.acc});
+ return head('个人中心','修改后立即写入本地数据库，下次登录依然生效','')+
+ '<div class="split">'+
+ '<div class="panel"><div class="hd"><h3>基本资料</h3><span class="chip c-blue">可编辑</span></div><div class="bd">'+
+ '<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">'+
+ '<div style="width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#4c8dff,#2d6be0);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:600">'+(me.name||'?').slice(-1)+'</div>'+
+ '<div><div style="font-weight:600">'+(me.name||'')+'</div><div style="font-size:11.5px;color:#8496ad;margin-top:3px">'+me.acc+' · '+ROLE[me.role]+'</div></div></div>'+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'+
+ '<label class="lf">姓名<input id="p-name" value="'+(me.name||'')+'"></label>'+
+ '<label class="lf">账号（学号）<input value="'+(me.acc||'')+'" disabled style="background:#f4f7fc;color:#8496ad"></label>'+
+ '<label class="lf">院系<input id="p-dept" value="'+(me.dept||'')+'"></label>'+
+ '<label class="lf">所属社团<input value="'+(me.club||'未加入')+'" disabled style="background:#f4f7fc;color:#8496ad"></label>'+
+ '<label class="lf">手机号<input id="p-tel" maxlength="11" value="'+(me.tel||'')+'"></label>'+
+ '<label class="lf">邮箱<input id="p-email" value="'+(me.email||'')+'"></label>'+
+ '</div><div style="display:flex;gap:10px;margin-top:18px">'+
+ '<button class="btn btn-p" onclick="saveProfile()">保存资料</button>'+
+ '<button class="btn btn-g" onclick="logout()">退出登录</button></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>账号安全</h3><span class="chip c-wait">修改后需重新登录</span></div><div class="bd">'+
+ '<label class="lf">原密码<input id="p-old" type="password" placeholder="请输入当前密码"></label>'+
+ '<label class="lf" style="margin-top:12px">新密码<input id="p-new" type="password" placeholder="6–16 位字母或数字"></label>'+
+ '<label class="lf" style="margin-top:12px">确认新密码<input id="p-new2" type="password" placeholder="再次输入新密码"></label>'+
+ '<button class="btn btn-p" style="margin-top:18px" onclick="changePwd()">修改密码</button>'+
+ '<p style="font-size:11px;color:#8496ad;line-height:1.9;margin-top:12px">密码以明文存放在本地演示库中，正式环境应使用加盐哈希存储。</p>'+
+ '</div></div></div>'+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">报名活动</div><div class="v">'+my.length+'</div><div class="t">累计记录</div></div>'+
+ '<div class="card"><div class="k">加入社团</div><div class="v">'+jo.length+'</div><div class="t">含待审核</div></div>'+
+ '<div class="card"><div class="k">账号状态</div><div class="v" style="font-size:16px">'+(me.status||'在册')+'</div><div class="t">由管理员维护</div></div>'+
+ '<div class="card"><div class="k">数据操作</div><div class="v" style="font-size:15px"><span class="lnk" onclick="exportData()">导出我的数据</span></div><div class="t">JSON 文件</div></div>'+
+ '</div>';
+}
+function saveProfile(){
+ var me=S.user||{};
+ var name=(document.getElementById('p-name').value||'').trim();
+ var dept=(document.getElementById('p-dept').value||'').trim();
+ var tel=(document.getElementById('p-tel').value||'').trim();
+ var email=(document.getElementById('p-email').value||'').trim();
+ if(!name){toast('姓名不能为空');return}
+ if(tel&&!/^1\d{10}$/.test(tel)){toast('手机号应为 11 位数字');return}
+ if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('邮箱格式不正确');return}
+ me.name=name;me.dept=dept;me.tel=tel;me.email=email;
+ dbSave();updateTopbar();toast('个人资料已保存并写入数据库');render();
+}
+function changePwd(){
+ var me=S.user||{};
+ var o=document.getElementById('p-old').value, n=document.getElementById('p-new').value, n2=document.getElementById('p-new2').value;
+ if(o!==me.pwd){toast('原密码不正确');return}
+ if(!/^[A-Za-z0-9]{6,16}$/.test(n)){toast('新密码需为 6–16 位字母或数字');return}
+ if(n!==n2){toast('两次输入的新密码不一致');return}
+ me.pwd=n;dbSave();toast('密码已修改，请使用新密码登录');
+}
+function exportData(){
+ var me=S.user||{};
+ var payload={user:me,apps:apps.filter(function(a){return a.acc===me.acc}),joins:joins.filter(function(j){return j.acc===me.acc})};
+ var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+ var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(me.acc||'user')+'_data.json';a.click();
+ toast('已导出个人数据 JSON');
+}
+
+/* ================= 加入申请审核 ================= */
+['leader','admin'].forEach(function(r){
+ if(!TABS[r].some(function(t){return t[0]==='joinreq'})){
+  var idx=TABS[r].findIndex(function(t){return t[0]==='mem'});
+  TABS[r].splice(idx<0?TABS[r].length:idx,0,['joinreq','加入申请']);
+ }
+});
+function viewJoinReq(){
+ var me=S.user||{};
+ var list=joins.map(function(j,i){return {j:j,i:i}}).filter(function(o){
+  return S.role==='admin'||!me.club||o.j.club===me.club;
+ });
+ var pending=list.filter(function(o){return o.j.status==='待社长审核'});
+ return head('加入申请','待审核 '+pending.length+' 条 · 通过后自动写入成员档案','')+
+ '<div class="panel"><div class="hd"><h3>待审核申请</h3><span class="chip c-wait">'+pending.length+' 条</span></div>'+
+ '<table><thead><tr><th>姓名</th><th>账号</th><th>申请社团</th><th>提交时间</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (pending.map(function(o){
+  return '<tr><td>'+o.j.name+'</td><td>'+o.j.acc+'</td><td>'+o.j.club+'</td><td>'+o.j.time+'</td>'+
+  '<td style="text-align:right"><button class="btn btn-p" onclick="approveJoin('+o.i+')">通过</button> '+
+  '<button class="btn btn-g" onclick="rejectJoin('+o.i+')">驳回</button></td></tr>';
+ }).join('')||'<tr><td colspan="5" style="text-align:center;color:#94a3b8">暂无待审核申请</td></tr>')+
+ '</tbody></table></div>';
+}
+function approveJoin(i){
+ var j=joins[i];
+ j.status='已通过';
+ var u=accounts.find(function(x){return x.acc===j.acc});
+ if(u){u.club=j.club;if(u.status==='资料待补')u.status='在册'}
+ var c=clubs.find(function(x){return x.name===j.club});if(c)c.members++;
+ dbSave();toast(j.name+' 已加入《'+j.club+'》，成员档案已更新');render();
+}
+function rejectJoin(i){
+ var j=joins[i];joins.splice(i,1);
+ dbSave();toast('已驳回 '+j.name+' 的加入申请');render();
+}
+
+/* ================= Supabase 云端同步 ================= */
+const SB_URL='https://qthwgfzmojeopscrkwcv.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0aHdnZnptb2plb3BzY3Jrd2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxODQ5OTMsImV4cCI6MjExMDc2MDk5M30.3ALgKCl6RSafyjO3RCQveP2is_awAIflkPEqmvGcVQM';
+function sbReq(path,opt){
+ opt=opt||{};
+ var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+ opt.headers=Object.assign(h,opt.headers||{});
+ return fetch(SB_URL+'/rest/v1/'+path,opt);
+}
+function sbBadge(t){
+ var el=document.getElementById('dbs');
+ if(!el)return;
+ el.style.opacity=1;el.textContent=t;
+ clearTimeout(window._f);
+ window._f=setTimeout(function(){el.style.opacity=.55},1600);
+}
+function clubState(){return {users:accounts,events:events,notices:notices,apps:apps,joins:joins}}
+let sbTimer=null;
+function sbPush(){
+ clearTimeout(sbTimer);
+ sbTimer=setTimeout(function(){
+  sbReq('club_state',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates'},
+   body:JSON.stringify([{id:1,data:clubState()}])})
+  .then(function(r){sbBadge(r.ok?'云端已保存 '+new Date().toLocaleTimeString('zh-CN',{hour12:false}):'云端保存失败 '+r.status)})
+  .catch(function(){sbBadge('云端不可达，已存本地缓存')});
+ },350);
+}
+function dbSave(){
+ try{localStorage.setItem(DBK,JSON.stringify({users:accounts,events:events,notices:notices,apps:apps,joins:joins,ts:Date.now()}))}catch(e){}
+ flash();sbPush();
+}
+function sbApply(d){
+ if(!d)return false;
+ if(d.users&&d.users.length){accounts.length=0;d.users.forEach(function(u){accounts.push(u)})}
+ if(d.events){events.length=0;d.events.forEach(function(e){events.push(e)})}
+ if(d.notices){notices.length=0;d.notices.forEach(function(n){notices.push(n)})}
+ apps=d.apps||[];joins=d.joins||[];
+ return true;
+}
+function sbBoot(){
+ sbReq('club_state?id=eq.1&select=data').then(function(r){return r.json()}).then(function(rows){
+  if(rows&&rows[0]&&rows[0].data&&rows[0].data.users){
+   sbApply(rows[0].data);sbBadge('云端已载入');
+   if(S.tab)render();
+  }else{sbPush()}
+ }).catch(function(){sbBadge('云端不可达，使用本地缓存')});
+}
+
+sbBoot();
+
+/* 隐藏托管页注入的品牌角标文案 */
+(function(){
+  var words=['豆包工作','豆包生成','妙搭生成','AI 生成'];
+  function hideBrand(){
+    var nodes=document.querySelectorAll('body span,body a,body div,body img,body p');
+    for(var i=0;i<nodes.length;i++){
+      var el=nodes[i];
+      var t=(el.alt||el.textContent||'').trim();
+      if(!t||t.length>60)continue;
+      var hit=words.some(function(w){return t.indexOf(w)>-1});
+      if(!hit)continue;
+      var p=el;
+      while(p.parentElement&&p.parentElement!==document.body&&(p.parentElement.textContent||'').trim().length<=60){p=p.parentElement}
+      if(p===document.body)continue;
+      p.style.setProperty('display','none','important');
+      p.style.setProperty('visibility','hidden','important');
+    }
+  }
+  var n=0,t=setInterval(function(){hideBrand();if(++n>40)clearInterval(t)},250);
+  document.addEventListener('DOMContentLoaded',hideBrand);
+  window.addEventListener('load',hideBrand);
+})();
+</script>
+</body>
+</html>
