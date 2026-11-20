@@ -977,6 +977,489 @@ function sbBoot(){
  }).catch(function(){sbBadge('云端不可达，使用本地缓存')});
 }
 
+/* ===== EXT v2 ===== */
+/* ================= 扩展模块 v2：场地 / 经费 / 签到 / 公告 / 消息 / 评价 / 日志 / 报表 ================= */
+const BASE_DAY='2024-11-21';
+let rooms=[
+ {id:'R1',name:'图书馆报告厅',cap:180,dev:'投影 · 无线麦 · 录播'},
+ {id:'R2',name:'大学生活动中心',cap:260,dev:'舞台灯光 · 音响 · 后台'},
+ {id:'R3',name:'东区篮球场',cap:600,dev:'夜间照明 · 记分牌'},
+ {id:'R4',name:'中心广场',cap:800,dev:'可搭台 · 需报备安保'},
+ {id:'R5',name:'第二田径场',cap:1000,dev:'草坪 · 电源接口'}
+];
+const SLOTS=['08:00-10:00','10:00-12:00','14:00-16:00','16:00-18:00','19:00-21:30'];
+let roomBk=[
+ {id:'RB001',room:'图书馆报告厅',date:'2024-11-26',slot:'19:00-21:30',club:'开源技术协会',applicant:'李承宇',reason:'开源之夜技术分享会',status:'已通过',time:'2024-11-19 09:12'},
+ {id:'RB002',room:'大学生活动中心',date:'2024-11-30',slot:'14:00-16:00',club:'街舞社',applicant:'周清越',reason:'街舞专场排练',status:'待审批',time:'2024-11-20 10:05'},
+ {id:'RB003',room:'东区篮球场',date:'2024-12-05',slot:'16:00-18:00',club:'篮球联盟',applicant:'王展鹏',reason:'新生杯决赛',status:'已通过',time:'2024-11-18 15:20'}
+];
+let funds=[
+ {id:'FD001',club:'开源技术协会',item:'技术分享会物料（海报 · 桌牌）',cat:'活动物料',amount:860,applicant:'李承宇',date:'2024-11-18',receipt:'FP-20241118-086',status:'已拨付',time:'2024-11-18 16:40'},
+ {id:'FD002',club:'青年志愿者协会',item:'社区支教往返交通',cat:'交通差旅',amount:420,applicant:'陈艺涵',date:'2024-11-20',receipt:'FP-20241120-112',status:'待审批',time:'2024-11-20 08:30'},
+ {id:'FD003',club:'吉他社',item:'草地音乐节设备租赁',cat:'设备租赁',amount:2400,applicant:'刘一诺',date:'2024-11-12',receipt:'FP-20241112-047',status:'已拨付',time:'2024-11-12 11:20'}
+];
+let cnotices=[
+ {id:'CN001',club:'开源技术协会',title:'本周技术分享改为线上进行',body:'因报告厅临时占用，11 月 26 日分享改为腾讯会议，链接见群公告。',time:'2024-11-20 09:30'}
+];
+let msgs=[
+ {id:'M001',to:'all',title:'关于开展 2024 年学生社团年审工作的通知',body:'各社团请于 11 月 28 日前提交年审材料，逾期视为自动放弃。',kind:'通知',time:'2024-11-18 10:00',read:false},
+ {id:'M002',to:'20240112',title:'报名成功：开源之夜 · 技术分享会',body:'活动时间 2024-11-26 19:00，地点图书馆报告厅，签到码将于活动前发布。',kind:'活动',time:'2024-11-19 20:12',read:false},
+ {id:'M003',to:'20230008',title:'加入申请待审核',body:'有 2 名学生申请加入开源技术协会，请到“加入申请”处理。',kind:'审批',time:'2024-11-20 08:45',read:false}
+];
+let evals=[
+ {id:'EV001',event:'草地音乐节',eid:'E05',acc:'20240126',name:'刘一诺',score:5,comment:'现场氛围很好，音响清晰，希望下届增加互动环节。',time:'2024-11-16 20:10'}
+];
+let logs=[
+ {id:'LG001',acc:'admin',name:'陶云',action:'审批通过活动《新生杯篮球联赛决赛》',time:'2024-11-18 15:22'},
+ {id:'LG002',acc:'20230008',name:'李承宇',action:'提交场地预约：图书馆报告厅 2024-11-26 19:00-21:30',time:'2024-11-19 09:12'},
+ {id:'LG003',acc:'admin',name:'陶云',action:'拨付经费 FD001（¥860）',time:'2024-11-18 16:40'}
+];
+const FUND_BUDGET=50000;
+
+function nowStr(){return new Date().toLocaleString('zh-CN',{hour12:false})}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function uid(p){return p+String(Date.now()).slice(-6)}
+function xlog(a){logs.unshift({id:uid('LG'),acc:(S.user||{}).acc||'-',name:(S.user||{}).name||'-',action:a,time:nowStr()});if(logs.length>200)logs.length=200}
+function pushMsg(to,title,body,kind){msgs.unshift({id:uid('M'),to:to,title:title,body:body,kind:kind||'通知',time:nowStr(),read:false})}
+function myMsgs(){var me=S.user||{};return msgs.filter(function(m){return m.to==='all'||m.to===me.acc})}
+function unreadCount(){return myMsgs().filter(function(m){return !m.read}).length}
+function money(n){return '¥'+Number(n||0).toLocaleString('zh-CN')}
+function subBar(items,cur,fn){
+ return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">'+items.map(function(it){
+  return '<button class="btn '+(it[0]===cur?'btn-p':'btn-g')+'" onclick="'+fn+'(\''+it[0]+'\')">'+it[1]+'</button>';
+ }).join('')+'</div>';
+}
+function goSub(k){S.sub=k;render()}
+function pdf(rows){return rows||'<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:18px">暂无记录</td></tr>'}
+function myClubName(){var me=S.user||{};return me.club||clubs[0].name}
+
+/* ---------- 场地预约 ---------- */
+function slotTaken(room,date,slot,exceptId){
+ return roomBk.some(function(b){return b.room===room&&b.date===date&&b.slot===slot&&b.status!=='已驳回'&&b.id!==exceptId});
+}
+function viewRoom(){
+ var me=S.user||{};
+ var mine=roomBk.filter(function(b){return b.applicant===me.name||b.club===myClubName()});
+ var busy=rooms.map(function(r){
+  var cells=SLOTS.map(function(s){
+   var used=roomBk.some(function(b){return b.room===r.name&&b.date==='2024-11-26'&&b.slot===s&&b.status==='已通过'});
+   return '<td><span class="chip '+(used?'c-no':'c-ok')+'">'+(used?'已占用':'空闲')+'</span></td>';
+  }).join('');
+  return '<tr><td>'+r.name+'<div style="font-size:11px;color:#8496ad">'+r.dev+' · 容纳 '+r.cap+' 人</div></td>'+cells+'</tr>';
+ }).join('');
+ return head('场地预约','提交后由校团委审批，已通过的时段自动锁定，重复时段会被拦截','')+
+ '<div class="panel"><div class="hd"><h3>提交预约申请</h3><span class="chip c-blue">写入 roomBk 表</span></div><div class="bd">'+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+ '<label class="lf">场地<select id="rb-room">'+rooms.map(function(r){return '<option>'+r.name+'</option>'}).join('')+'</select></label>'+
+ '<label class="lf">使用日期<input id="rb-date" type="date" value="2024-11-26"></label>'+
+ '<label class="lf">时段<select id="rb-slot">'+SLOTS.map(function(s){return '<option>'+s+'</option>'}).join('')+'</select></label>'+
+ '<label class="lf">预计人数<input id="rb-people" type="number" value="120"></label>'+
+ '<label class="lf" style="grid-column:1/3">用途说明<input id="rb-reason" value="社团活动排练 / 分享会"></label>'+
+ '</div><div style="margin-top:16px"><button class="btn btn-p" onclick="submitRoom()">提交预约</button> '+
+ '<span style="font-size:11.5px;color:#8496ad">2024-11-26 当天场地占用情况见下表</span></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>我的预约记录</h3><span class="chip c-blue">'+mine.length+' 条</span></div>'+
+ '<table><thead><tr><th>场地</th><th>日期</th><th>时段</th><th>用途</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (mine.map(function(b){var i=roomBk.indexOf(b);
+  return '<tr><td>'+b.room+'</td><td>'+b.date+'</td><td>'+b.slot+'</td><td>'+b.reason+'</td>'+
+  '<td><span class="chip '+(b.status==='已通过'?'c-ok':b.status==='待审批'?'c-wait':'c-no')+'">'+b.status+'</span></td>'+
+  '<td style="text-align:right">'+(b.status!=='已驳回'?'<button class="btn btn-g" onclick="cancelRoom('+i+')">取消</button>':'—')+'</td></tr>';
+ }).join('')||pdf())+'</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>2024-11-26 场地占用表</h3><span class="chip c-blue">5 个时段</span></div>'+
+ '<table><thead><tr><th>场地</th>'+SLOTS.map(function(s){return '<th>'+s+'</th>'}).join('')+'</tr></thead><tbody>'+busy+'</tbody></table></div>';
+}
+function submitRoom(){
+ var me=S.user||{};
+ var r=document.getElementById('rb-room').value,d=document.getElementById('rb-date').value,s=document.getElementById('rb-slot').value;
+ var reason=(document.getElementById('rb-reason').value||'').trim()||'社团活动';
+ if(!d){toast('请选择使用日期');return}
+ if(d<'2024-11-22'){toast('只能预约当天以后 1 个工作日以上的场地');return}
+ if(slotTaken(r,d,s)){toast('该场地 '+d+' '+s+' 已被占用，请换时段');return}
+ roomBk.unshift({id:uid('RB'),room:r,date:d,slot:s,club:myClubName(),applicant:me.name||me.acc,reason:reason,status:'待审批',time:nowStr()});
+ pushMsg('admin','场地预约待审批：'+r+' '+d+' '+s,'申请人 '+(me.name||me.acc)+'（'+myClubName()+'），用途：'+reason,'审批');
+ xlog('提交场地预约：'+r+' '+d+' '+s);
+ dbSave();toast('预约已提交（'+r+' '+d+' '+s+'），等待校团委审批');render();
+}
+function cancelRoom(i){
+ var b=roomBk[i];if(!b)return;
+ if(!confirm('确定取消 '+b.room+' '+b.date+' '+b.slot+' 的预约？'))return;
+ roomBk.splice(i,1);xlog('取消场地预约：'+b.room+' '+b.date);dbSave();toast('预约已取消');render();
+}
+
+/* ---------- 场地审批 ---------- */
+function viewRoomAudit(){
+ var pending=roomBk.filter(function(b){return b.status==='待审批'});
+ return head('场地审批','通过后该时段即被锁定，其他社团无法重复预约','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">待审批</div><div class="v">'+pending.length+'</div><div class="t">场地预约申请</div></div>'+
+ '<div class="card"><div class="k">已通过</div><div class="v">'+roomBk.filter(function(b){return b.status==='已通过'}).length+'</div><div class="t">已锁定时段</div></div>'+
+ '<div class="card"><div class="k">可预约场地</div><div class="v">'+rooms.length+'</div><div class="t">共 '+rooms.length*SLOTS.length+' 个时段</div></div>'+
+ '<div class="card"><div class="k">已驳回</div><div class="v">'+roomBk.filter(function(b){return b.status==='已驳回'}).length+'</div><div class="t">含冲突时段</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>全部预约申请</h3><span class="chip c-wait">'+pending.length+' 条待处理</span></div>'+
+ '<table><thead><tr><th>场地</th><th>日期 / 时段</th><th>申请社团</th><th>申请人</th><th>用途</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (roomBk.map(function(b){var i=roomBk.indexOf(b);
+  return '<tr><td>'+b.room+'</td><td>'+b.date+'<div style="font-size:11px;color:#8496ad">'+b.slot+'</div></td><td>'+b.club+'</td><td>'+b.applicant+'</td><td>'+b.reason+'</td>'+
+  '<td><span class="chip '+(b.status==='已通过'?'c-ok':b.status==='待审批'?'c-wait':'c-no')+'">'+b.status+'</span></td>'+
+  '<td style="text-align:right">'+(b.status==='待审批'?'<button class="btn btn-p" onclick="decideRoom('+i+',true)">通过</button> <button class="btn btn-g" onclick="decideRoom('+i+',false)">驳回</button>':'—')+'</td></tr>';
+ }).join('')||pdf())+'</tbody></table></div>';
+}
+function decideRoom(i,pass){
+ var b=roomBk[i];if(!b)return;
+ if(pass&&slotTaken(b.room,b.date,b.slot,b.id)){toast('该时段已被其他申请锁定，请先驳回冲突单');return}
+ b.status=pass?'已通过':'已驳回';
+ pushMsg('all',(pass?'场地预约已通过：':'场地预约已驳回：')+b.room+' '+b.date+' '+b.slot,(pass?'请按时到场并保持场地整洁，使用后 24 小时内提交使用反馈。':'该时段已被占用，请重新选择时段提交。'),'审批');
+ xlog('审批场地预约 '+(pass?'通过':'驳回')+'：'+b.room+' '+b.date+' '+b.slot);
+ dbSave();toast('已'+(pass?'通过':'驳回')+' '+b.club+' 的 '+b.room+' 预约');render();
+}
+
+/* ---------- 经费 ---------- */
+function clubFundSum(name){return funds.filter(function(f){return f.club===name&&f.status==='已拨付'}).reduce(function(s,f){return s+f.amount},0)}
+function viewFund(){
+ var me=S.user||{};var cl=myClubName();
+ var mine=funds.filter(function(f){return f.club===cl});
+ var used=clubFundSum(cl);
+ return head('经费申报','单据通过后进入财务拨付队列，额度按社团年度预算控制','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">年度预算</div><div class="v" style="font-size:19px">'+money(FUND_BUDGET)+'</div><div class="t">'+cl+'</div></div>'+
+ '<div class="card"><div class="k">已拨付</div><div class="v" style="font-size:19px">'+money(used)+'</div><div class="t">累计 '+mine.filter(function(f){return f.status==='已拨付'}).length+' 单</div></div>'+
+ '<div class="card"><div class="k">剩余额度</div><div class="v" style="font-size:19px">'+money(FUND_BUDGET-used)+'</div><div class="t">超支将被拦截</div></div>'+
+ '<div class="card"><div class="k">待审批</div><div class="v">'+mine.filter(function(f){return f.status==='待审批'}).length+'</div><div class="t">本社团</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>提交报销单</h3><span class="chip c-blue">写入 funds 表</span></div><div class="bd">'+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+
+ '<label class="lf">费用项目<input id="fd-item" value="活动物料采购"></label>'+
+ '<label class="lf">费用类别<select id="fd-cat"><option>活动物料</option><option>交通差旅</option><option>设备租赁</option><option>宣传印刷</option><option>其他</option></select></label>'+
+ '<label class="lf">金额（元）<input id="fd-amount" type="number" value="500"></label>'+
+ '<label class="lf">票据编号<input id="fd-receipt" value="FP-20241121-001"></label>'+
+ '</div><div style="margin-top:16px"><button class="btn btn-p" onclick="submitFund()">提交报销单</button></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>本社团申报记录</h3><span class="chip c-blue">'+mine.length+' 单</span></div>'+
+ '<table><thead><tr><th>项目</th><th>类别</th><th>金额</th><th>票据</th><th>提交人</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (mine.map(function(f){var i=funds.indexOf(f);
+  return '<tr><td>'+f.item+'</td><td>'+f.cat+'</td><td>'+money(f.amount)+'</td><td>'+f.receipt+'</td><td>'+f.applicant+'</td>'+
+  '<td><span class="chip '+(f.status==='已拨付'?'c-ok':f.status==='待审批'?'c-wait':'c-no')+'">'+f.status+'</span></td>'+
+  '<td style="text-align:right">'+(f.status==='待审批'?'<button class="btn btn-g" onclick="cancelFund('+i+')">撤回</button>':'—')+'</td></tr>';
+ }).join('')||pdf())+'</tbody></table></div>';
+}
+function submitFund(){
+ var me=S.user||{},cl=myClubName();
+ var item=(document.getElementById('fd-item').value||'').trim();
+ var cat=document.getElementById('fd-cat').value;
+ var amount=Number(document.getElementById('fd-amount').value||0);
+ var receipt=(document.getElementById('fd-receipt').value||'').trim();
+ if(!item){toast('请填写费用项目');return}
+ if(!(amount>0)){toast('金额需大于 0');return}
+ if(clubFundSum(cl)+amount>FUND_BUDGET){toast('超出本社团年度预算（剩余 '+money(FUND_BUDGET-clubFundSum(cl))+'）');return}
+ if(!receipt){toast('请填写票据编号');return}
+ funds.unshift({id:uid('FD'),club:cl,item:item,cat:cat,amount:amount,applicant:me.name||me.acc,date:todayStr(),receipt:receipt,status:'待审批',time:nowStr()});
+ pushMsg('admin','经费报销待审批：'+item,money(amount)+' · '+cl+' · 票据 '+receipt,'审批');
+ xlog('提交经费申报：'+item+' '+money(amount));
+ dbSave();toast('报销单已提交，等待财务审批');render();
+}
+function cancelFund(i){
+ var f=funds[i];if(!f)return;
+ if(!confirm('确定撤回「'+f.item+'」的报销单？'))return;
+ funds.splice(i,1);xlog('撤回经费申报：'+f.item);dbSave();toast('报销单已撤回');render();
+}
+function viewFundAudit(){
+ var pending=funds.filter(function(f){return f.status==='待审批'});
+ var paid=funds.filter(function(f){return f.status==='已拨付'}).reduce(function(s,f){return s+f.amount},0);
+ return head('经费审批','审批后自动拨付并写入日志，累计金额实时汇总','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">待审批单</div><div class="v">'+pending.length+'</div><div class="t">合计 '+money(pending.reduce(function(s,f){return s+f.amount},0))+'</div></div>'+
+ '<div class="card"><div class="k">已拨付</div><div class="v" style="font-size:19px">'+money(paid)+'</div><div class="t">'+funds.filter(function(f){return f.status==='已拨付'}).length+' 单</div></div>'+
+ '<div class="card"><div class="k">已驳回</div><div class="v">'+funds.filter(function(f){return f.status==='已驳回'}).length+'</div><div class="t">票据存疑</div></div>'+
+ '<div class="card"><div class="k">总预算</div><div class="v" style="font-size:19px">'+money(FUND_BUDGET*clubs.length)+'</div><div class="t">'+clubs.length+' 个社团</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>报销单队列</h3><span class="chip c-wait">'+pending.length+' 条待处理</span></div>'+
+ '<table><thead><tr><th>社团</th><th>项目</th><th>类别</th><th>金额</th><th>票据</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (funds.map(function(f){var i=funds.indexOf(f);
+  return '<tr><td>'+f.club+'</td><td>'+f.item+'</td><td>'+f.cat+'</td><td>'+money(f.amount)+'</td><td>'+f.receipt+'</td>'+
+  '<td><span class="chip '+(f.status==='已拨付'?'c-ok':f.status==='待审批'?'c-wait':'c-no')+'">'+f.status+'</span></td>'+
+  '<td style="text-align:right">'+(f.status==='待审批'?'<button class="btn btn-p" onclick="decideFund('+i+',true)">拨付</button> <button class="btn btn-g" onclick="decideFund('+i+',false)">驳回</button>':'—')+'</td></tr>';
+ }).join('')||pdf())+'</tbody></table></div>';
+}
+function decideFund(i,pass){
+ var f=funds[i];if(!f)return;
+ f.status=pass?'已拨付':'已驳回';
+ pushMsg('all',(pass?'经费已拨付：':'经费申请被驳回：')+f.item,money(f.amount)+' · '+f.club+(pass?'，款项将在 3 个工作日内到账。':'，请补充合规票据后重新提交。'),'审批');
+ xlog('审批经费 '+(pass?'拨付':'驳回')+'：'+f.id+' '+money(f.amount));
+ dbSave();toast((pass?'已拨付 ':'已驳回 ')+f.club+' 的报销单 '+money(f.amount));render();
+}
+
+/* ---------- 签到管理 ---------- */
+function viewCheckin(){
+ var me=S.user||{},cl=myClubName();
+ var own=events.filter(function(e){return e.club===cl});
+ var cur=S.signEid||(own[0]&&own[0].id)||'';
+ var ev=own.find(function(e){return e.id===cur})||own[0];
+ if(!ev)return head('签到管理','本社团暂无可签到的活动','')+'<div class="panel"><div class="bd">请先在“活动申报”提交并通过活动。</div></div>';
+ var list=apps.filter(function(a){return a.eid===ev.id});
+ var done=list.filter(function(a){return a.status==='已签到'});
+ var rate=list.length?Math.round(done.length/list.length*100):0;
+ return head('签到管理','活动：'+ev.name+' · 生成签到码后学生可自助签到','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">报名人数</div><div class="v">'+list.length+'</div><div class="t">'+ev.date+'</div></div>'+
+ '<div class="card"><div class="k">已签到</div><div class="v">'+done.length+'</div><div class="t">含现场补签</div></div>'+
+ '<div class="card"><div class="k">签到率</div><div class="v">'+rate+'%</div><div class="t">实时计算</div></div>'+
+ '<div class="card"><div class="k">签到码</div><div class="v" style="font-size:19px">'+(ev.signCode||'—')+'</div><div class="t">'+(ev.signCode?'已生成':'点击下方生成')+'</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="bd" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'+
+ '<select onchange="pickEvent(this.value)" style="padding:9px 12px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:12.5px">'+
+ own.map(function(e){return '<option value="'+e.id+'" '+(e.id===ev.id?'selected':'')+'>'+e.name+'（'+e.status+'）</option>'}).join('')+'</select>'+
+ '<button class="btn btn-p" onclick="genCode()">生成 / 刷新签到码</button>'+
+ '<button class="btn btn-g" onclick="allCheckin()">一键全部签到</button>'+
+ '<button class="btn btn-g" onclick="exportCsv(\'apps\')">导出报名名单 CSV</button>'+
+ '</div></div>'+
+ '<div class="panel"><div class="hd"><h3>报名名单</h3><span class="chip c-blue">'+list.length+' 人</span></div>'+
+ '<table><thead><tr><th>姓名</th><th>账号</th><th>报名时间</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (list.map(function(a){var gi=apps.indexOf(a);
+  return '<tr><td>'+a.name+'</td><td>'+a.acc+'</td><td>'+(a.time||'—')+'</td>'+
+  '<td><span class="chip '+(a.status==='已签到'?'c-ok':'c-wait')+'">'+a.status+'</span></td>'+
+  '<td style="text-align:right">'+(a.status!=='已签到'?'<button class="btn btn-g" onclick="signOne('+gi+')">补签</button>':'<span style="font-size:11px;color:#8496ad">'+(a.signTime||'')+'</span>')+'</td></tr>';
+ }).join('')||pdf())+'</tbody></table></div>';
+}
+function pickEvent(id){S.signEid=id;render()}
+function genCode(){
+ var me=S.user||{},cl=myClubName();
+ var own=events.filter(function(e){return e.club===cl});
+ var ev=own.find(function(e){return e.id===(S.signEid||(own[0]&&own[0].id))})||own[0];
+ ev.signCode=String(Math.floor(1000+Math.random()*9000));
+ xlog('生成签到码 '+ev.signCode+'（'+ev.name+'）');
+ dbSave();toast('签到码已生成：'+ev.signCode+'，学生端可凭码签到');render();
+}
+function signOne(gi){
+ var a=apps[gi];if(!a)return;
+ a.status='已签到';a.signTime=nowStr();
+ xlog('补签：'+a.name+' '+a.event);
+ dbSave();toast(a.name+' 已补签');render();
+}
+function allCheckin(){
+ var me=S.user||{},cl=myClubName();
+ var own=events.filter(function(e){return e.club===cl});
+ var ev=own.find(function(e){return e.id===(S.signEid||(own[0]&&own[0].id))})||own[0];
+ var n=0;apps.forEach(function(a){if(a.eid===ev.id&&a.status!=='已签到'){a.status='已签到';a.signTime=nowStr();n++}});
+ xlog('一键签到 '+n+' 人（'+ev.name+'）');
+ dbSave();toast('已为 '+n+' 人完成签到');render();
+}
+
+/* ---------- 社团公告 ---------- */
+function viewCNotice(){
+ var me=S.user||{},cl=myClubName();
+ var mine=cnotices.filter(function(c){return c.club===cl});
+ return head('社团公告','发布后立即推送到本社团全部成员的消息中心','')+
+ '<div class="panel"><div class="hd"><h3>发布新公告</h3><span class="chip c-blue">'+cl+'</span></div><div class="bd">'+
+ '<label class="lf">标题<input id="cn-title" value="本周例会议程调整"></label>'+
+ '<label class="lf" style="margin-top:12px">正文<textarea id="cn-body" rows="4">本周例会调整到周四 19:00，地点改为活动中心 302，请各队负责人准时参加。</textarea></label>'+
+ '<div style="margin-top:16px"><button class="btn btn-p" onclick="submitCNotice()">发布并推送</button></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>已发布公告</h3><span class="chip c-blue">'+mine.length+' 条</span></div>'+
+ '<table><thead><tr><th>标题</th><th>发布时间</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (mine.map(function(c){var i=cnotices.indexOf(c);
+  return '<tr><td>'+c.title+'<div style="font-size:11.5px;color:#8496ad">'+c.body+'</div></td><td>'+c.time+'</td>'+
+  '<td style="text-align:right"><button class="btn btn-g" onclick="delCNotice('+i+')">删除</button></td></tr>';
+ }).join('')||pdf())+'</tbody></table></div>';
+}
+function submitCNotice(){
+ var me=S.user||{},cl=myClubName();
+ var t=(document.getElementById('cn-title').value||'').trim();
+ var b=(document.getElementById('cn-body').value||'').trim();
+ if(!t){toast('请填写公告标题');return}
+ cnotices.unshift({id:uid('CN'),club:cl,title:t,body:b,time:nowStr()});
+ var n=0;accounts.forEach(function(u){if(u.club===cl&&u.role!=='admin'){pushMsg(u.acc,'【'+cl+'】'+t,b,'社团公告');n++}});
+ xlog('发布社团公告：'+t+'（推送 '+n+' 人）');
+ dbSave();toast('公告已发布，已推送给 '+n+' 名成员');render();
+}
+function delCNotice(i){
+ if(!confirm('确定删除该公告？'))return;
+ cnotices.splice(i,1);dbSave();toast('公告已删除');render();
+}
+
+/* ---------- 消息中心 ---------- */
+function viewMsg(){
+ var me=S.user||{};
+ var list=myMsgs();
+ var un=unreadCount();
+ var kindChip={'通知':'c-blue','活动':'c-ok','审批':'c-wait','社团公告':'c-no'};
+ return head('消息中心','共 '+list.length+' 条 · 未读 '+un+' 条','<button class="btn btn-g" onclick="readAll()">全部标为已读</button>')+
+ '<div class="panel"><div class="bd">'+
+ (list.map(function(m){var i=msgs.indexOf(m);
+  return '<div class="list-row" style="align-items:flex-start"><span class="chip '+(kindChip[m.kind]||'c-blue')+'" style="margin-top:2px">'+(m.kind||'通知')+'</span>'+
+  '<div class="t" style="font-weight:'+(m.read?'500':'700')+'">'+m.title+'<div class="d" style="line-height:1.8">'+m.body+'<br><span style="color:#a9b6c8">'+m.time+(m.read?' · 已读':' · 未读')+'</span></div></div>'+
+  '<div style="display:flex;gap:6px">'+(m.read?'':'<button class="btn btn-g" onclick="readOne('+i+')">标为已读</button>')+
+  '<button class="btn btn-g" onclick="delMsg('+i+')">删除</button></div></div>';
+ }).join('')||'<div class="list-row"><div class="t" style="color:#94a3b8">暂无消息</div></div>')+
+ '</div></div>';
+}
+function readOne(i){if(msgs[i])msgs[i].read=true;dbSave();render()}
+function readAll(){myMsgs().forEach(function(m){m.read=true});dbSave();toast('已全部标为已读');render()}
+function delMsg(i){var m=msgs[i];if(!m)return;msgs.splice(i,1);dbSave();toast('消息已删除');render()}
+
+/* ---------- 活动评价 ---------- */
+function viewEval(){
+ var me=S.user||{};
+ var mine=apps.filter(function(a){return a.acc===me.acc});
+ var done=mine.filter(function(a){return a.status==='已签到'});
+ var myEvals=evals.filter(function(e){return e.acc===me.acc});
+ var avg=evals.length?(evals.reduce(function(s,e){return s+e.score},0)/evals.length).toFixed(1):'—';
+ return head('活动评价','只有已签到记录可以评价，评价结果计入社团年度考核','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">可评价活动</div><div class="v">'+done.filter(function(a){return !evals.some(function(e){return e.eid===a.eid&&e.acc===me.acc})}).length+'</div><div class="t">已签到未评价</div></div>'+
+ '<div class="card"><div class="k">我提交的评价</div><div class="v">'+myEvals.length+'</div><div class="t">累计</div></div>'+
+ '<div class="card"><div class="k">全校平均分</div><div class="v">'+avg+'</div><div class="t">'+evals.length+' 条评价</div></div>'+
+ '<div class="card"><div class="k">评价维度</div><div class="v" style="font-size:15px">组织 · 内容 · 体验</div><div class="t">1–5 分制</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>待评价活动</h3><span class="chip c-wait">'+done.length+' 场已参加</span></div>'+
+ '<table><thead><tr><th>活动</th><th>时间</th><th>评分</th><th>评价内容</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ (done.map(function(a){var gi=apps.indexOf(a);var has=evals.find(function(e){return e.eid===a.eid&&e.acc===me.acc});
+  return '<tr><td>'+a.event+'</td><td>'+a.date+'</td>'+
+  (has?'<td><span class="chip c-ok">'+has.score+' 分</span></td><td style="font-size:12px;color:#5f7089">'+has.comment+'</td><td style="text-align:right">已评价</td>':
+   '<td><select id="ev-s-'+gi+'"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select> 分</td>'+
+   '<td><input id="ev-c-'+gi+'" placeholder="一句话反馈" style="width:100%;padding:7px 10px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:12px"></td>'+
+   '<td style="text-align:right"><button class="btn btn-p" onclick="submitEval('+gi+')">提交</button></td>')+'</tr>';
+ }).join('')||pdf())+'</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>最新评价（全校）</h3><span class="chip c-blue">公开可见</span></div>'+
+ '<table><thead><tr><th>活动</th><th>评价人</th><th>评分</th><th>内容</th><th>时间</th></tr></thead><tbody>'+
+ (evals.slice(0,8).map(function(e){
+  return '<tr><td>'+e.event+'</td><td>'+e.name+'</td><td><span class="chip c-ok">'+e.score+' 分</span></td><td>'+e.comment+'</td><td>'+e.time+'</td></tr>';
+ }).join('')||pdf())+'</tbody></table></div>';
+}
+function submitEval(gi){
+ var a=apps[gi];if(!a)return;
+ var s=Number(document.getElementById('ev-s-'+gi).value);
+ var c=(document.getElementById('ev-c-'+gi).value||'').trim()||'（未填写文字评价）';
+ evals.unshift({id:uid('EV'),event:a.event,eid:a.eid,acc:a.acc,name:(S.user||{}).name||a.name,score:s,comment:c,time:nowStr()});
+ xlog('评价活动《'+a.event+'》'+s+' 分');
+ dbSave();toast('评价已提交，感谢反馈');render();
+}
+
+/* ---------- 操作日志 ---------- */
+function viewLogs(){
+ return head('操作日志','记录每一次增删改操作，用于审计与问题追溯','<button class="btn btn-g" onclick="exportCsv(\'logs\')">导出日志 CSV</button>')+
+ '<div class="panel"><div class="hd"><h3>最近操作</h3><span class="chip c-blue">'+logs.length+' 条</span></div>'+
+ '<table><thead><tr><th>时间</th><th>操作人</th><th>账号</th><th>操作内容</th></tr></thead><tbody>'+
+ (logs.slice(0,60).map(function(l){
+  return '<tr><td style="white-space:nowrap">'+l.time+'</td><td>'+l.name+'</td><td>'+l.acc+'</td><td>'+l.action+'</td></tr>';
+ }).join('')||pdf())+'</tbody></table></div>';
+}
+
+/* ---------- 报表导出 ---------- */
+function exportCsv(type){
+ var rows=[],name='export.csv';
+ if(type==='members'){rows=[['姓名','账号','院系','社团','状态','角色']].concat(accounts.filter(function(u){return u.role!=='admin'}).map(function(u){return [u.name,u.acc,u.dept||'',u.club||'',u.status||'',ROLE[u.role]]}));name='成员档案.csv'}
+ else if(type==='events'){rows=[['活动','社团','时间','地点','状态']].concat(events.map(function(e){return [e.name,e.club,e.date,e.place,e.status]}));name='活动清单.csv'}
+ else if(type==='apps'){rows=[['姓名','账号','活动','时间','地点','状态','签到时间']].concat(apps.map(function(a){return [a.name,a.acc,a.event,a.date,a.place,a.status,a.signTime||'']}));name='报名名单.csv'}
+ else if(type==='logs'){rows=[['时间','操作人','账号','操作']].concat(logs.map(function(l){return [l.time,l.name,l.acc,l.action]}));name='操作日志.csv'}
+ else if(type==='rooms'){rows=[['场地','日期','时段','社团','用途','状态']].concat(roomBk.map(function(b){return [b.room,b.date,b.slot,b.club,b.reason,b.status]}));name='场地预约.csv'}
+ else {rows=[['统计项','数值'],['注册用户',accounts.length],['活动数',events.length],['报名数',apps.length]];name='统计.csv'}
+ var csv='\ufeff'+rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\r\n');
+ var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+ var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
+ toast('已导出 '+name+'（'+rows.length+' 行）');
+}
+
+/* ---------- 审批中心 / 运营中心 ---------- */
+function viewAppr(){
+ var sub=S.sub||'event';
+ return head('审批中心','活动 / 场地 / 经费三类审批集中处理，结果实时推送到申请人消息中心','')+
+ subBar([['event','活动审批'],['room','场地审批'],['fund','经费审批']],sub,'goSub')+
+ (sub==='room'?viewRoomAudit():sub==='fund'?viewFundAudit():viewApprove());
+}
+function viewOps(){
+ var sub=S.sub||'room';
+ return head('运营中心','场地 · 经费 · 签到 · 公告 四项社团日常运营功能','')+
+ subBar([['room','场地申请'],['fund','经费申报'],['check','签到管理'],['cn','社团公告']],sub,'goSub')+
+ (sub==='fund'?viewFund():sub==='check'?viewCheckin():sub==='cn'?viewCNotice():viewRoom());
+}
+function viewReport(){
+ var tot=events.length,appN=apps.length,signed=apps.filter(function(a){return a.status==='已签到'}).length;
+ return head('数据报表','一键导出 CSV，可直接用于实训报告附表','')+
+ '<div class="cards">'+
+ '<div class="card"><div class="k">用户总数</div><div class="v">'+accounts.length+'</div><div class="t">含管理员</div></div>'+
+ '<div class="card"><div class="k">活动总数</div><div class="v">'+tot+'</div><div class="t">已通过 '+events.filter(function(e){return e.status==='已通过'}).length+'</div></div>'+
+ '<div class="card"><div class="k">报名记录</div><div class="v">'+appN+'</div><div class="t">签到 '+signed+' 人次</div></div>'+
+ '<div class="card"><div class="k">经费总额</div><div class="v" style="font-size:19px">'+money(funds.reduce(function(s,f){return s+f.amount},0))+'</div><div class="t">'+funds.length+' 张单据</div></div>'+
+ '</div>'+
+ '<div class="panel"><div class="hd"><h3>导出中心</h3><span class="chip c-blue">UTF-8 CSV</span></div><div class="bd" style="display:flex;gap:10px;flex-wrap:wrap">'+
+ '<button class="btn btn-p" onclick="exportCsv(\'members\')">成员档案</button>'+
+ '<button class="btn btn-p" onclick="exportCsv(\'events\')">活动清单</button>'+
+ '<button class="btn btn-p" onclick="exportCsv(\'apps\')">报名名单</button>'+
+ '<button class="btn btn-p" onclick="exportCsv(\'rooms\')">场地预约</button>'+
+ '<button class="btn btn-g" onclick="exportCsv(\'logs\')">操作日志</button>'+
+ '<button class="btn btn-g" onclick="exportCsv(\'sum\')">统计汇总</button></div></div>'+
+ '<div class="panel"><div class="hd"><h3>社团活跃度排序</h3></div>'+
+ '<table><thead><tr><th>社团</th><th>成员</th><th>活动</th><th>报名</th><th>经费</th></tr></thead><tbody>'+
+ clubs.map(function(c){
+  var evs=events.filter(function(e){return e.club===c.name});
+  var as=apps.filter(function(a){return evs.some(function(e){return e.id===a.eid})});
+  return '<tr><td>'+c.name+'</td><td>'+c.members+'</td><td>'+evs.length+'</td><td>'+as.length+'</td><td>'+money(clubFundSum(c.name))+'</td></tr>';
+ }).join('')+'</tbody></table></div>';
+}
+
+/* ---------- 挂载导航 ---------- */
+(function(){
+ function add(role,item,afterKey){
+  if(TABS[role].some(function(t){return t[0]===item[0]}))return;
+  var idx=TABS[role].findIndex(function(t){return t[0]===afterKey});
+  TABS[role].splice(idx<0?TABS[role].length:idx+1,0,item);
+ }
+ add('student',['room','场地预约'],'mine');
+ add('student',['eval','活动评价'],'room');
+ add('student',['msg','消息中心'],'notice');
+ add('leader',['ops','运营中心'],'joinreq');
+ add('leader',['msg','消息中心'],'ops');
+ var ai=TABS.admin.findIndex(function(t){return t[0]==='approve'});
+ if(ai>=0)TABS.admin[ai]=['appr','审批中心'];
+ TABS.admin.push(['logs','操作日志']);
+ TABS.admin.push(['report','数据报表']);
+ TABS.admin.push(['msg','消息中心']);
+})();
+
+/* ---------- 覆盖渲染与持久化 ---------- */
+function render(){
+ var c=document.getElementById('content');
+ var map={plaza:viewPlaza,events:viewEvents,mine:viewMine,notice:viewNotice,myclub:viewMyClub,pub:viewPub,
+  mem:viewMem,dash:viewDash,audit:viewAudit,approve:viewApprove,profile:viewProfile,joinreq:viewJoinReq,
+  appr:viewAppr,room:viewRoom,roomA:viewRoomAudit,roomAudit:viewRoomAudit,fund:viewFund,fundAudit:viewFundAudit,
+  checkin:viewCheckin,cnotice:viewCNotice,msg:viewMsg,eval:viewEval,logs:viewLogs,report:viewReport,ops:viewOps};
+ c.innerHTML=(map[S.tab]||viewPlaza)();
+ bindCharts();
+ var tb=document.querySelectorAll('#tabs button');
+ for(var i=0;i<tb.length;i++){
+  if(tb[i].dataset.t==='msg'&&unreadCount()>0){tb[i].textContent='消息中心 '+unreadCount()}
+ }
+}
+function clubState(){return {users:accounts,events:events,notices:notices,apps:apps,joins:joins,
+ roomsBk:roomBk,funds:funds,cnotices:cnotices,msgs:msgs,evals:evals,logs:logs}}
+function dbSave(){
+ try{localStorage.setItem(DBK,JSON.stringify({users:accounts,events:events,notices:notices,apps:apps,joins:joins,
+  roomsBk:roomBk,funds:funds,cnotices:cnotices,msgs:msgs,evals:evals,logs:logs,ts:Date.now()}))}catch(e){}
+ flash();sbPush();
+}
+function sbApply(d){
+ if(!d)return false;
+ if(d.users&&d.users.length){accounts.length=0;d.users.forEach(function(u){accounts.push(u)})}
+ if(d.events){events.length=0;d.events.forEach(function(e){events.push(e)})}
+ if(d.notices){notices.length=0;d.notices.forEach(function(n){notices.push(n)})}
+ apps=d.apps||[];joins=d.joins||[];
+ if(d.roomsBk){roomBk.length=0;d.roomsBk.forEach(function(x){roomBk.push(x)})}
+ if(d.funds){funds.length=0;d.funds.forEach(function(x){funds.push(x)})}
+ if(d.cnotices){cnotices.length=0;d.cnotices.forEach(function(x){cnotices.push(x)})}
+ if(d.msgs){msgs.length=0;d.msgs.forEach(function(x){msgs.push(x)})}
+ if(d.evals){evals.length=0;d.evals.forEach(function(x){evals.push(x)})}
+ if(d.logs){logs.length=0;d.logs.forEach(function(x){logs.push(x)})}
+ return true;
+}
+(function localExtra(){
+ try{
+  var r=JSON.parse(localStorage.getItem(DBK)||'null');if(!r)return;
+  if(r.roomsBk){roomBk.length=0;r.roomsBk.forEach(function(x){roomBk.push(x)})}
+  if(r.funds){funds.length=0;r.funds.forEach(function(x){funds.push(x)})}
+  if(r.cnotices){cnotices.length=0;r.cnotices.forEach(function(x){cnotices.push(x)})}
+  if(r.msgs){msgs.length=0;r.msgs.forEach(function(x){msgs.push(x)})}
+  if(r.evals){evals.length=0;r.evals.forEach(function(x){evals.push(x)})}
+  if(r.logs){logs.length=0;r.logs.forEach(function(x){logs.push(x)})}
+ }catch(e){}
+})();
+
 sbBoot();
 
 /* 隐藏托管页注入的品牌角标文案 */
