@@ -490,16 +490,178 @@ body{background:
 #login .inner .meta{color:rgba(214,232,223,.7)}
 
 /* 应用页底部真实影像带 */
-.ep-vband{position:fixed;left:0;right:0;bottom:0;height:18vh;z-index:0;overflow:hidden;pointer-events:none;
- -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 58%);mask-image:linear-gradient(180deg,transparent 0,#000 58%)}
-.ep-vband video{width:100%;height:100%;object-fit:cover;filter:blur(2px) saturate(.92) brightness(1.08);transform:scale(1.05);opacity:.72}
-.ep-vband::after{content:"";position:absolute;inset:0;
- background:linear-gradient(180deg,rgba(247,249,253,.92) 0%,rgba(247,249,253,.68) 55%,rgba(247,249,253,.45) 100%)}
+
+
+
 @media(max-width:920px){
  #login .lg-right{background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none;backdrop-filter:none;padding:28px 16px}
  #login .form-card{max-width:400px;margin:0 auto;box-shadow:0 30px 80px -34px rgba(0,20,15,.7)}
- .ep-vband{height:24vh}
+ 
 }
+
+</style>
+<style id="ep-pages">
+body{background:linear-gradient(180deg,#fcfdff 0%,#f3f6fa 100%) fixed!important}
+
+.app::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(1000px 460px at 80% -10%,var(--pg-soft,transparent),transparent 66%),radial-gradient(760px 380px at 8% 106%,var(--pg-soft,transparent),transparent 70%)}
+
+/* ================= v5 页面独立视觉系统 ================= */
+#content{position:relative;z-index:1}
+#content>.page-head{position:relative;overflow:hidden;border-radius:18px;padding:26px 30px 26px 32px;
+ min-height:126px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;
+ background:var(--pg-band,linear-gradient(120deg,#132b45,#0c1c2c));color:var(--pg-ink,#fff);
+ box-shadow:0 26px 54px -36px rgba(12,26,42,.6);transition:background .5s ease}
+#content>.page-head h2{color:var(--pg-ink,#fff)!important;font-size:27px!important;line-height:1.25;font-family:"Noto Serif SC","Songti SC",serif;letter-spacing:.03em}
+#content>.page-head h2::before{display:none!important}
+#content>.page-head .t{color:var(--pg-ink,#fff)!important;font-size:27px;font-family:"Noto Serif SC",serif}
+#content>.page-head p{color:var(--pg-sub,rgba(255,255,255,.76))!important;margin-top:9px;font-size:12.5px;letter-spacing:.03em;line-height:1.7}
+#content>.page-head .pg-mark{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:0 0 auto;
+ margin-left:18px;font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace}
+#content>.page-head .pg-mark span{font-size:10px;letter-spacing:.26em;color:var(--pg-sub,rgba(255,255,255,.7));text-transform:uppercase}
+#content>.page-head .pg-mark b{font-size:16px;font-weight:600;letter-spacing:.08em;color:var(--pg-ink,#fff)}
+#content>.page-head .btn{border-radius:var(--pg-r,10px)!important}
+
+/* 强调色跟随页面 */
+.app .btn-p{background:linear-gradient(135deg,var(--pg,#2f6df6),var(--pg2,#59a6ff))!important;
+ box-shadow:0 10px 22px -12px var(--pg-soft,rgba(47,109,246,.45)),inset 0 1px 0 rgba(255,255,255,.42)!important}
+.app .btn-s{background:var(--pg-soft,rgba(47,109,246,.12))!important;color:var(--pg,#2f6df6)!important}
+.app .tabs button.on{color:var(--pg,#2f6df6)!important}
+.app .tabs button.on::after{background:var(--pg,#2f6df6)!important}
+.app .badge{background:var(--pg-soft,rgba(47,109,246,.1))!important;color:var(--pg,#2f6df6)!important;
+ border-color:color-mix(in srgb,var(--pg,#2f6df6) 30%,transparent)!important}
+.app #content table thead th,.app #content .panel table th{background:var(--pg-soft,rgba(47,109,246,.08))!important;color:var(--pg,#2f6df6)!important}
+.app #content .chip.c-ok,.app #content .chip.c-blue{background:var(--pg-soft,rgba(47,109,246,.1))!important;color:var(--pg,#2f6df6)!important}
+.app #content tbody tr:hover{background:var(--pg-soft,rgba(47,109,246,.06))!important}
+.app .bars .b{background:linear-gradient(180deg,var(--pg2,#59a6ff),var(--pg,#2f6df6))!important}
+.app .chip.c-blue{background:var(--pg-soft,rgba(47,109,246,.1))!important;color:var(--pg,#2f6df6)!important}
+.app .btn{border-radius:var(--pg-r,10px)}
+.app .panel,.app .card{transition:box-shadow .3s var(--ep-ease),background .4s ease}
+
+/* 同一页内第二个及以后的标题降级为小节头，避免双横幅 */
+#content>.page-head.pg-sub,#content .panel .page-head{background:transparent!important;box-shadow:none!important;
+ min-height:0!important;border-radius:0!important;padding:2px 2px 12px!important;margin-bottom:12px!important;
+ border-left:3px solid var(--pg,#2f6df6)!important;padding-left:12px!important;color:#16233a!important}
+#content>.page-head.pg-sub h2,#content .panel .page-head h2{color:#16233a!important;font-size:19px!important}
+#content>.page-head.pg-sub p,#content .panel .page-head p{color:#5b6b82!important}
+#content>.page-head.pg-sub .pg-mark{display:none!important}
+
+/* 页脚标识，收尾留白 */
+#content>.pg-foot{display:flex;align-items:center;gap:14px;margin:34px 2px 6px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+ font-size:10.5px;letter-spacing:.22em;color:#9aa4b2;text-transform:uppercase}
+#content>.pg-foot .pg-fl{flex:1 1 auto;height:1px;background:linear-gradient(90deg,var(--pg,#2f6df6),transparent 78%);opacity:.55}
+#content>.pg-foot b{font-weight:600;color:var(--pg,#2f6df6);letter-spacing:.16em}
+
+/* 表单控件底色统一 */
+.app #content select,.app #content option{background-color:#fff!important;color:#232a33!important}
+.app #content input,.app #content textarea,.app #content select{background-color:#fff!important}
+
+/* 顶栏排版：避免角色文字换行 */
+.topbar .who{display:flex!important;align-items:center;gap:8px;flex:0 0 auto;white-space:nowrap}
+.topbar .who>span,.topbar .who .badge,.topbar .who .bdg{white-space:nowrap}
+.topbar .who .badge,.topbar .who .bdg{display:none!important}
+.topbar .in{max-width:none!important;padding:0 24px!important;height:auto!important;min-height:64px;flex-wrap:nowrap}
+.topbar .inner{flex-wrap:nowrap;max-width:none!important;padding:0 24px!important}
+.topbar .tabs{flex:1 1 auto;min-width:0}
+.logo-row,.brand{flex:0 0 auto}
+
+/* 页签图标 */
+#tabs button{display:inline-flex;align-items:center;gap:6px}
+#tabs button .ep-ic{display:inline-flex;width:15px;height:15px;opacity:.62;transition:.2s}
+#tabs button .ep-ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#tabs button.on .ep-ic{opacity:1;transform:translateY(-1px)}
+
+.app[data-page="plaza"]{--pg:#2f6df6;--pg2:#6fa8ff;--pg-ink:#ffffff;--pg-sub:rgba(255,255,255,.80);--pg-r:999px;--pg-soft:color-mix(in srgb,#2f6df6 14%,transparent)}
+.app[data-page="plaza"] #content>.page-head{background:radial-gradient(900px 260px at 88% -20%,rgba(47,109,246,.42),transparent 62%),linear-gradient(120deg,#0c1a2b 0%,#152742 100%)}
+.app[data-page="plaza"] #content>.page-head::after{content:"CLUB FAIR";position:absolute;right:26px;bottom:-6px;font-size:58px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.075);font-family:"IBM Plex Mono",monospace;pointer-events:none}
+
+.app[data-page="events"]{--pg:#6366d8;--pg2:#8f92ee;--pg-ink:#ffffff;--pg-sub:rgba(255,255,255,.74);--pg-r:6px;--pg-soft:color-mix(in srgb,#6366d8 14%,transparent)}
+.app[data-page="events"] #content>.page-head{background:linear-gradient(115deg,#3b3fa8 0%,#232a63 58%,#171b49 100%),repeating-linear-gradient(115deg,rgba(255,255,255,.06) 0 2px,transparent 2px 11px)}
+.app[data-page="events"] .panel,.app[data-page="events"] .card{border-radius:6px!important}
+
+.app[data-page="mine"]{--pg:#0f8a73;--pg2:#3fc4a6;--pg-ink:#ffffff;--pg-sub:rgba(255,255,255,.78);--pg-r:14px;--pg-soft:color-mix(in srgb,#0f8a73 14%,transparent)}
+.app[data-page="mine"] #content>.page-head{background:radial-gradient(760px 240px at 92% 120%,rgba(15,138,115,.5),transparent 62%),linear-gradient(115deg,#082722 0%,#0d3b32 100%)}
+.app[data-page="mine"] .card{border-radius:14px!important}
+.app[data-page="mine"] #content>.page-head::after{content:"MEMBER";position:absolute;right:28px;bottom:-2px;font-size:50px;letter-spacing:.22em;color:rgba(255,255,255,.07);font-family:"IBM Plex Mono",monospace}
+
+.app[data-page="myclub"]{--pg:#0f8a73;--pg2:#3fc4a6;--pg-ink:#ffffff;--pg-sub:rgba(255,255,255,.78);--pg-r:14px;--pg-soft:color-mix(in srgb,#0f8a73 14%,transparent)}
+.app[data-page="myclub"] #content>.page-head{background:radial-gradient(760px 240px at 92% 120%,rgba(15,138,115,.5),transparent 62%),linear-gradient(115deg,#082722 0%,#0d3b32 100%)}
+.app[data-page="pub"]{--pg:#2b7a4b;--pg2:#57ab74;--pg-ink:#14361f;--pg-sub:rgba(20,54,31,.62);--pg-r:8px;--pg-soft:color-mix(in srgb,#2b7a4b 14%,transparent)}
+.app[data-page="pub"] #content>.page-head{background:linear-gradient(180deg,#fbfdf8 0%,#edf5e9 100%),repeating-linear-gradient(180deg,transparent 0 33px,rgba(20,54,31,.07) 33px 34px)}
+.app[data-page="pub"] #content>.page-head{border-left:6px solid #2b7a4b}
+
+.app[data-page="room"]{--pg:#2c6aa8;--pg2:#5b9ad6;--pg-ink:#123f68;--pg-sub:rgba(18,63,104,.62);--pg-r:3px;--pg-soft:color-mix(in srgb,#2c6aa8 14%,transparent)}
+.app[data-page="room"] #content>.page-head{background:linear-gradient(180deg,#f4f9fe 0%,#e2eef9 100%),repeating-linear-gradient(90deg,rgba(44,106,168,.10) 0 1px,transparent 1px 26px),repeating-linear-gradient(0deg,rgba(44,106,168,.10) 0 1px,transparent 1px 26px)}
+.app[data-page="room"] .btn-p{background:transparent!important;color:#2c6aa8!important;border:1.6px solid #2c6aa8;box-shadow:none!important}
+.app[data-page="eval"]{--pg:#c4762a;--pg2:#e0a75c;--pg-ink:#6b4218;--pg-sub:rgba(107,66,24,.6);--pg-r:999px;--pg-soft:color-mix(in srgb,#c4762a 14%,transparent)}
+.app[data-page="eval"] #content>.page-head{background:linear-gradient(150deg,#fdf6ea 0%,#f4e3c8 100%)}
+.app[data-page="eval"] .btn-p{background:#c4762a!important;color:#fff!important;box-shadow:0 8px 18px -14px #c4762a!important}
+.app[data-page="eval"] #content>.page-head::after{content:"\201C";position:absolute;right:22px;top:-14px;font-size:92px;line-height:1;color:rgba(196,118,42,.18);font-family:Georgia,serif}
+
+.app[data-page="notice"]{--pg:#8a5a2b;--pg2:#b98a52;--pg-ink:#5a3d22;--pg-sub:rgba(90,61,34,.6);--pg-r:12px;--pg-soft:color-mix(in srgb,#8a5a2b 14%,transparent)}
+.app[data-page="notice"] #content>.page-head{background:linear-gradient(180deg,#f7f0e1 0%,#e9dcc3 100%),repeating-linear-gradient(180deg,transparent 0 2px,rgba(138,90,43,.05) 2px 3px)}
+.app[data-page="notice"] .btn-p{background:#8a5a2b!important;color:#fff!important;box-shadow:0 8px 18px -14px #8a5a2b!important}
+.app[data-page="cnotice"]{--pg:#8a5a2b;--pg2:#b98a52;--pg-ink:#5a3d22;--pg-sub:rgba(90,61,34,.6);--pg-r:12px;--pg-soft:color-mix(in srgb,#8a5a2b 14%,transparent)}
+.app[data-page="cnotice"] #content>.page-head{background:linear-gradient(180deg,#f7f0e1 0%,#e9dcc3 100%),repeating-linear-gradient(180deg,transparent 0 2px,rgba(138,90,43,.05) 2px 3px)}
+.app[data-page="cnotice"] .btn-p{background:#8a5a2b!important;color:#fff!important;box-shadow:0 8px 18px -14px #8a5a2b!important}
+.app[data-page="msg"]{--pg:#1b2330;--pg2:#3b4a60;--pg-ink:#1b2330;--pg-sub:rgba(27,35,48,.58);--pg-r:6px;--pg-soft:color-mix(in srgb,#1b2330 14%,transparent)}
+.app[data-page="msg"] #content>.page-head{background:linear-gradient(90deg,#ffffff 0%,#f6f7fa 100%)}
+.app[data-page="msg"] .btn-p{background:#1b2330!important;color:#fff!important;box-shadow:none!important}
+.app[data-page="msg"] #content>.page-head{border-left:8px solid #1b2330}
+.app[data-page="msg"] .list-row{border-left:2px solid transparent}.app[data-page="msg"] .list-row:hover{border-left-color:#1b2330}
+
+.app[data-page="dash"]{--pg:#0ea5c6;--pg2:#37d6ea;--pg-ink:#e7fbff;--pg-sub:rgba(231,251,255,.72);--pg-r:16px;--pg-soft:color-mix(in srgb,#0ea5c6 14%,transparent)}
+.app[data-page="dash"] #content>.page-head{background:radial-gradient(1200px 280px at 12% 0%,rgba(14,165,198,.42),transparent 62%),linear-gradient(120deg,#071726 0%,#0d2b42 100%)}
+.app[data-page="dash"] #content>.page-head{box-shadow:0 30px 60px -34px rgba(4,20,34,.7),inset 0 0 0 1px rgba(120,225,245,.18)}
+
+.app[data-page="audit"]{--pg:#b23b3b;--pg2:#d76a5f;--pg-ink:#7a2530;--pg-sub:rgba(122,37,48,.6);--pg-r:2px;--pg-soft:color-mix(in srgb,#b23b3b 14%,transparent)}
+.app[data-page="audit"] #content>.page-head{background:linear-gradient(180deg,#fbf5e4 0%,#f0e2c4 100%)}
+.app[data-page="audit"] .btn-p{background:transparent!important;color:#b23b3b!important;border:2px double #b23b3b;box-shadow:none!important;font-weight:700}
+.app[data-page="audit"] #content>.page-head{border-left:7px solid rgba(178,59,59,.55)}
+.app[data-page="audit"] #content>.page-head::after{content:"ARCHIVE";position:absolute;right:26px;bottom:-4px;font-size:44px;letter-spacing:.24em;color:rgba(122,37,48,.10);font-family:"IBM Plex Mono",monospace}
+
+.app[data-page="appr"]{--pg:#1f8f6b;--pg2:#48bd93;--pg-ink:#e9f7f0;--pg-sub:rgba(233,247,240,.76);--pg-r:4px;--pg-soft:color-mix(in srgb,#1f8f6b 14%,transparent)}
+.app[data-page="appr"] #content>.page-head{background:linear-gradient(120deg,#0f3d31 0%,#16594a 100%)}
+.app[data-page="appr"] .btn-p{background:transparent!important;color:#1f8f6b!important;border:1.6px solid #1f8f6b;box-shadow:none!important}
+.app[data-page="appr"] #content>.page-head{outline:1px dashed rgba(233,247,240,.35);outline-offset:-10px}
+
+.app[data-page="mem"]{--pg:#8a5a2b;--pg2:#b98a52;--pg-ink:#382a1a;--pg-sub:rgba(56,42,26,.6);--pg-r:6px;--pg-soft:color-mix(in srgb,#8a5a2b 14%,transparent)}
+.app[data-page="mem"] #content>.page-head{background:linear-gradient(180deg,#fffefb 0%,#f8f1e2 100%),repeating-linear-gradient(180deg,transparent 0 39px,rgba(122,82,48,.10) 39px 40px)}
+.app[data-page="mem"] .btn-p{background:#8a5a2b!important;color:#fff!important;box-shadow:0 8px 18px -14px #8a5a2b!important}
+.app[data-page="mem"] .panel{background:linear-gradient(180deg,#fffdf8,#fdf6e9)!important}
+
+.app[data-page="logs"]{--pg:#14b8a6;--pg2:#4de3d0;--pg-ink:#a8f0e4;--pg-sub:rgba(168,240,228,.66);--pg-r:0px;--pg-soft:color-mix(in srgb,#14b8a6 14%,transparent)}
+.app[data-page="logs"] #content>.page-head{background:linear-gradient(120deg,#080d12 0%,#101a20 100%)}
+.app[data-page="logs"] .btn-p{background:#14b8a6!important;color:#fff!important;box-shadow:none!important}
+.app[data-page="logs"] #content>.page-head{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.app[data-page="logs"] .panel table{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px}
+
+.app[data-page="report"]{--pg:#3b6ea8;--pg2:#6d9dcc;--pg-ink:#17395c;--pg-sub:rgba(23,57,92,.58);--pg-r:10px;--pg-soft:color-mix(in srgb,#3b6ea8 14%,transparent)}
+.app[data-page="report"] #content>.page-head{background:linear-gradient(180deg,#f5f8fc 0%,#e7eef7 100%),repeating-linear-gradient(90deg,rgba(59,110,168,.07) 0 1px,transparent 1px 32px)}
+.app[data-page="report"] .btn-p{background:#3b6ea8!important;color:#fff!important;box-shadow:0 8px 18px -14px #3b6ea8!important}
+.app[data-page="ops"]{--pg:#3f8fb0;--pg2:#6fb8d2;--pg-ink:#f0fbff;--pg-sub:rgba(240,251,255,.74);--pg-r:12px;--pg-soft:color-mix(in srgb,#3f8fb0 14%,transparent)}
+.app[data-page="ops"] #content>.page-head{background:linear-gradient(120deg,#12304a 0%,#1c4c6b 100%)}
+.app[data-page="ops"] .btn-p{background:transparent!important;color:#3f8fb0!important;border:1.6px solid #3f8fb0;box-shadow:none!important}
+.app[data-page="joinreq"]{--pg:#c2410c;--pg2:#e3763f;--pg-ink:#8f3510;--pg-sub:rgba(143,53,16,.6);--pg-r:10px;--pg-soft:color-mix(in srgb,#c2410c 14%,transparent)}
+.app[data-page="joinreq"] #content>.page-head{background:linear-gradient(180deg,#fff7ee 0%,#ffe8d4 100%)}
+.app[data-page="joinreq"] .btn-p{background:#c2410c!important;color:#fff!important;box-shadow:0 8px 18px -14px #c2410c!important}
+.app[data-page="joinreq"] #content>.page-head{border-left:6px dashed rgba(194,65,12,.5)}
+
+.app[data-page="fund"]{--pg:#a16207;--pg2:#d19a3a;--pg-ink:#6d4306;--pg-sub:rgba(109,67,6,.58);--pg-r:6px;--pg-soft:color-mix(in srgb,#a16207 14%,transparent)}
+.app[data-page="fund"] #content>.page-head{background:linear-gradient(180deg,#fdf8ec 0%,#f4e8cd 100%)}
+.app[data-page="fund"] .btn-p{background:#a16207!important;color:#fff!important;box-shadow:0 8px 18px -14px #a16207!important}
+.app[data-page="fund"] #content>.page-head{border-bottom:3px double rgba(161,98,7,.35)}
+
+.app[data-page="fundAudit"]{--pg:#a16207;--pg2:#d19a3a;--pg-ink:#6d4306;--pg-sub:rgba(109,67,6,.58);--pg-r:6px;--pg-soft:color-mix(in srgb,#a16207 14%,transparent)}
+.app[data-page="fundAudit"] #content>.page-head{background:linear-gradient(180deg,#fdf8ec 0%,#f4e8cd 100%)}
+.app[data-page="fundAudit"] .btn-p{background:#a16207!important;color:#fff!important;box-shadow:0 8px 18px -14px #a16207!important}
+.app[data-page="checkin"]{--pg:#0e7490;--pg2:#33a9c0;--pg-ink:#eafcff;--pg-sub:rgba(234,252,255,.74);--pg-r:14px;--pg-soft:color-mix(in srgb,#0e7490 14%,transparent)}
+.app[data-page="checkin"] #content>.page-head{background:linear-gradient(120deg,#0a3a45 0%,#116a78 100%)}
+.app[data-page="profile"]{--pg:#475569;--pg2:#7b8ba3;--pg-ink:#23303f;--pg-sub:rgba(35,48,63,.6);--pg-r:12px;--pg-soft:color-mix(in srgb,#475569 14%,transparent)}
+.app[data-page="profile"] #content>.page-head{background:linear-gradient(180deg,#f4f6fa 0%,#e8ecf3 100%)}
+.app[data-page="profile"] .btn-p{background:#475569!important;color:#fff!important;box-shadow:0 8px 18px -14px #475569!important}
+.app[data-page="logs"] #content>.page-head::before{content:"";position:absolute;left:26px;top:22px;width:34px;height:8px;border-radius:50%;background:radial-gradient(circle at 6px 4px,#ff5f57 0 4px,transparent 4px),radial-gradient(circle at 16px 4px,#febc2e 0 4px,transparent 4px),radial-gradient(circle at 26px 4px,#28c840 0 4px,transparent 4px)}
+
+@media(max-width:900px){#content>.page-head{padding:20px 18px;min-height:104px;border-radius:14px}#content>.page-head h2{font-size:21px!important}#content>.page-head .pg-mark{display:none}}
 
 </style>
 </head>
@@ -560,7 +722,6 @@ body{background:
 </section>
 
 <div class="app" id="app">
-  <div class="ep-vband" aria-hidden="true"><video src="assets/campus.mp4" autoplay muted loop playsinline preload="none"></video></div>
   <div class="topbar">
     <div class="inner">
       <div class="brand"><div class="m">云</div>社团云</div>
@@ -1072,7 +1233,7 @@ function delUser(idx){
 function viewNotice(){
  var admin=S.role==='admin';
  var addBtn=admin?'<button class="btn btn-p" onclick="editNotice(-1)">+ 发布公告</button>':'';
- return head('消息通知',admin?'管理员可新增 / 编辑 / 删除公告，学生端实时同步':'系统通知与社团公告',''+addBtn)+
+ return head(admin?'公告管理':'消息通知',admin?'校团委公告发布台 · 学生端实时同步':'系统通知与社团公告',''+addBtn)+
  '<div class="panel"><div class="bd">'+
  (notices.map(function(n,i){
   return '<div class="list-row"><span class="chip c-blue">'+(n.from||'校团委')+'</span><div class="t">'+n.t+
@@ -1846,6 +2007,44 @@ sbBoot();
   document.addEventListener('DOMContentLoaded',hideBrand);
   window.addEventListener('load',hideBrand);
 })();
+</script>
+<script id="ep-pages-js">
+/* ================= v5 页面独立视觉系统 ================= */
+(function(){
+ var ICON={"plaza": "<rect x=\"3.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"13.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"3.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"13.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"1.5\"/>", "events": "<rect x=\"3.5\" y=\"5\" width=\"17\" height=\"15.5\" rx=\"2\"/><path d=\"M3.5 10h17M8 3v4.5M16 3v4.5\"/>", "mine": "<circle cx=\"12\" cy=\"8.2\" r=\"3.4\"/><path d=\"M5.2 20c1.5-3.8 4.2-5.6 6.8-5.6s5.3 1.8 6.8 5.6\"/>", "myclub": "<path d=\"M5.5 21V3.5\"/><path d=\"M5.5 4.5h11.5l-2.2 4 2.2 4H5.5\"/>", "pub": "<path d=\"M4 20l1-4 10-10 3 3-10 10z\"/><path d=\"M14 6l3 3\"/>", "room": "<rect x=\"3.5\" y=\"4\" width=\"17\" height=\"16\" rx=\"1\"/><path d=\"M3.5 11.5h17M9.5 4v16\"/>", "eval": "<path d=\"M12 3.4l2.5 5.4 5.9.7-4.3 4.1 1.1 5.8L12 16.6 6.8 19.4l1.1-5.8L3.6 9.5l5.9-.7z\"/>", "notice": "<path d=\"M6 3.8h8l4 4v12.4H6z\"/><path d=\"M9 9.6h6.4M9 13.4h4.6\"/>", "cnotice": "<path d=\"M4 5h16v11H4z\"/><path d=\"M4 16l5-5h6l5 5\"/>", "msg": "<rect x=\"3.4\" y=\"5.2\" width=\"17.2\" height=\"13.6\" rx=\"2\"/><path d=\"M3.8 6.6l8.2 6 8.2-6\"/>", "dash": "<path d=\"M4.5 19V10M9.5 19V5M14.5 19v-6.5M19.5 19V8\"/>", "audit": "<circle cx=\"12\" cy=\"12\" r=\"8.2\"/><path d=\"M8.4 12.4l2.6 2.6 4.6-5.2\"/>", "appr": "<rect x=\"5\" y=\"3.2\" width=\"14\" height=\"17.6\" rx=\"2\"/><path d=\"M9 15l2.2 2.2 3.8-4.6\"/>", "mem": "<circle cx=\"8\" cy=\"9\" r=\"2.6\"/><circle cx=\"16\" cy=\"9\" r=\"2.6\"/><path d=\"M3.2 19c1-3 3-4.4 4.8-4.4s3.8 1.4 4.8 4.4M12.4 19c1-3 2.4-4.4 3.9-4.4\"/>", "logs": "<path d=\"M4.5 6.5h15M4.5 12h9.5M4.5 17.5h12.5\"/>", "report": "<circle cx=\"12\" cy=\"12\" r=\"8.2\"/><path d=\"M12 3.8v8.2h8.2\"/>", "ops": "<circle cx=\"12\" cy=\"12\" r=\"3.1\"/><path d=\"M12 3.2v2.6M12 18.2v2.6M3.2 12h2.6M18.2 12h2.6\"/>", "joinreq": "<path d=\"M12 5v14M5 12h14\"/>", "fund": "<rect x=\"3.6\" y=\"6.4\" width=\"16.8\" height=\"11.2\" rx=\"1.6\"/><circle cx=\"12\" cy=\"12\" r=\"2.3\"/>", "fundAudit": "<path d=\"M5 4h14v16H5z\"/><path d=\"M8.4 9h7.2M8.4 13h4.6\"/>", "checkin": "<circle cx=\"12\" cy=\"12\" r=\"8.2\"/><path d=\"M12 6.8v5.4l3.4 2\"/>", "profile": "<circle cx=\"12\" cy=\"8\" r=\"3.2\"/><path d=\"M5 20c1.5-4 4-5.6 7-5.6s5.5 1.6 7 5.6\"/>", "roomAudit": "<rect x=\"3.5\" y=\"4\" width=\"17\" height=\"16\" rx=\"1\"/><path d=\"M3.5 11.5h17M9.5 4v16\"/>"};
+ var MARK={"plaza": ["CLUB FAIR", "2024"], "events": ["AUTUMN", "2024"], "dash": ["LIVE", "11/20"], "logs": ["SESSION", "LOG"], "audit": ["DOSSIER", "03"], "appr": ["APPROVAL", "PENDING"], "mem": ["ROSTER", "18"], "report": ["REPORT", "Q4"], "msg": ["INBOX", "NEW"], "room": ["PLAN", "A-2"], "eval": ["FEEDBACK", "4.6"], "fund": ["LEDGER", "CNY"], "checkin": ["CHECK-IN", "ON"], "pub": ["FORM", "E-07"], "mine": ["MY CLUB", ""], "myclub": ["MY CLUB", ""], "ops": ["OPS", ""], "joinreq": ["QUEUE", ""], "notice": ["POSTED", ""], "cnotice": ["POSTED", ""], "roomAudit": ["APPROVE", ""], "fundAudit": ["AUDIT", ""], "profile": ["PROFILE", ""]};
+ function paint(){
+  var app=document.getElementById('app'),c=document.getElementById('content');
+  if(!app||!c||typeof S==='undefined'||!S.tab)return;
+  app.setAttribute('data-page',S.tab);
+  var ph=c.querySelector('.page-head');
+  if(ph&&!ph.querySelector('.pg-mark')){
+   var m=MARK[S.tab];
+   if(m&&m[0]){var d=document.createElement('div');d.className='pg-mark';
+    d.innerHTML='<span>'+m[0]+'</span>'+(m[1]?'<b>'+m[1]+'</b>':'');ph.appendChild(d)}
+  }
+  var hs=c.querySelectorAll('.page-head');
+  for(var j=0;j<hs.length;j++){if(j>0)hs[j].classList.add('pg-sub')}
+  var lb='';
+  for(var k=0;k<TABS.length;k++){}
+  try{var list=TABS[S.role]||[];for(var q=0;q<list.length;q++){if(list[q][0]===S.tab)lb=list[q][1]}}catch(e){}
+  var needFoot=c.querySelector('.panel,.card,.list-row,table');
+  if(needFoot&&!c.querySelector('.pg-foot')){
+   var f=document.createElement('div');f.className='pg-foot';
+   f.innerHTML='<b>'+(lb||S.tab)+'</b><span class="pg-fl"></span><span>ClubHub · Local DB</span>';c.appendChild(f);
+  }
+  var tb=document.querySelectorAll('#tabs button');
+  for(var i=0;i<tb.length;i++){
+   var b=tb[i];if(b.querySelector('.ep-ic'))continue;
+   var t=b.dataset.t,svg=ICON[t];if(!svg)continue;
+   b.insertAdjacentHTML('afterbegin','<span class="ep-ic">'+('<svg viewBox="0 0 24 24">'+svg+'</svg>')+'</span>');
+  }
+ }
+ var _r=window.render;
+ window.render=function(){var r=_r.apply(this,arguments);paint();return r};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',paint);else paint();
+})();
+
 </script>
 </body>
 </html><script>
