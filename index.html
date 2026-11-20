@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>陶云 · 课程设计作品集</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;background:#0e1622;color:#e8eef7;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.wrap{max-width:960px;width:100%}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.mk{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#4c8dff,#2d6be0);display:flex;align-items:center;justify-content:center;font-weight:700}
+h1{font-size:26px;letter-spacing:1px}
+.sub{color:#8fa6c4;font-size:12.5px;line-height:2;margin:14px 0 34px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:#16212f;border:1px solid #22303f;border-radius:14px;padding:22px;transition:.2s;text-decoration:none;color:inherit;display:block}
+.card:hover{transform:translateY(-3px);border-color:#3f83f0;box-shadow:0 14px 34px rgba(20,50,110,.35)}
+.card h2{font-size:16px;margin-bottom:8px}
+.card p{font-size:12.5px;color:#93a7bf;line-height:1.9;margin-bottom:16px}
+.tag{display:inline-block;font-size:11px;color:#7fb0ff;border:1px solid rgba(76,141,255,.35);border-radius:6px;padding:3px 8px;margin-right:6px;margin-bottom:12px}
+.go{font-size:12.5px;color:#6aa1ff}
+.foot{margin-top:34px;font-size:11px;color:#6d7f96;line-height:2;border-top:1px solid #22303f;padding-top:16px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><div class="mk">云</div><h1>陶云 · 课程设计作品集</h1></div>
+  <p class="sub">西南交通大学希望学院 · 计算机科学与技术<br>两个课程实训系统，前后端打通 Supabase 云端数据库，支持多角色登录与真实增删改查。</p>
+  <div class="grid">
+    <a class="card" href="./club.html">
+      <h2>校园学生社团管理系统</h2>
+      <p>学生报名、社团负责人申报审批、管理员用户与公告管理，数据落库可跨设备同步。</p>
+      <span class="tag">前端仿真</span><span class="tag">Supabase</span><span class="tag">多角色</span>
+      <div class="go">进入系统 →</div>
+    </a>
+    <a class="card" href="./library.html">
+      <h2>在线图书借阅管理系统</h2>
+      <p>读者检索借还续借、馆员图书入库与读者管理、逾期与统计看板。</p>
+      <span class="tag">借还流程</span><span class="tag">Supabase</span><span class="tag">权限隔离</span>
+      <div class="go">进入系统 →</div>
+    </a>
+  </div>
+  <div class="foot">
+    演示账号：社团系统 admin / admin123（管理员）、20240112 / 123456（学生）<br>
+    图书系统 librarian / lib123456（馆员）、20240112 / 123456（读者）
+  </div>
+</div>
+</body>
+</html>
