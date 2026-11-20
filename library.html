@@ -153,8 +153,8 @@ label.lf{font-size:12px;color:#5f7089;display:block}label.lf input,label.lf sele
 
 /* ---- 底色与光 ---- */
 body{background:
-  radial-gradient(1100px 620px at 12% -8%, rgba(160,195,165,.30), transparent 62%),
-  radial-gradient(900px 560px at 96% 4%, rgba(214,184,132,.22), transparent 58%),
+  radial-gradient(1100px 620px at 12% -8%, rgba(160,195,165,.34), transparent 62%),
+  radial-gradient(900px 560px at 96% 4%, rgba(214,184,132,.24), transparent 58%),
   linear-gradient(180deg,#fffdf7 0%,#faf8f2 42%,#eff4ec 100%) !important;
   color:var(--ep-ink) !important;
 }
@@ -383,9 +383,9 @@ select:focus,textarea:focus{outline:none;border-color:var(--ep-brand);box-shadow
 /* ---- 内容质感 (final) ---- */
 body{
  background:
-  radial-gradient(900px 520px at 8% -6%, rgba(160,195,165,.30), transparent 62%),
-  radial-gradient(760px 460px at 98% 4%, rgba(214,184,132,.22), transparent 64%),
-  radial-gradient(700px 420px at 50% 108%, rgba(214,184,132,.22), transparent 66%),
+  radial-gradient(900px 520px at 8% -6%, rgba(160,195,165,.34), transparent 62%),
+  radial-gradient(760px 460px at 98% 4%, rgba(214,184,132,.24), transparent 64%),
+  radial-gradient(700px 420px at 50% 108%, rgba(214,184,132,.24), transparent 66%),
   linear-gradient(180deg,#fffdf7 0%,#faf8f2 42%,#eff4ec 100%) fixed !important;
 }
 .topbar{background:rgba(255,255,255,.78)!important;backdrop-filter:blur(18px) saturate(1.5);
@@ -408,6 +408,43 @@ body{
 .panel table td{color:#1f2b26!important}
 .panel table td+td,.panel table th+th{border-left:1px solid #eeece2}
 .panel .sub,.panel .muted,.muted{color:#7c887f}
+
+/* ---- 手机端全屏场景 ---- */
+.ep-scene-m{display:none}
+@media(max-width:920px){
+ #login{position:relative}
+ .ep-scene-m{display:block;position:absolute;inset:0;z-index:0;opacity:1}
+ .lg-right{position:relative;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.99))!important}
+ .ep-scene-m .ep-hills .h3{bottom:26%}
+ .ep-scene-m .ep-hills .h2{bottom:14%}
+ .ep-scene-m .ep-hills .h1{bottom:-4%}
+}
+/* ---- 应用页底部校园草坪 ---- */
+.ep-campus{position:fixed;left:0;right:0;bottom:0;height:170px;z-index:0;pointer-events:none;overflow:hidden;
+ -webkit-mask-image:linear-gradient(180deg,transparent,#000 38%,#000);mask-image:linear-gradient(180deg,transparent,#000 38%,#000)}
+.ep-campus-hills span{position:absolute;left:-12%;right:-12%;border-radius:50% 50% 0 0/70% 70% 0 0}
+.ep-campus-hills span:nth-child(2){bottom:-38px;height:120px;background:linear-gradient(180deg,rgba(214,184,132,.24),rgba(0,0,0,0));opacity:.55}
+.ep-campus-hills span:nth-child(1){bottom:-64px;height:120px;background:linear-gradient(180deg,rgba(160,195,165,.34),rgba(0,0,0,0));opacity:.5}
+.ep-campus-grass{position:absolute;left:0;right:0;bottom:0;height:56%;
+ background-image:linear-gradient(180deg,rgba(0,0,0,0),rgba(28,86,52,.10));
+ background-size:100% 100%;opacity:.8}
+.ep-campus-grass:after{content:"";position:absolute;inset:auto 0 -6px 0;height:26px;
+ background:repeating-linear-gradient(88deg,rgba(24,78,48,.16) 0 3px,transparent 3px 11px);
+ -webkit-mask-image:linear-gradient(180deg,transparent,#000 70%);mask-image:linear-gradient(180deg,transparent,#000 70%)}
+
+/* ---- 应用页氛围加强 ---- */
+body{background:
+ radial-gradient(1000px 380px at 50% 112%, rgba(160,195,165,.34), transparent 70%),
+ radial-gradient(900px 520px at 8% -6%, rgba(160,195,165,.34), transparent 62%),
+ radial-gradient(760px 460px at 98% 4%, rgba(214,184,132,.24), transparent 64%),
+ linear-gradient(180deg,#fffdf7 0%,#faf8f2 44%,#eff4ec 100%) fixed !important}
+.ep-campus{height:210px;opacity:1}
+.ep-campus-hills span:nth-child(2){bottom:-30px;height:150px;background:linear-gradient(180deg,rgba(160,195,165,.34),rgba(0,0,0,0));opacity:.9}
+.ep-campus-hills span:nth-child(1){bottom:-58px;height:150px;background:linear-gradient(180deg,rgba(214,184,132,.24),rgba(0,0,0,0));opacity:.85}
+.ep-campus-grass{background-image:linear-gradient(180deg,rgba(0,0,0,0),rgba(24,78,48,.16))}
+.ep-campus-grass:after{background:repeating-linear-gradient(88deg,rgba(24,78,48,.22) 0 3px,transparent 3px 10px)}
+.panel{box-shadow:0 20px 44px -30px rgba(16,42,72,.45),0 2px 6px -2px rgba(16,42,72,.08)!important}
+.card{box-shadow:0 16px 34px -26px rgba(16,42,72,.42)!important}
 
 </style>
 </head>
@@ -1621,6 +1658,11 @@ sbBoot();
    '<div class="ep-birds"><s></s><s></s></div>';
   var veil=$('.veil',lg);
   if(veil)lg.insertBefore(sc,veil);else lg.insertBefore(sc,lg.firstChild);
+  var login=$('#login');
+  if(login&&!$('.ep-scene-m',login)){
+   var m=sc.cloneNode(true);m.className='ep-scene ep-scene-m';
+   login.insertBefore(m,login.firstChild);
+  }
  }
 
  /* 应用内环境光斑 */
@@ -1687,8 +1729,14 @@ sbBoot();
   });
  }
 
+ function buildCampus(){
+  if(!$('.app')||$('.ep-campus'))return;
+  var c=document.createElement('div');c.className='ep-campus';c.setAttribute('aria-hidden','true');
+  c.innerHTML='<div class="ep-campus-hills"><span></span><span></span></div><div class="ep-campus-grass"></div>';
+  document.body.appendChild(c);
+ }
  function boot(){
-  buildScene();buildAmbient();enhance();watch();
+  buildScene();buildAmbient();buildCampus();enhance();watch();
   document.addEventListener('mousemove',parallax,{passive:true});
   window.addEventListener('resize',function(){sc=null});
  }
