@@ -643,7 +643,7 @@ function sbPush(){
  clearTimeout(sbTimer);
  sbTimer=setTimeout(function(){
   sbReq('club_state',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates'},
-   body:JSON.stringify([{id:SB_ROW,data:{v:1,ts:Date.now(),state:{store:store}}}]))
+   body:JSON.stringify([{id:SB_ROW,data:{v:1,ts:Date.now(),state:{store:store}}}])})
   .catch(function(){});
  },450);
 }
