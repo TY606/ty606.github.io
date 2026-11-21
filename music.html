@@ -302,7 +302,7 @@ function save(){try{
  if(U)store.data[U.acc]={fav:fav,plays:plays.slice(0,40),lists:lists,recent:(S.recent||[]).slice(0,8)};
  store.users=users;store.last=U?U.acc:store.last;
  localStorage.setItem(DBK,JSON.stringify(store));
-}catch(e){}}
+}catch(e){}sbPush();}
 function switchUser(u){U=u;const d=store.data[u.acc]||{};
  fav=Array.isArray(d.fav)?d.fav:[];
  plays=Array.isArray(d.plays)?d.plays:[];
@@ -627,6 +627,38 @@ if(!localStorage.getItem(DBK))save();
 const remembered=localStorage.getItem('sonora_last_acc');
 if(remembered){const el=document.getElementById('acc');if(el)el.value=remembered;}
 drawCap();drawCap2();
+
+/* ================= Supabase 云端同步 ================= */
+const SB_URL='https://qthwgfzmojeopscrkwcv.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0aHdnZnptb2plb3BzY3Jrd2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxODQ5OTMsImV4cCI6MjExMDc2MDk5M30.3ALgKCl6RSafyjO3RCQveP2is_awAIflkPEqmvGcVQM';
+const SB_ROW=2;
+let sbReady=false,sbTimer=null;
+function sbReq(path,opt){
+ opt=opt||{};var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+ opt.headers=Object.assign(h,opt.headers||{});
+ return fetch(SB_URL+'/rest/v1/'+path,opt);
+}
+function sbPush(){
+ if(!sbReady)return;
+ clearTimeout(sbTimer);
+ sbTimer=setTimeout(function(){
+  sbReq('club_state',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates'},
+   body:JSON.stringify([{id:SB_ROW,data:{v:1,ts:Date.now(),state:{store:store}}}]))
+  .catch(function(){});
+ },450);
+}
+function sbBoot(){
+ sbReq('club_state?id=eq.2&select=data').then(function(r){return r.json()}).then(function(rows){
+  var d=rows&&rows[0]&&rows[0].data;
+  if(d&&d.state&&d.state.store&&d.state.store.data&&Object.keys(d.state.store.data).length){
+   store=d.state.store;users=store.users||users;
+   try{localStorage.setItem(DBK,JSON.stringify(store))}catch(e){}
+   if(U)switchUser(U);
+  }
+  sbReady=true;sbPush();
+ }).catch(function(){sbReady=true});
+}
+sbBoot();
 </script>
 </body>
 </html>
