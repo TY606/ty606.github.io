@@ -290,26 +290,22 @@ svg{display:block}
 /* ================= 数据 ================= */
 const TONES=[['#7b5cf0','#b18cff'],['#0f93c8','#46c8e8'],['#e0663a','#f2a15c'],['#19a06a','#63f2b4'],['#5b6b8a','#96a6c4'],['#b8478f','#f07ac0'],['#2f6df6','#6fa8ff'],['#8a6d3b','#c9a469']];
 const SONGS=[
- {id:'s1',art:'assets/covers/c1.jpg',t:'夜航西飞',a:'陈默与乐队',al:'夜航',len:60,g:0,hot:'city-pop'},
- {id:'s2',art:'assets/covers/c2.jpg',t:'晚风收音机',a:'林知夏',al:'收音机时代',len:60,g:1,hot:'民谣'},
- {id:'s3',art:'assets/covers/c3.jpg',t:'南方车站',a:'周野',al:'南站',len:60,g:2,hot:'indie'},
- {id:'s4',art:'assets/covers/c4.jpg',t:'未完成的夏天',a:'周末乐队',al:'夏日清单',len:60,g:3,hot:'流行'},
- {id:'s5',art:'assets/covers/c5.jpg',t:'城市潜水',a:'徐一鸣',al:'潜水',len:60,g:4,hot:'电子'},
- {id:'s6',art:'assets/covers/c6.jpg',t:'海湾公路',a:'阿岚',al:'公路电影',len:60,g:5,hot:'民谣'},
- {id:'s7',art:'assets/covers/c7.jpg',t:'凌晨三点半',a:'深夜电台',al:'午夜场',len:60,g:6,hot:'city-pop'},
- {id:'s8',art:'assets/covers/c8.jpg',t:'风马',a:'高原乐队',al:'风马',len:60,g:7,hot:'摇滚'}
+ {id:'s1',art:'assets/covers/c1.jpg',t:'Exodus',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:361,g:0,hot:'blues',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/HWyH7GDvpBZ03BZjR5YtL8fDgvsn2u1jKikD3RfR.mp3',inst:1},
+ {id:'s2',art:'assets/covers/c2.jpg',t:'Light',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:317,g:1,hot:'americana',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/1x6jkowEauRUxjfyw1c1Cddkiak4BX8Ug8NUZcfd.mp3',inst:1},
+ {id:'s3',art:'assets/covers/c3.jpg',t:'Funeral',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:167,g:2,hot:'folk',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/dLShVbwPtM0Sm1VJUOKVbdaOp8eAwjG5OiDNBiVM.mp3',inst:1},
+ {id:'s4',art:'assets/covers/c4.jpg',t:'Wandering',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:490,g:3,hot:'blues',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/VKAaOVjnhkX5JZbhTVgGPf5O5ASnDbTyGCFMcv2v.mp3',inst:1},
+ {id:'s5',art:'assets/covers/c5.jpg',t:'Return',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:410,g:4,hot:'folk',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/QrKEysJuyZWKJEgYYvfTDj5bGYxG3rJ0mhQ1zyvw.mp3',inst:1},
+ {id:'s6',art:'assets/covers/c6.jpg',t:'Aftermath',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:362,g:5,hot:'americana',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/bJ8kw6IzAZgXXLBnXeLJ2n2f7PkSDU6CkKLykXsD.mp3',inst:1},
+ {id:'s7',art:'assets/covers/c7.jpg',t:'Dreamshifter',a:'HoliznaCC0',al:'Public Domain Lofi',len:157,g:6,hot:'lofi',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/u3xjENJMKOtoKQIL2wFKohuXvNimTXRPWLldST7m.mp3',inst:1},
+ {id:'s8',art:'assets/covers/c8.jpg',t:'Calm Currents',a:'HoliznaCC0',al:'Public Domain Lofi',len:148,g:7,hot:'lofi',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/4rKapZUMNnNSPAOvpjlfSH6B5Ib8rgEWdvjnM7C6.mp3',inst:1}
 ];
 const PLAYER=new Audio();PLAYER.preload='auto';PLAYER.volume=.62;
 PLAYER.addEventListener('ended',()=>next(true));
 PLAYER.addEventListener('error',()=>{PLAYER._err=true});
-const LYRICS=[['夜色把城市调成静音','我在耳机里养了一片海','风穿过车窗的缝隙','像谁在耳边轻轻说话'],
- ['把晚风折进信封','寄给还没睡的你','收音机里飘着旧歌','我们都没长大'],
- ['南方的车站没有雪','只有潮湿的告别','最后一班车开走了','我还在原地等风'],
- ['夏天还没写完','我们就先散场','操场上的风很大','吹散了所有不勇敢']];
-const LISTS=[{id:'p1',n:'深夜通勤',d:'通勤路上循环的歌',ids:['s7','s1','s5'],g:0},
- {id:'p2',n:'民谣夜话',d:'木吉他与旧故事',ids:['s2','s6'],g:2},
- {id:'p3',n:'周末歌单',d:'周五晚上的轻松感',ids:['s4','s3'],g:3}];
-const HOTKW=['夜航西飞','民谣','city-pop','南方车站','深夜电台'];
+const LISTS=[{id:'p1',n:'深夜通勤',d:'低频与长段落，适合路上听',ids:['s7','s1','s4'],g:0},
+ {id:'p2',n:'午后缓听',d:'轻缓的吉他与环境感',ids:['s8','s2','s5'],g:2},
+ {id:'p3',n:'周末布鲁斯',d:'木吉他、尘土和旧故事',ids:['s3','s6','s4'],g:3}];
+const HOTKW=['Wandering','lofi','blues','Dreamshifter','King of the Crow Tree'];
 
 /* ================= 状态 ================= */
 const DBK='sonora_db_v2';
@@ -437,7 +433,7 @@ function vRec(){
  '<div>'+picks.map(s=>rowHtml(s,false)).join('')+'</div>'+
  '<div class="section-head"><h2>新近收录</h2><span class="more">'+SONGS.length+' 首</span></div>'+
  '<div>'+fresh.map(s=>rowHtml(s,false)).join('')+'</div>'+
- '<div class="editor-note">全部音频与封面都随安装包内置，离线也能播放。点歌曲任意位置开始播放，心形按钮用来收藏。</div>'}
+ '<div class="editor-note">8 首真实录音已随安装包内置，离线可播；音频来自 Free Music Archive，均为 CC0 公共领域授权。</div>'}
 function rowHtml(s,showCover,rank){
  const h='<svg viewBox="0 0 24 24"><path d="M12 20.2S4.8 15.6 4.8 10.6A4 4 0 0 1 12 8.4a4 4 0 0 1 7.2 2.2c0 5-7.2 9.6-7.2 9.6z"/></svg>';
  return '<div class="track" onclick="playIt(\''+s.id+'\')">'+
@@ -560,7 +556,6 @@ function songMenu(id){const s=findSong(id);if(!s)return;
 function vPlayer(){
  const s=S.playing?findSong(S.playing):SONGS[0];
  const pct=(S.pos||0)/s.len*100;
- const lineIdx=Math.min(3,Math.floor((S.pos||0)/(s.len/4)));
  const bg="background-image:linear-gradient(180deg,rgba(10,9,8,.48) 0%,rgba(10,9,8,.82) 38%,rgba(11,10,9,.98) 78%),url('"+s.art+"')";
  return '<div class="player" style="'+bg+'">'+
  '<div class="ptop"><button onclick="go(\'rec\')"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>'+
@@ -577,7 +572,7 @@ function vPlayer(){
  '<button class="'+(S.repeat?'on':'')+'" onclick="S.repeat=!S.repeat;refreshPlayer();toast(S.repeat?\'单曲循环已开\':\'单曲循环已关\')">单曲循环</button>'+
  '<button class="'+(S.sleepAt?'on':'')+'" onclick="sleepTimer()">'+(S.sleepAt?'定时 '+Math.max(0,Math.round((S.sleepAt-Date.now())/60000))+' 分':'定时关闭')+'</button></div>'+
  '<div class="volume"><span>音量</span><input type="range" min="0" max="100" value="'+Math.round((PLAYER.volume||.62)*100)+'" oninput="setVol(this.value)"><span id="volTxt">'+Math.round((PLAYER.volume||.62)*100)+'</span></div>'+
- '<div class="lyric">'+LYRICS[s.g%LYRICS.length].map((l,i)=>'<span class="'+(i===lineIdx?'on':'')+'">'+l+'</span>').join('')+'</div>'+
+ '<div class="lyric"><span class="on">纯音乐 · 暂无歌词</span><span>录音：'+s.a+'</span><span>Free Music Archive · CC0 公共领域授权</span></div>'+
  '<div class="foot"><span onclick="addToSheet(\''+s.id+'\')" style="cursor:pointer">加入歌单</span><span onclick="toggleFav(\''+s.id+'\');refreshPlayer()" style="cursor:pointer">'+(fav.includes(s.id)?'已收藏':'收藏这首')+'</span></div></div>'}
 function addToSheet(sid){const s=findSong(sid);
  openSheet('<h4>加入歌单 · '+s.t+'</h4>'+
@@ -609,7 +604,7 @@ function vMine(){
 /* ================= 交互 ================= */
 function playIt(id,fromQueue){if(!fromQueue)S.queue=null;S.playing=id;S.paused=false;S.pos=0;PLAYER._err=false;
  try{PLAYER.pause()}catch(e){}
- PLAYER.src='assets/audio/'+id+'.mp3';PLAYER.load();
+ const s=findSong(id);const remote=/^https?:/.test(location.protocol)&&!/localhost/.test(location.hostname)&&s.u;PLAYER.src=remote?s.u:('assets/audio/'+id+'.mp3');PLAYER.load();
  var pr=PLAYER.play();if(pr&&pr.catch)pr.catch(function(){toast('点一下播放按钮开始')});
  plays=[id].concat(plays.filter(x=>x!==id)).slice(0,40);save();
  go('player');toast('正在播放：'+findSong(id).t);syncMini()}
