@@ -113,6 +113,7 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 .page[data-page="monitor"]{--pg:#ff7b8a}
 .page[data-page="docs"]{--pg:#6aa9ff}
 .page[data-page="users"]{--pg:#c084fc}
+.page[data-page="community"]{--pg:#ffd166}
 .page[data-page="settings"]{--pg:#8fb7ff}
 
 /* 卡片 / 面板 */
@@ -230,24 +231,343 @@ tbody tr:last-child td{border-bottom:0}
  #login .left h1{font-size:26px}
  #login .facts,#login .foot{display:none}
 }
+
+/* ================= 落地页（浏览端） ================= */
+#landing{position:relative;min-height:100vh;background:#070a10;overflow-x:hidden}
+#landing .lp-bg{position:absolute;left:0;right:0;top:0;height:100vh;z-index:0;pointer-events:none;overflow:hidden}
+#landing .lp-bg video{width:100%;height:100%;object-fit:cover;filter:grayscale(.2) brightness(.75) saturate(.85)}
+#landing .lp-bg .lp-scrim{position:absolute;inset:0;background:
+ radial-gradient(1100px 640px at 18% 8%,rgba(56,224,200,.13),transparent 60%),
+ linear-gradient(180deg,rgba(4,7,12,.58) 0%,rgba(5,8,13,.86) 42%,#070a10 96%)}
+#landing .lp-bg .lp-grid{position:absolute;inset:0;opacity:.13;background-image:
+ linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+ background-size:64px 64px;mask-image:radial-gradient(ellipse at 26% 16%,#000 12%,transparent 72%)}
+
+.lp-head{position:sticky;top:0;z-index:12;display:flex;align-items:center;gap:34px;height:74px;padding:0 56px;
+ border-bottom:1px solid rgba(255,255,255,.07);background:rgba(7,10,16,.58);backdrop-filter:blur(14px)}
+.lp-brand{display:flex;align-items:center;gap:11px}
+.lp-brand .mk{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;
+ background:linear-gradient(135deg,#123a38,#0d6b63);border:1px solid rgba(56,224,200,.4)}
+.lp-brand .mk svg{width:18px;height:18px;stroke:#5affd6;fill:none;stroke-width:1.8}
+.lp-brand b{font-size:16px;letter-spacing:.03em;display:block}
+.lp-brand small{font-size:9.5px;letter-spacing:.24em;color:rgba(232,238,247,.45);font-family:var(--mono)}
+.lp-nav{display:flex;gap:26px;margin-left:22px}
+.lp-nav a{font-size:12.5px;color:rgba(232,238,247,.62);text-decoration:none;position:relative;padding:6px 0;transition:.2s}
+.lp-nav a:hover{color:#5affd6}
+.lp-nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:#5affd6;transition:.25s}
+.lp-nav a:hover::after{right:0}
+.lp-act{margin-left:auto;display:flex;gap:10px}
+.lp-ghost,.lp-solid{border-radius:7px;font-size:12px;padding:9px 16px;cursor:pointer;transition:.2s}
+.lp-ghost{background:transparent;border:1px solid rgba(255,255,255,.16);color:#cfd8e6}
+.lp-ghost:hover{border-color:rgba(56,224,200,.5);color:#5affd6}
+.lp-solid{background:rgba(56,224,200,.14);border:1px solid rgba(56,224,200,.4);color:#5affd6}
+.lp-solid:hover{background:rgba(56,224,200,.22)}
+
+.lp-hero{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:96px 56px 64px;min-height:calc(100vh - 74px - 88px);
+ display:flex;flex-direction:column;justify-content:center}
+.lp-kicker{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:rgba(232,238,247,.5)}
+.lp-kicker i{width:26px;height:1px;background:#38e0c8}
+.lp-hero h1{margin-top:24px;font-size:60px;line-height:1.22;letter-spacing:-.015em;font-weight:700;max-width:860px}
+.lp-hero h1 em{font-style:normal;color:#5affd6;position:relative}
+.lp-hero h1 em::after{content:"";position:absolute;left:2px;right:2px;bottom:2px;height:8px;background:rgba(56,224,200,.18);z-index:-1}
+.lp-hero{padding-right:360px}
+.lp-hero>p{margin-top:24px;max-width:590px;font-size:14px;line-height:2.1;color:rgba(232,238,247,.78)}
+.lp-cta{display:flex;align-items:center;gap:14px;margin-top:38px}
+.lp-main{display:inline-flex;align-items:center;gap:12px;border:0;border-radius:9px;padding:14px 24px;font-size:13.5px;font-weight:600;
+ cursor:pointer;color:#04120f;background:linear-gradient(135deg,#5affd6,#22b8a6);box-shadow:0 18px 40px -22px rgba(56,224,200,.9);transition:.2s}
+.lp-main:hover{transform:translateY(-2px)}
+.lp-main span{font-family:var(--mono);font-size:13px}
+.lp-main.sm{padding:11px 16px;font-size:12.5px;margin-top:16px;width:100%;justify-content:space-between}
+.lp-line{background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.22);color:rgba(232,238,247,.68);font-size:12.5px;padding:9px 2px;cursor:pointer}
+.lp-line:hover{color:#5affd6;border-color:rgba(56,224,200,.6)}
+.lp-hero-card{position:absolute;right:56px;top:50%;transform:translateY(-50%);width:262px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(10,15,22,.72);backdrop-filter:blur(16px);padding:16px 16px 14px}
+.lp-hero-card .hd{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:rgba(232,238,247,.5);padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+.lp-hero-card .hd span{color:#5affd6;display:flex;align-items:center;gap:5px}
+.lp-hero-card .hd span::before{content:"";width:5px;height:5px;border-radius:50%;background:#38e0c8;box-shadow:0 0 8px #38e0c8}
+.lp-hero-card .rw{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.lp-hero-card .rw b{font-size:11.5px;font-weight:500;color:rgba(232,238,247,.8)}
+.lp-hero-card .rw span{font-family:var(--mono);font-size:10px;color:rgba(232,238,247,.42)}
+.lp-hero-card .ft{margin-top:12px;font-family:var(--mono);font-size:9.5px;color:rgba(232,238,247,.42);line-height:1.9}
+.lp-facts{display:flex;gap:46px;margin-top:52px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);max-width:720px}
+.lp-facts b{font-family:var(--mono);font-size:22px;color:#e8eef7;font-weight:600}
+.lp-facts span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:rgba(232,238,247,.4);margin-top:6px}
+
+.lp-ticker{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);
+ overflow:hidden;background:rgba(255,255,255,.02);height:44px;display:flex;align-items:center}
+.lp-track{display:flex;align-items:center;gap:18px;white-space:nowrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;
+ color:rgba(232,238,247,.4);animation:lpmove 42s linear infinite}
+.lp-track span:nth-child(4n+1){color:#5affd6}
+.lp-track i{font-style:normal;color:rgba(255,255,255,.16)}
+@keyframes lpmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.lp-sec{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:96px 56px 10px}
+.lp-shead{display:grid;grid-template-columns:86px 1fr 300px;gap:22px;align-items:end;padding-bottom:26px;border-bottom:1px solid rgba(255,255,255,.1)}
+.lp-shead .num{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:rgba(232,238,247,.34);padding-bottom:6px}
+.lp-shead .eyebrow{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;color:#5affd6}
+.lp-shead h2{font-size:31px;letter-spacing:-.01em;margin-top:10px;font-weight:600}
+.lp-note{font-size:12px;line-height:1.95;color:rgba(232,238,247,.68);padding-bottom:4px}
+.lp-note.left{grid-column:2/4}
+
+.lp-rows{margin-top:6px}
+.lp-row{display:grid;grid-template-columns:60px 1fr 210px;gap:24px;align-items:center;padding:27px 0;border-bottom:1px solid rgba(255,255,255,.07);transition:.25s}
+.lp-row:hover{padding-left:10px;background:linear-gradient(90deg,rgba(56,224,200,.05),transparent 62%)}
+.lp-row .idx{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:#5affd6;opacity:.7}
+.lp-row h3{font-size:16px;font-weight:600;letter-spacing:.01em}
+.lp-row h3 span{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:rgba(232,238,247,.36);margin-left:10px}
+.lp-row p{margin-top:8px;font-size:12.5px;line-height:1.95;color:rgba(232,238,247,.72);max-width:660px}
+.lp-row .meta{display:flex;flex-direction:column;gap:6px;text-align:right;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:rgba(232,238,247,.42)}
+
+.lp-comm{display:grid;grid-template-columns:1fr 296px;gap:34px;margin-top:22px}
+.lp-trend{display:flex;flex-direction:column}
+.lp-item{padding:22px 0;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer;transition:.2s}
+.lp-item:hover{padding-left:6px}
+.lp-item .m{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:rgba(232,238,247,.4)}
+.lp-item .cc{padding:3px 7px;border-radius:4px;border:1px solid rgba(56,224,200,.28);color:#5affd6}
+.lp-item .cc.q{border-color:rgba(255,207,138,.3);color:#ffcf8a}
+.lp-item h4{margin-top:9px;font-size:15px;font-weight:500;line-height:1.55}
+.lp-item .sm{margin-top:8px;font-size:11px;color:rgba(232,238,247,.6)}
+.lp-item .sm b{color:rgba(232,238,247,.64);font-weight:500}
+.lp-comm-side{border-left:1px solid rgba(255,255,255,.1);padding-left:30px}
+.lp-comm-side .big{font-family:var(--mono);font-size:54px;line-height:1;color:#e8eef7;letter-spacing:-.02em}
+.lp-comm-side .cap{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:rgba(232,238,247,.36);margin-top:10px}
+.lp-comm-side .stat{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;color:rgba(232,238,247,.72);margin-top:10px}
+.lp-comm-side .stat b{font-family:var(--mono);color:#e8eef7;font-weight:500}
+
+.lp-res{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.09);margin-top:24px;border:1px solid rgba(255,255,255,.09)}
+.lp-card{background:#0b1017;padding:24px 22px 20px;min-height:190px;display:flex;flex-direction:column;transition:.25s}
+.lp-card:hover{background:#0e1520}
+.lp-card .t{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:#5affd6}
+.lp-card h4{font-size:17px;margin-top:14px;line-height:1.4;font-weight:600}
+.lp-card p{font-size:11.5px;line-height:1.9;color:rgba(232,238,247,.7);margin-top:10px;flex:1}
+.lp-card .f{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:rgba(232,238,247,.38);padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+
+.lp-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.09);margin-top:24px}
+.lp-flow>div{background:#0b1017;padding:22px 20px 26px}
+.lp-flow b{font-family:var(--mono);font-size:10px;color:#5affd6;letter-spacing:.14em}
+.lp-flow h4{font-size:15px;margin-top:14px}
+.lp-flow p{font-size:11.5px;line-height:1.9;color:rgba(232,238,247,.68);margin-top:8px}
+
+.lp-foot{position:relative;z-index:2;max-width:1180px;margin:80px auto 0;padding:30px 56px 46px;border-top:1px solid rgba(255,255,255,.1);
+ display:flex;justify-content:space-between;align-items:flex-start}
+.lp-foot b{font-size:14px;letter-spacing:.04em}
+.lp-foot span{font-size:11px;color:rgba(232,238,247,.4);margin-left:12px}
+.lp-foot .fp{font-family:var(--mono);font-size:10px;line-height:2;color:rgba(232,238,247,.34);text-align:right}
+
+/* ================= 登录弹层 ================= */
+#login{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:26px;background:rgba(4,7,11,.82);backdrop-filter:blur(14px)}
+#login .lb-mask{position:absolute;inset:0}
+#login .lb-x{position:absolute;right:28px;top:22px;z-index:3;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.14);
+ background:rgba(255,255,255,.05);color:#cfd8e6;font-size:17px;cursor:pointer;line-height:1}
+#login .lb-x:hover{border-color:rgba(56,224,200,.5);color:#5affd6}
+#login .lb{position:relative;z-index:2;display:grid;grid-template-columns:1fr 378px;gap:56px;align-items:center;max-width:960px;width:100%}
+#login .lb-left .lp-brand{margin-bottom:26px}
+#login .lb-left h2{font-size:32px;letter-spacing:-.01em;font-weight:600}
+#login .lb-left h2::after{content:"";display:block;width:44px;height:2px;background:#38e0c8;margin-top:18px}
+#login .lb-left p{margin-top:18px;font-size:12.5px;line-height:2;color:rgba(232,238,247,.55);max-width:340px}
+#login .lb-facts{display:flex;gap:26px;margin-top:30px}
+#login .lb-facts b{font-family:var(--mono);font-size:16px;color:#5affd6}
+#login .lb-facts span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:rgba(232,238,247,.36);margin-top:5px}
+#login .lb-note{margin-top:30px;font-family:var(--mono);font-size:10px;color:rgba(232,238,247,.3);letter-spacing:.08em}
+
+@media(max-width:1140px){.lp-hero-card{display:none}.lp-hero{padding-right:56px}}
+@media(max-width:980px){
+ .lp-head{padding:0 22px;gap:14px}.lp-nav{display:none}
+ .lp-hero,.lp-sec{padding-left:22px;padding-right:22px}
+ .lp-hero h1{font-size:38px}.lp-facts{gap:24px;flex-wrap:wrap}
+ .lp-shead{grid-template-columns:1fr}.lp-note{grid-column:1}
+ .lp-row{grid-template-columns:1fr}.lp-row .meta{text-align:left;flex-direction:row;gap:14px}
+ .lp-comm{grid-template-columns:1fr}.lp-comm-side{border-left:0;padding-left:0;border-top:1px solid rgba(255,255,255,.1);padding-top:20px}
+ .lp-res,.lp-flow{grid-template-columns:1fr 1fr}
+ #login .lb{grid-template-columns:1fr;max-width:420px;gap:24px}
+ #login .lb-left{display:none}
+}
+
+/* ================= 社区页 ================= */
+.modal{overflow:auto}
+.sheet.wide{max-height:88vh;overflow-y:auto;padding:24px 26px}
+.cm-kpis{display:flex;gap:26px;align-items:flex-end;padding:4px 2px 18px}
+.cm-kpis>div b{font-family:var(--mono);font-size:22px;display:block;color:#e8eef7;font-weight:600}
+.cm-kpis>div span{font-size:11px;color:var(--sub);margin-top:4px;display:block}
+.cm-kpis .cm-new{margin-left:auto;background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.35);color:#ffd166;
+ border-radius:8px;padding:10px 16px;font-size:12.5px;cursor:pointer;transition:.2s}
+.cm-kpis .cm-new:hover{background:rgba(255,209,102,.2)}
+.cm-bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.cm-tabs{display:flex;gap:4px;flex-wrap:wrap}
+.cm-tab{border:0;background:transparent;color:var(--sub);font-size:12px;padding:7px 12px;border-radius:7px;cursor:pointer;transition:.18s}
+.cm-tab:hover{color:#e8eef7;background:rgba(255,255,255,.04)}
+.cm-tab.on{background:rgba(255,209,102,.14);color:#ffd166;font-weight:500}
+.cm-tools{margin-left:auto;display:flex;align-items:center;gap:10px}
+.cm-tools input{width:230px;background:#0b1017;border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:11.5px;outline:none;font-family:var(--mono)}
+.cm-tools input:focus{border-color:rgba(255,209,102,.45)}
+.cm-sort{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.cm-sort button{border:0;background:transparent;color:var(--sub);font-size:11px;padding:7px 10px;cursor:pointer}
+.cm-sort button.on{background:rgba(255,255,255,.06);color:#e8eef7}
+.cm-layout{display:grid;grid-template-columns:1fr 268px;gap:18px;align-items:start;margin-top:16px}
+.cm-listwrap{min-width:0}
+.cm-listhd{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--sub);padding:4px 4px 10px}
+.cm-row{display:flex;gap:16px;padding:16px 14px;border:1px solid var(--line);border-radius:11px;background:var(--panel);margin-bottom:9px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.cm-row:hover{border-color:rgba(255,209,102,.32);background:#111821;transform:translateX(2px)}
+.cm-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:.2s}
+.cm-row:hover::before{background:#ffd166}
+.cm-vote{flex:0 0 42px;text-align:center;padding-top:2px}
+.cm-vote b{display:block;font-family:var(--mono);font-size:15px;color:#ffd166}
+.cm-vote span{font-size:9.5px;color:var(--sub)}
+.cm-main{flex:1;min-width:0}
+.cm-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cm-cat{font-size:10px;padding:3px 7px;border-radius:4px;border:1px solid rgba(56,224,200,.28);color:#7fe9d7}
+.cm-cat.qa{border-color:rgba(255,207,138,.34);color:#ffcf8a}
+.cm-cat.exp{border-color:rgba(167,139,250,.34);color:#a78bfa}
+.cm-pin{font-size:10px;color:#ffd166;border:1px solid rgba(255,209,102,.3);padding:2px 6px;border-radius:4px}
+.cm-ok{font-size:10px;color:#7fe9d7;border:1px solid rgba(56,224,200,.3);padding:2px 6px;border-radius:4px}
+.cm-time{font-family:var(--mono);font-size:10px;color:var(--sub);margin-left:auto}
+.cm-row h3{font-size:14.5px;font-weight:500;margin-top:9px;line-height:1.55;color:#e8eef7}
+.cm-row p{font-size:11.5px;color:#8b98ad;line-height:1.85;margin-top:7px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.cm-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:11px;font-family:var(--mono);font-size:9.5px;color:var(--sub)}
+.cm-author{color:#aab6c8}
+.cm-tag{color:#7fe9d7;opacity:.8}
+.cm-count{margin-left:auto;font-family:var(--mono)}
+.cm-empty{padding:44px 20px;text-align:center;font-size:12px;color:var(--sub);border:1px dashed var(--line);border-radius:11px}
+.cm-side{display:flex;flex-direction:column;gap:12px}
+.cm-side-card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:15px 15px 14px}
+.cm-side-card .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:#ffd166;opacity:.8}
+.cm-side-card h4{font-size:12.5px;margin-top:9px}
+.cm-side-card p{font-size:11px;line-height:1.9;color:var(--sub);margin-top:8px}
+.cm-rules{margin-top:12px;display:flex;flex-direction:column;gap:6px;font-size:10.5px;color:#8b98ad}
+.cm-rules span{border-left:2px solid rgba(255,209,102,.35);padding-left:8px}
+.cm-user{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.cm-user:last-child{border-bottom:0;padding-bottom:0}
+.cm-user .av{width:26px;height:26px;border-radius:7px;background:rgba(56,224,200,.12);color:#5affd6;display:grid;place-items:center;font-size:11px}
+.cm-user b{display:block;font-size:11.5px;font-weight:500}
+.cm-user span{font-size:9.5px;color:var(--sub);font-family:var(--mono)}
+.cm-user i{margin-left:auto;font-style:normal;font-family:var(--mono);font-size:8.5px;color:#ffd166}
+.cm-side-card.tip p{color:#8b98ad}
+
+/* 详情 */
+.cm-detail .cm-meta{gap:8px}
+.cm-detail h3{font-size:19px;line-height:1.55;margin-top:12px;font-weight:600}
+.cm-by{display:flex;align-items:center;gap:9px;margin-top:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.cm-by .av{width:28px;height:28px;border-radius:8px;background:rgba(56,224,200,.14);color:#5affd6;display:grid;place-items:center;font-size:12px}
+.cm-by b{font-size:12px;display:block}
+.cm-by span{font-size:9.5px;color:var(--sub);font-family:var(--mono)}
+.cm-by .sp{flex:1}
+.cm-like{border:1px solid var(--line);background:transparent;color:#8b98ad;font-family:var(--mono);font-size:10.5px;padding:5px 10px;border-radius:6px;cursor:pointer}
+.cm-like:hover{color:#ff8b8b;border-color:rgba(255,139,139,.4)}
+.cm-ghost{border:1px solid var(--line);background:transparent;color:#8b98ad;font-size:10.5px;padding:5px 9px;border-radius:6px;cursor:pointer}
+.cm-ghost.danger{color:#ff9aa5;border-color:rgba(255,154,165,.28)}
+.cm-body{margin-top:16px}
+.cm-body p{font-size:12.5px;line-height:2.05;color:#c6d0de;margin-bottom:14px}
+.cm-tagrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:10px;color:#7fe9d7;border-top:1px solid var(--line);padding-top:14px}
+.cm-tagrow .views{margin-left:auto;color:var(--sub);font-family:var(--mono)}
+.cm-replyhd{font-size:12px;margin-top:20px;padding-bottom:10px;border-bottom:1px solid var(--line);color:#e8eef7}
+.cm-replyhd span{font-family:var(--mono);color:#ffd166;margin-left:6px}
+.cm-reply{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.cm-reply.best{background:rgba(56,224,200,.05);margin:0 -8px;padding:13px 8px;border-radius:8px}
+.cm-reply .hd{display:flex;align-items:center;gap:8px}
+.cm-reply .av{width:24px;height:24px;border-radius:6px;background:rgba(255,209,102,.12);color:#ffd166;display:grid;place-items:center;font-size:10.5px}
+.cm-reply .hd b{font-size:11.5px;display:block}
+.cm-reply .hd span{font-size:9.5px;color:var(--sub);font-family:var(--mono)}
+.cm-reply .hd em{margin-left:auto;font-style:normal;color:#7fe9d7;font-size:10.5px}
+.cm-reply .hd button{margin-left:auto;border:0;background:transparent;color:#ffd166;font-size:10.5px;cursor:pointer}
+.cm-reply p{font-size:12px;line-height:1.95;color:#c6d0de;margin-top:8px}
+.cm-none{font-size:11.5px;color:var(--sub);padding:16px 0}
+.cm-write{margin-top:16px}
+.cm-write textarea{width:100%;min-height:92px;background:#0b1017;border:1px solid var(--line);border-radius:9px;padding:11px 12px;font-size:12px;line-height:1.9;outline:none;resize:vertical;font-family:inherit}
+.cm-write textarea:focus{border-color:rgba(255,209,102,.4)}
+.cm-wacts{display:flex;align-items:center;justify-content:space-between;margin-top:9px;font-size:10px;color:var(--sub);font-family:var(--mono)}
+.cm-wacts button{background:linear-gradient(135deg,#ffd166,#e0a83c);border:0;color:#20180a;font-weight:600;font-size:12px;padding:9px 18px;border-radius:7px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<section id="login">
-  <video src="assets/dev_code.mp4" poster="assets/dev_code.jpg" autoplay muted loop playsinline preload="auto"></video>
-  <div class="scrim"></div><div class="grid"></div>
-  <div class="inner">
-    <div class="left">
-      <div class="logo"><div class="mk"><svg viewBox="0 0 24 24"><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/></svg></div>
-        <div><b>DevRealm</b><small>PLATFORM FOR GAME DEVELOPERS</small></div></div>
-      <h1>把资源、接口、渠道<br><em>收进一个工作台</em></h1>
-      <p>面向独立游戏开发者的综合服务平台：资源库统一管理插件与美术素材，API 调试台直接压测接口，Steam / Discord / 发行渠道 一处接入，日志与延迟集中监控。</p>
-      <div class="facts">
-        <div><b>36</b><span>RESOURCES</span></div>
-        <div><b>12</b><span>OPEN APIS</span></div>
-        <div><b>99.94%</b><span>UPTIME 30D</span></div>
-      </div>
+<section id="landing">
+  <div class="lp-bg"><video src="assets/dev_code.mp4" poster="assets/dev_code.jpg" autoplay muted loop playsinline preload="auto"></video>
+    <div class="lp-scrim"></div><div class="lp-grid"></div></div>
+
+  <header class="lp-head">
+    <div class="lp-brand"><div class="mk"><svg viewBox="0 0 24 24"><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/></svg></div>
+      <div><b>DevRealm</b><small>FOR GAME DEVELOPERS</small></div></div>
+    <nav class="lp-nav"><a href="#lp-cap">平台能力</a><a href="#lp-comm">开发者社区</a><a href="#lp-res">资源库</a><a href="#lp-flow">工作流</a></nav>
+    <div class="lp-act"><button class="lp-ghost" onclick="openLogin('login')">登录</button><button class="lp-solid" onclick="openLogin('reg')">申请开发者</button></div>
+  </header>
+
+  <div class="lp-hero">
+    <div class="lp-kicker"><i></i>INDEPENDENT GAME STUDIO · 2026</div>
+    <h1>一个人做游戏，<br>也该有一个<em>像样的后台</em></h1>
+    <p>DevRealm 把资源、接口、发行渠道和社区讨论收在同一个地方。你不必再在网盘、聊天群和一堆脚本之间来回找东西，打开一个页面就能推进今天的进度。</p>
+    <div class="lp-cta"><button class="lp-main" onclick="openLogin('login')">进入控制台 <span>→</span></button>
+      <button class="lp-line" onclick="lpScroll('lp-comm')">先看看大家在讨论什么</button></div>
+    <div class="lp-facts">
+      <div><b>36</b><span>RESOURCES</span></div><div><b>12</b><span>OPEN APIS</span></div>
+      <div><b>96</b><span>DISCUSSIONS</span></div><div><b>99.94%</b><span>UPTIME 30D</span></div></div>
+    <aside class="lp-hero-card">
+      <div class="hd">WORKBENCH<span>LIVE</span></div>
+      <div class="rw"><b>资源库</b><span>36 / 6 类型</span></div>
+      <div class="rw"><b>接口调试</b><span>12 条 · 142ms</span></div>
+      <div class="rw"><b>渠道接入</b><span>2 / 3 在线</span></div>
+      <div class="rw" style="border:0"><b>社区讨论</b><span>96 条 · 62 解决</span></div>
+      <div class="ft">STEAMWORKS 已连接 · DISCORD 已连接<br>ENV · PROD · P95 142MS</div>
+    </aside>
+  </div>
+
+  <div class="lp-ticker"><div class="lp-track"><span>BUILD</span><i>·</span><span>TEST</span><i>·</span><span>SHIP</span><i>·</i><span>REPEAT</span><i>·</i><span>资源统一版本</span><i>·</i><span>接口可复现</span><i>·</i><span>渠道集中握手</span><i>·</i><span>社区有人回答</span><i>·</i><span>BUILD</span><i>·</span><span>TEST</span><i>·</span><span>SHIP</span><i>·</i><span>REPEAT</span><i>·</i><span>资源统一版本</span><i>·</i><span>接口可复现</span><i>·</i><span>渠道集中握手</span><i>·</i><span>社区有人回答</span></div></div>
+
+  <section class="lp-sec" id="lp-cap">
+    <div class="lp-shead"><div class="num">01</div><div><div class="eyebrow">CAPABILITY</div><h2>四件事，替你把杂活收掉</h2></div>
+      <p class="lp-note">不是把所有功能堆在一起，而是把独立开发者每天都在重复的四件事做成固定入口。</p></div>
+    <div class="lp-rows">
+      <div class="lp-row"><div class="idx">A</div><div class="tx"><h3>资源库 <span>REGISTRY</span></h3><p>插件、美术素材、音效统一版本与许可证管理，按引擎筛选，下载前就能看到体积和依赖。</p></div><div class="meta"><span>36 个资源</span><span>6 种类型</span></div></div>
+      <div class="lp-row"><div class="idx">B</div><div class="tx"><h3>接口调试台 <span>API CONSOLE</span></h3><p>路径、方法、请求体一次配好，状态码、耗时、Trace ID 直接摆在响应区，调试记录可以回填重发。</p></div><div class="meta"><span>12 条开放接口</span><span>Mock 可复现</span></div></div>
+      <div class="lp-row"><div class="idx">C</div><div class="tx"><h3>渠道接入 <span>INTEGRATIONS</span></h3><p>Steamworks、Discord Rich Presence、itch.io Butler 三处握手集中管理，密钥掩码展示，连接状态一目了然。</p></div><div class="meta"><span>3 个渠道</span><span>密钥托管</span></div></div>
+      <div class="lp-row"><div class="idx">D</div><div class="tx"><h3>监控与日志 <span>OBSERVE</span></h3><p>P95 延迟、错误率、依赖健康度按 5 分钟采样，异常发生前先看到趋势，而不是上线后被玩家告知。</p></div><div class="meta"><span>5 项依赖</span><span>实时采样</span></div></div>
+    </div>
+  </section>
+
+  <section class="lp-sec" id="lp-comm">
+    <div class="lp-shead"><div class="num">02</div><div><div class="eyebrow">COMMUNITY</div><h2>做不下去的时候，有人能问</h2></div>
+      <p class="lp-note">注册开发者可以发帖交流技术方案、提具体问题，回答被采纳后会标记为「已解决」，后来的人也能搜到。</p></div>
+    <div class="lp-comm">
+      <div class="lp-trend" id="lpTrend"></div>
+      <aside class="lp-comm-side">
+        <div class="big">96</div><div class="cap">DISCUSSIONS SINCE 2025.09</div>
+        <div class="stat"><span>已解决问题</span><b>62</b></div>
+        <div class="stat"><span>注册开发者</span><b>8</b></div>
+        <div class="stat"><span>平均首次回复</span><b>3.4 h</b></div>
+        <button class="lp-main sm" onclick="openLogin('login')">登录后参与讨论 <span>→</span></button>
+      </aside>
+    </div>
+  </section>
+
+  <section class="lp-sec" id="lp-res">
+    <div class="lp-shead"><div class="num">03</div><div><div class="eyebrow">RESOURCES</div><h2>拿起来就能用的东西</h2></div>
+      <p class="lp-note">每个资源都带版本号、体积与适用引擎，避免下载完才发现不兼容。</p></div>
+    <div class="lp-res" id="lpRes"></div>
+  </section>
+
+  <section class="lp-sec" id="lp-flow">
+    <div class="lp-shead"><div class="num">04</div><div><div class="eyebrow">WORKFLOW</div><h2>从想法到上线，四个固定动作</h2></div></div>
+    <div class="lp-flow"><div><b>01</b><h4>取资源</h4><p>先看版本与依赖，再决定用插件还是自己写。</p></div>
+      <div><b>02</b><h4>调接口</h4><p>把请求跑通、记录留存，问题可复现。</p></div>
+      <div><b>03</b><h4>接渠道</h4><p>Steam / Discord / itch 一次握手，密钥不外露。</p></div>
+      <div><b>04</b><h4>看数据</h4><p>延迟与错误率先看趋势，再做下一次迭代。</p></div></div>
+  </section>
+
+  <footer class="lp-foot">
+    <div><b>DevRealm</b><span>面向独立游戏开发者的综合服务平台</span></div>
+    <div class="fp">课程实训项目 Demo · 陶云 · 西南交通大学希望学院<br>数据由 Supabase 云端同步 · GitHub Pages 托管</div>
+  </footer>
+</section>
+
+<section id="login" class="hide">
+  <div class="lb-mask" onclick="closeLogin()"></div>
+  <button class="lb-x" onclick="closeLogin()">×</button>
+  <div class="lb">
+    <div class="lb-left">
+      <div class="lp-brand"><div class="mk"><svg viewBox="0 0 24 24"><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/></svg></div>
+        <div><b>DevRealm</b><small>DEV CONSOLE ACCESS</small></div></div>
+      <h2>回到你的工作台</h2>
+      <p>资源、接口、渠道和社区都在同一个账号下。演示账号可以直接登录查看完整功能。</p>
+      <div class="lb-facts"><div><b>36</b><span>RESOURCES</span></div><div><b>8</b><span>MEMBERS</span></div><div><b>96</b><span>POSTS</span></div></div>
+      <div class="lb-note">DEMO · admin / admin123　dev / dev123</div>
     </div>
     <div class="card">
       <div class="top"><span>DEV CONSOLE</span><span class="dot"><i></i>ONLINE</span></div>
@@ -271,11 +591,10 @@ tbody tr:last-child td{border-bottom:0}
           <canvas id="capImg2" width="104" height="40" onclick="drawCap2()" style="border-radius:8px;cursor:pointer;background:#fff"></canvas></div>
           <em class="err" id="e-rcap"></em></label>
         <button class="submit" type="submit">提 交 申 请</button>
-        <div class="hint">申请后默认进入开发者角色，可管理自己的资源与接口密钥。</div>
+        <div class="hint">申请后默认进入开发者角色，可直接进入社区发帖。</div>
       </form>
     </div>
   </div>
-  <div class="foot">REAL FOOTAGE · CODING SESSION</div>
 </section>
 
 <div id="app" class="hide">
@@ -336,20 +655,21 @@ const NAVS=[
   ['api','API 调试','<path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/>'],
   ['assets','资源库','<path d="M4 7l8-3 8 3v10l-8 3-8-3z"/><path d="M4 7l8 3 8-3M12 10v10"/>'],
   ['users','成员管理','<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.8-3.4 2.8-5.1 5.5-5.1S13.7 15.6 14.5 19"/><circle cx="17" cy="9" r="2.4"/><path d="M17 13.2c2 .2 3.2 1.7 3.7 4"/>']]},
+ {g:'社区',items:[['community','开发者社区','<path d="M20 12.5c0 3.4-3.6 6.1-8 6.1-1 0-2-.1-2.9-.4L5 20l1.2-3.2C4.6 15.6 4 14.1 4 12.5c0-3.4 3.6-6.1 8-6.1s8 2.7 8 6.1z"/><path d="M8.5 12.4h.01M12 12.4h.01M15.5 12.4h.01"/>']]},
  {g:'集成',items:[['link','第三方接入','<path d="M9 15l6-6M7 17l-2 2M17 7l2-2"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="6" r="2.4"/>'],
   ['monitor','监控日志','<path d="M4 18V8M9 18V5M14 18v-7M19 18V9"/>']]},
  {g:'文档',items:[['docs','接口文档','<path d="M6 3.5h9l4 4v13H6z"/><path d="M9 10h7M9 14h5"/>']]},
  {g:'账户',items:[['settings','账号设置','<circle cx="12" cy="12" r="3.1"/><path d="M12 3.5v2.4M12 18.1v2.4M3.5 12h2.4M18.1 12h2.4M6 6l1.7 1.7M16.3 16.3L18 18M18 6l-1.7 1.7M7.7 16.3L6 18"/>']]}
 ];
-const PATHS={overview:'/v1/overview?range=24h',api:'/v1/assets',assets:'/v1/assets?page=1&size=12',link:'/v1/integrations',monitor:'/v1/health',docs:'/v1/docs'};
-const PERM={admin:['overview','api','assets','users','link','monitor','docs','settings'],dev:['overview','api','assets','monitor','docs','settings']};
+const PATHS={overview:'/v1/overview?range=24h',api:'/v1/assets',assets:'/v1/assets?page=1&size=12',link:'/v1/integrations',monitor:'/v1/health',docs:'/v1/docs',community:'/v1/community'};
+const PERM={admin:['overview','api','assets','users','community','link','monitor','docs','settings'],dev:['overview','api','assets','community','monitor','docs','settings']};
 
 /* ================= 登录 ================= */
 const DB='devrealm_db_v1';
 let users=[{acc:'admin',pwd:'admin123',name:'陶云',role:'admin',created:'2026-11-01'},{acc:'dev',pwd:'dev123',name:'李承宇',role:'dev',created:'2026-11-08'}];
 let res=RES.slice(),logs=LOGS.slice(),chans=CHANNELS.map(x=>({...x})),apiHist=[],apiSaved=[];
 let prefs={mail:true,daily:false};
-function save(){try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs}))}catch(e){}sbPush();}
+function save(){try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community}))}catch(e){}sbPush();}
 function load(){try{const d=JSON.parse(localStorage.getItem(DB)||'{}');
  if(Array.isArray(d.users)&&d.users.length)users=d.users;
  if(Array.isArray(d.res)&&d.res.length)res=d.res;
@@ -357,7 +677,8 @@ function load(){try{const d=JSON.parse(localStorage.getItem(DB)||'{}');
  if(Array.isArray(d.logs)&&d.logs.length)logs=d.logs;
  if(Array.isArray(d.apiHist))apiHist=d.apiHist;
  if(Array.isArray(d.apiSaved))apiSaved=d.apiSaved;
- if(d.prefs&&typeof d.prefs==='object')prefs=Object.assign(prefs,d.prefs);}catch(e){}}
+ if(d.prefs&&typeof d.prefs==='object')prefs=Object.assign(prefs,d.prefs);
+ if(Array.isArray(d.community))community=d.community;}catch(e){}if(!community.length)seedCommunity();}
 let capCode='',capCode2='';const CH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function rc(){let s='';for(let i=0;i<4;i++)s+=CH[Math.floor(Math.random()*CH.length)];return s}
 function draw(cv,code){const c=cv.getContext('2d'),w=cv.width,h=cv.height;c.clearRect(0,0,w,h);
@@ -393,18 +714,36 @@ function doReg(e){e.preventDefault();['e-rname','e-rmail','e-rpwd','e-rcap'].for
  if(!ok){drawCap2();c.value='';return false}
  const acc=m.value.split('@')[0];if(users.some(x=>x.acc===acc)){err('e-rname','该邮箱已申请');return false}
  const u={acc:acc,pwd:p.value,name:n.value.trim(),role:'dev'};users.push(u);save();enter(u);return false}
-let S={role:'dev',tab:'overview',method:'GET',filter:'',q:'',lv:'ALL',lq:''};
+let S={role:'dev',tab:'overview',method:'GET',filter:'',q:'',lv:'ALL',lq:'',cTab:'全部',cSort:'latest',cQ:''};
 function enter(u){S.role=u.role;S.user=u;
  document.getElementById('login').classList.add('hide');
+ document.getElementById('landing').classList.add('hide');
  document.getElementById('app').classList.remove('hide');
- const v=document.querySelector('#login video');if(v){try{v.pause()}catch(e){}}
+ const v=document.querySelector('#landing video');if(v){try{v.pause()}catch(e){}}
  document.getElementById('meAv').textContent=u.name.slice(0,1);
  document.getElementById('meName').textContent=u.name;
  document.getElementById('meRole').textContent=u.role.toUpperCase();
  buildNav();go(PERM[u.role][0]);toast('WELCOME · '+u.name)}
 function logout(){document.getElementById('app').classList.add('hide');
- document.getElementById('login').classList.remove('hide');
- const v=document.querySelector('#login video');if(v){v.play().catch(()=>{})}drawCap()}
+ document.getElementById('landing').classList.remove('hide');
+ document.getElementById('login').classList.add('hide');
+ const v=document.querySelector('#landing video');if(v){v.play().catch(()=>{})}renderLanding()}
+function openLogin(m){document.getElementById('login').classList.remove('hide');switchTab(m||'login');drawCap();drawCap2();
+ const el=document.getElementById('acc');if(el&&!el.value)el.value='';}
+function closeLogin(){document.getElementById('login').classList.add('hide')}
+function lpScroll(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLogin()});
+function renderLanding(){
+ const t=document.getElementById('lpTrend'),r=document.getElementById('lpRes');
+ if(t){
+  const hot=community.slice().sort((a,b)=>((b.pinned?1:0)-(a.pinned?1:0))||((b.replies.length+b.likes)-(a.replies.length+a.likes))).slice(0,4);
+  t.innerHTML=hot.map(p=>'<div class="lp-item" onclick="openLogin(\'login\')"><div class="m"><span class="cc '+(p.cat==='疑难问答'?'q':'')+'">'+p.cat+'</span><span>'+ago(p.ts)+'</span>'+(p.solved?'<span style="color:#7fe9d7">已解决</span>':'')+'</div>'+
+   '<h4>'+esc(p.title)+'</h4><div class="sm"><b>'+esc(p.author)+'</b> · '+p.replies.length+' 条回复 · '+p.views+' 次浏览</div></div>').join('');
+ }
+ if(r){r.innerHTML=res.slice(0,3).map(x=>'<div class="lp-card"><div class="t">'+x.t.toUpperCase()+' · v'+x.v+'</div><h4>'+esc(x.n)+'</h4><p>'+esc(x.d)+'</p>'+
+   '<div class="f"><span>'+x.size+'</span><span>'+x.id.toUpperCase()+'</span></div></div>').join('')}
+
+}
 
 /* ================= 框架 ================= */
 function buildNav(){const nav=document.getElementById('nav');
@@ -416,10 +755,10 @@ function go(t){if(!PERM[S.role].includes(t))t=PERM[S.role][0];
  document.getElementById('crumb').textContent=t.toUpperCase();
  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
  document.querySelector('.content').scrollTop=0;
- if(t==='overview')grow();}
+ if(t==='overview')grow();if(t==='community')cmMount();}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
  clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2000)}
-function openSheet(h){document.getElementById('sheet').innerHTML=h;document.getElementById('modal').classList.remove('hide')}
+function openSheet(h,w,wide){const sh=document.getElementById('sheet');sh.innerHTML=h;sh.style.width=w||'min(420px,94vw)';sh.classList.toggle('wide',!!wide);document.getElementById('modal').classList.remove('hide')}
 function closeSheet(){document.getElementById('modal').classList.add('hide')}
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeSheet()});
 
@@ -427,11 +766,11 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
 function ph(k,title,sub,code){
  return '<div class="ph"><div class="k">'+k+'</div><h1>'+title+'</h1><p>'+sub+'</p>'+
  '<div class="mark">'+PATHMAP[S.tab]+'<b>'+code+'</b></div></div>'}
-const PATHMAP={overview:'SESSION / 24H',api:'ENDPOINT / TEST',assets:'REGISTRY / ASSETS',users:'TEAM / MEMBERS',link:'INTEGRATIONS',monitor:'OBSERVE / LOGS',docs:'REFERENCE / API',settings:'ACCOUNT / SETTINGS'};
+const PATHMAP={overview:'SESSION / 24H',api:'ENDPOINT / TEST',assets:'REGISTRY / ASSETS',users:'TEAM / MEMBERS',community:'COMMUNITY / POSTS',link:'INTEGRATIONS',monitor:'OBSERVE / LOGS',docs:'REFERENCE / API',settings:'ACCOUNT / SETTINGS'};
 function view(t){
  if(t==='overview')return vOverview();if(t==='api')return vApi();if(t==='assets')return vAssets();
  if(t==='users')return vUsers();if(t==='link')return vLink();if(t==='monitor')return vMonitor();
- if(t==='docs')return vDocs();return vSettings()}
+ if(t==='docs')return vDocs();if(t==='community')return vCommunity();return vSettings()}
 
 function vOverview(){
  const bars=[38,52,41,68,74,63,88,79,92,71,84,96,88,102,94,110,98,121,108,132,119,141,128,150];
@@ -716,8 +1055,148 @@ function confirmReset(){
  '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="resetAll()">确认恢复</button></div>')}
 function resetAll(){localStorage.removeItem(DB);location.reload()}
 
+
+/* ================= 开发者社区 ================= */
+let community=[];
+function esc(x){return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function ago(ts){const m=Math.floor((Date.now()-ts)/60000);if(m<1)return '刚刚';if(m<60)return m+' 分钟前';
+ const h=Math.floor(m/60);if(h<24)return h+' 小时前';const d=Math.floor(h/24);return d<30?d+' 天前':Math.floor(d/30)+' 个月前'}
+function seedCommunity(){
+ const now=Date.now(),H=3600000,D=86400000;
+ community=[
+ {id:'c1',cat:'学术交流',title:'帧同步在 2D 平台跳跃里的确定性坑：浮点、随机种子和输入延迟',acc:'admin',author:'陶云',role:'admin',ts:now-3*H,
+  tags:['帧同步','确定性','物理'],likes:14,views:186,solved:false,pinned:true,
+  body:'最近把一个小项目从状态同步改成帧同步，踩了几个很具体的坑，记一下方便后来人。\n\n第一是浮点。物理积分只要有一帧两边用了不同的精度或不同的编译器优化，位置就会慢慢漂。最后的做法是把位置换成定点数（1/1000 单位），浮点只用来渲染插值。\n\n第二是随机。所有随机必须走同一条种子序列，不能有任何一个地方直接调用引擎的 Random。我们把随机封装成 TickRandom，按帧号推进，回放时能完全复现。\n\n第三是输入延迟。帧同步里输入要带帧号提交，客户端本地先预测。预测错的时候不要直接瞬移，做 80ms 的位置收敛，玩家感知会好很多。\n\n目前 60 帧下 4 人联机稳定，回放校验跑了 200 局没有分叉。欢迎补充你们项目里的处理方式。',
+  replies:[
+   {acc:'dev',by:'李承宇',role:'dev',ts:now-2.4*H,text:'定点数这块你们用的什么精度？我们 1/10000 在高速移动时还是会抖，渲染插值做了但看起来不够顺。',best:false},
+   {acc:'admin',by:'陶云',role:'admin',ts:now-2*H,text:'1/1000 对我们这个移动速度够用。抖主要是插值用了上一帧和当前帧的线性混合，试试用三次样条或者把渲染帧和逻辑帧解耦成固定 16ms 采样。',best:true},
+   {acc:'dev',by:'李承宇',role:'dev',ts:now-1.2*H,text:'收到，我先把插值改成固定采样试试，回头把回放对比数据贴上来。',best:false}]},
+ {id:'c2',cat:'疑难问答',title:'Unity IL2CPP 出 Android 包后，Steamworks 的回调在主线程不触发',acc:'dev',author:'李承宇',role:'dev',ts:now-7*H,
+  tags:['Unity','IL2CPP','Steamworks'],likes:9,views:142,solved:true,pinned:false,
+  body:'情况是这样：编辑器里一切正常，出 Android IL2CPP 包之后 Steamworks 的 Callback 只在启动时进一次，后面完全静默。\n\n已经排查过：登录成功、AppID 正确、回调注册在 Awake 之后。怀疑是 IL2CPP 把回调委托给裁剪了，但加了 link.xml 保留整个命名空间还是不行。\n\n有没有人遇到过类似情况？',
+  replies:[
+   {acc:'admin',by:'陶云',role:'admin',ts:now-6*H,text:'先确认你是不是在子线程里跑的 SteamAPI.RunCallbacks。Android 上必须每个渲染帧在主线程调一次，否则回调队列会堆着不派发。',best:false},
+   {acc:'dev',by:'李承宇',role:'dev',ts:now-5.4*H,text:'确实是放到了网络线程的循环里……挪回 Update 之后回调正常了。另外 link.xml 也保留着，没再出问题。',best:true},
+   {acc:'admin',by:'陶云',role:'admin',ts:now-5*H,text:'那就是这个原因。建议把 RunCallbacks 放在一个高优先级的 MonoBehaviour 里，帧率掉了也不会漏回调。',best:false}]},
+ {id:'c3',cat:'经验分享',title:'独立游戏上 Steam 之前，我踩过的 7 个发行坑（预算 0 的那种）',acc:'admin',author:'陶云',role:'admin',ts:now-1.3*D,
+  tags:['发行','Steam','上线'],likes:31,views:402,solved:false,pinned:false,
+  body:'项目上线一个月，销量不高但流程跑通了。把和钱、时间有关的坑列一下。\n\n1. 商店页审核至少预留 5 个工作日，别卡着日期提交。\n2. 愿望单不是越多越好，转化看的是上线首周的曝光，前期先把 demo 的留存做起来。\n3. 定价区级别偷懒，阿根廷和土耳其的低价区会被跨区套利。\n4. 首日补丁一定会发，构建流水线要能在 10 分钟内出包。\n5. Steam Deck 兼容性标签会影响推荐，提前测。\n6. 别把成就做成 grind，玩家会骂，退款率也会上去。\n7. 上线当天不要改玩法，只修崩溃。\n\n有问题可以直接在下面问，我尽量回。',
+  replies:[
+   {acc:'dev',by:'李承宇',role:'dev',ts:now-1.1*D,text:'第 4 点太真实了。我们上线当天临时改了一个 UI bug，结果打包脚本半小时才出包，直接错过窗口。',best:false},
+   {acc:'admin',by:'陶云',role:'admin',ts:now-1*D,text:'所以流水线要提前一周做一次全量演练，包括商店页素材和 depot 上传，别只测本地构建。',best:false}]},
+ {id:'c4',cat:'疑难问答',title:'Spine 骨骼动画在 URP 下描边闪烁，换材质也压不住，有稳定方案吗？',acc:'dev',author:'李承宇',role:'dev',ts:now-2*D,
+  tags:['Spine','URP','渲染'],likes:6,views:98,solved:false,pinned:false,
+  body:'2D 角色用 Spine，URP 里加了自定义描边 pass，角色移动时边缘会一闪一闪，静止时正常。\n\n试过：关闭 MSAA、把描边改成基于法线、换 Sorting Layer，还是会闪。感觉是骨骼网格每帧重建导致法线不稳定。\n\n有没有人用 Spine 在 URP 下做过稳定的外描边？',
+  replies:[
+   {acc:'admin',by:'陶云',role:'admin',ts:now-1.8*D,text:'如果描边是基于网格法线扩边的，骨骼每帧形变确实会让法线跳。试试改成屏幕空间描边（基于 alpha 膨胀），或者把描边宽度按屏幕像素固定。',best:false}]},
+ {id:'c5',cat:'学术交流',title:'小团队该不该上 ECS？一个 6 个月项目的取舍复盘',acc:'admin',author:'陶云',role:'admin',ts:now-3*D,
+  tags:['架构','ECS','团队协作'],likes:18,views:265,solved:false,pinned:false,
+  body:'三个人、六个月、一个 2D 动作游戏。立项时争论了很久要不要上 ECS，最后选了「半 ECS」：数据用组件拆开，系统还是普通类，按固定顺序在 Update 里跑。\n\n好处是新人能看懂，调试时可以直接断点看实体；坏处是跨系统查询比纯 ECS 慢，但我们的实体量只有几百，完全不成问题。\n\n结论：ECS 的价值在数据布局和并行，不在「听起来更专业」。实体量小、团队小的时候，可读性比极限性能重要。\n\n如果你们团队也在纠结，可以先问三个问题：实体规模多大、有没有并行需求、团队里几个人能维护这套架构。',
+  replies:[
+   {acc:'dev',by:'李承宇',role:'dev',ts:now-2.7*D,text:'同意。我们之前强行上纯 ECS，结果策划改一个数值要在四个系统里找，最后又退回来了。',best:false},
+   {acc:'admin',by:'陶云',role:'admin',ts:now-2.5*D,text:'对，工具链和调试体验跟不上，架构再先进也是负担。',best:false}]},
+ {id:'c6',cat:'经验分享',title:'一个人做像素美术：资源命名、切片和导入设置的一套固定规范',acc:'dev',author:'李承宇',role:'dev',ts:now-4*D,
+  tags:['像素风','资源管线','规范'],likes:22,views:311,solved:false,pinned:false,
+  body:'一个人做美术最容易乱，三个月后自己都找不到文件。我后来定了一套很土但有效的规范：\n\n- 目录按 char / env / ui / fx 分，不按章节分。\n- 文件名统一 小写_类型_状态_序号，比如 char_player_idle_01。\n- 所有切片用 16 的倍数，导入 Filter Mode 一律 Point，Compression 关掉。\n- 调色板单独一个 png，任何新图先吸色再画。\n- 每周末导出一次 contact sheet，肉眼检查风格有没有跑偏。\n\n规范不高级，但找东西的速度快了很多。',
+  replies:[
+   {acc:'admin',by:'陶云',role:'admin',ts:now-3.8*D,text:'补一条：给每个资源写一行用途备注，三个月后看文件名不一定想得起来当初为什么画它。',best:false}]}
+ ];
+}
+
+function cmFiltered(){
+ const q=(S.cQ||'').trim().toLowerCase();
+ let list=community.filter(p=>(S.cTab==='全部'||p.cat===S.cTab)&&(!q||(p.title+p.body+p.tags.join(' ')+p.author).toLowerCase().includes(q)));
+ if(S.cSort==='hot')list.sort((a,b)=>(b.likes+b.replies.length*2)-(a.likes+a.replies.length*2));
+ else if(S.cSort==='unanswered')list=list.filter(p=>!p.solved).sort((a,b)=>b.ts-a.ts);
+ else list.sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0)||b.ts-a.ts);
+ return list;
+}
+function setCat(c){S.cTab=c;document.querySelectorAll('.cm-tab').forEach(b=>b.classList.toggle('on',b.dataset.c===c));renderCL()}
+function setSort(v){S.cSort=v;document.querySelectorAll('.cm-sort button').forEach(b=>b.classList.toggle('on',b.dataset.s===v));renderCL()}
+function renderCL(){
+ const box=document.getElementById('clist');if(!box)return;
+ const list=cmFiltered();
+ box.innerHTML=list.length?list.map(p=>{
+  const own=p.acc===S.user.acc;
+  return '<article class="cm-row" onclick="openPost(\''+p.id+'\')">'+
+  '<div class="cm-vote"><b>'+p.likes+'</b><span>赞</span></div>'+
+  '<div class="cm-main"><div class="cm-meta"><span class="cm-cat '+(p.cat==='疑难问答'?'qa':p.cat==='经验分享'?'exp':'')+'">'+p.cat+'</span>'+
+   (p.pinned?'<span class="cm-pin">置顶</span>':'')+(p.solved?'<span class="cm-ok">已解决</span>':'')+'<span class="cm-time">'+ago(p.ts)+'</span></div>'+
+  '<h3>'+esc(p.title)+'</h3><p>'+esc(p.body.replace(/\n+/g,' ').slice(0,110))+'…</p>'+
+  '<div class="cm-foot"><span class="cm-author">'+esc(p.author)+' · '+p.role.toUpperCase()+(own?' · 我':'').replace(' · 我','')+'</span>'+
+   p.tags.map(t=>'<span class="cm-tag">#'+esc(t)+'</span>').join('')+
+   '<span class="cm-count">'+p.replies.length+' 回复 · '+p.views+' 浏览</span></div></div></article>';
+ }).join(''):'<div class="cm-empty">没有符合条件的讨论，换个关键词或者发一条新的。</div>';
+ const cnt=document.getElementById('cmCount');if(cnt)cnt.textContent=list.length+' 条';
+}
+function vCommunity(){
+ const total=community.length,replies=community.reduce((a,p)=>a+p.replies.length,0),solved=community.filter(p=>p.solved).length;
+ const authors=[...new Set(community.map(p=>p.author))].slice(0,4);
+ return ph('COMMUNITY','开发者社区','技术方案、具体问题和上线经验都在这里；回答被采纳后会标记为已解决','OPEN TO MEMBERS')+
+ '<div class="cm-kpis"><div><b>'+total+'</b><span>讨论</span></div><div><b>'+replies+'</b><span>回复</span></div>'+
+ '<div><b>'+solved+'</b><span>已解决</span></div><div><b>'+users.length+'</b><span>注册成员</span></div>'+
+ '<button class="cm-new" onclick="newPost()">发起讨论 +</button></div>'+
+ '<div class="cm-bar"><div class="cm-tabs">'+['全部','学术交流','疑难问答','经验分享'].map(c=>'<button class="cm-tab'+(S.cTab===c?' on':'')+'" data-c="'+c+'" onclick="setCat(\''+c+'\')">'+c+'</button>').join('')+'</div>'+
+ '<div class="cm-tools"><input id="cmq" placeholder="搜索标题、正文或标签…" value="'+esc(S.cQ)+'" oninput="S.cQ=this.value;renderCL()">'+
+ '<div class="cm-sort"><button data-s="latest" class="'+(S.cSort==='latest'?'on':'')+'" onclick="setSort(\'latest\')">最新</button><button data-s="hot" class="'+(S.cSort==='hot'?'on':'')+'" onclick="setSort(\'hot\')">最热</button><button data-s="unanswered" class="'+(S.cSort==='unanswered'?'on':'')+'" onclick="setSort(\'unanswered\')">待解决</button></div></div></div>'+
+ '<div class="cm-layout"><div class="cm-listwrap"><div class="cm-listhd"><span>COMMUNITY FEED</span><span id="cmCount">'+cmFiltered().length+' 条</span></div><div id="clist">'+(()=>{const d=document.createElement('div');return ''})()+'</div></div>'+
+ '<aside class="cm-side"><div class="cm-side-card"><div class="k">版块说明</div><h4>提问前先搜一下</h4><p>标题写清引擎、平台和具体现象；附上复现步骤和报错截图，比「求解」更容易得到回答。</p>'+
+ '<div class="cm-rules"><span>学术交流 · 方案与复盘</span><span>疑难问答 · 可复现的问题</span><span>经验分享 · 踩坑与流程</span></div></div>'+
+ '<div class="cm-side-card"><div class="k">活跃成员</div>'+authors.map((n,i)=>'<div class="cm-user"><div class="av">'+n.slice(0,1)+'</div><div><b>'+esc(n)+'</b><span>'+(community.filter(p=>p.author===n).length)+' 条讨论</span></div><i>'+(i===0?'TOP':'')+'</i></div>').join('')+'</div>'+
+ '<div class="cm-side-card tip"><div class="k">社区数据</div><p>讨论与回复会随账号同步到云端；换设备登录后仍然能看到自己的帖子和收到的回答。</p></div></aside></div>';
+}
+function cmMount(){renderCL()}
+function openPost(id){
+ const p=community.find(x=>x.id===id);if(!p)return;
+ p.views++;S.postId=id;
+ const own=p.acc===S.user.acc||S.role==='admin';
+ const repl=p.replies.map((r,i)=>'<div class="cm-reply'+(r.best?' best':'')+'"><div class="hd"><div class="av">'+esc(r.by).slice(0,1)+'</div><div><b>'+esc(r.by)+'</b><span>'+r.role.toUpperCase()+' · '+ago(r.ts)+'</span></div>'+
+  (r.best?'<em>已采纳 ✓</em>':'')+(own&&!r.best?'<button onclick="acceptReply(\''+p.id+'\','+i+')">采纳</button>':'')+'</div><p>'+esc(r.text).replace(/\n/g,'<br>')+'</p></div>').join('')||'<div class="cm-none">还没有回复，来写第一条。</div>';
+ openSheet('<div class="cm-detail"><div class="cm-meta"><span class="cm-cat '+(p.cat==='疑难问答'?'qa':p.cat==='经验分享'?'exp':'')+'">'+p.cat+'</span>'+(p.solved?'<span class="cm-ok">已解决</span>':'')+'<span class="cm-time">'+ago(p.ts)+'</span></div>'+
+ '<h3>'+esc(p.title)+'</h3><div class="cm-by"><div class="av">'+esc(p.author).slice(0,1)+'</div><div><b>'+esc(p.author)+'</b><span>'+p.role.toUpperCase()+'</span></div><div class="sp"></div>'+
+ '<button class="cm-like" onclick="likePost(\''+p.id+'\')">♥ '+p.likes+'</button>'+
+ (own&&S.role==='admin'?'<button class="cm-ghost" onclick="pinPost(\''+p.id+'\')">'+(p.pinned?'取消置顶':'置顶')+'</button><button class="cm-ghost danger" onclick="delPost(\''+p.id+'\')">删除</button>':'')+'</div>'+
+ '<div class="cm-body">'+p.body.split(/\n{2,}/).map(x=>'<p>'+esc(x).replace(/\n/g,'<br>')+'</p>').join('')+'</div>'+
+ '<div class="cm-tagrow">'+p.tags.map(t=>'<span>#'+esc(t)+'</span>').join('')+'<span class="views">'+p.views+' 次浏览 · '+p.replies.length+' 条回复</span></div>'+
+ '<div class="cm-replyhd">回复 <span>'+p.replies.length+'</span></div>'+repl+
+ '<div class="cm-write"><textarea id="cmrp" placeholder="写下你的方案或追问，尽量带上引擎版本和复现步骤…"></textarea>'+
+ '<div class="cm-wacts"><span>以 '+esc(S.user.name)+' 的身份回复</span><button onclick="addReply(\''+p.id+'\')">发布回复</button></div></div></div>','min(760px,96vw)',true);
+}
+function likePost(id){const p=community.find(x=>x.id===id);if(!p)return;p.liked=p.liked||[];
+ const i=p.liked.indexOf(S.user.acc);if(i>=0){p.liked.splice(i,1);p.likes=Math.max(0,p.likes-1)}else{p.liked.push(S.user.acc);p.likes++}
+ save();openPost(id);toast('已更新点赞')}
+function addReply(id){const p=community.find(x=>x.id===id);if(!p)return;
+ const t=document.getElementById('cmrp');const v=(t?t.value:'').trim();
+ if(v.length<6){toast('回复至少写 6 个字');return}
+ p.replies.push({acc:S.user.acc,by:S.user.name,role:S.user.role,ts:Date.now(),text:v,best:false});save();openPost(id);toast('回复已发布')}
+function acceptReply(id,i){const p=community.find(x=>x.id===id);if(!p)return;
+ p.replies.forEach((r,j)=>r.best=(j===i));p.solved=true;save();openPost(id);toast('已采纳为最佳答案，问题标记为已解决')}
+function pinPost(id){const p=community.find(x=>x.id===id);if(!p)return;p.pinned=!p.pinned;save();openPost(id);go('community');toast(p.pinned?'已置顶':'已取消置顶')}
+function delPost(id){const p=community.find(x=>x.id===id);if(!p)return;
+ openSheet('<h4>删除讨论</h4><div style="font-size:12px;color:#8b98ad;line-height:1.9">《'+esc(p.title)+'》及其 '+p.replies.length+' 条回复会被删除，操作不可撤销。</div>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="doDelPost(\''+id+'\')">确认删除</button></div>','min(420px,94vw)')}
+function doDelPost(id){community=community.filter(x=>x.id!==id);save();closeSheet();go('community');toast('讨论已删除')}
+function newPost(){
+ if(!S.user){openLogin('login');return}
+ openSheet('<h4>发起讨论</h4>'+
+ '<label>版块<select id="np-cat"><option>学术交流</option><option>疑难问答</option><option>经验分享</option></select></label>'+
+ '<label>标题<input id="np-title" maxlength="60" placeholder="用一句话说清问题或结论"></label>'+
+ '<label>正文<textarea id="np-body" rows="8" placeholder="背景、已尝试的方案、具体现象；技术问题请附引擎与平台版本。"></textarea></label>'+
+ '<label>标签<input id="np-tags" placeholder="用逗号分隔，最多 3 个，如 帧同步,物理"></label>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-p" onclick="createPost()">发布</button></div>','min(560px,94vw)')
+}
+function createPost(){
+ const cat=document.getElementById('np-cat').value,ti=document.getElementById('np-title').value.trim(),
+  bd=document.getElementById('np-body').value.trim(),tg=document.getElementById('np-tags').value.trim();
+ if(ti.length<6){toast('标题至少 6 个字');return}
+ if(bd.length<20){toast('正文至少 20 个字，写清背景和现象');return}
+ const tags=tg?tg.split(/[,，\s]+/).filter(Boolean).slice(0,3):['讨论'];
+ const p={id:'c'+Date.now(),cat:cat,title:ti,acc:S.user.acc,author:S.user.name,role:S.user.role,ts:Date.now(),tags:tags,
+  likes:0,views:1,solved:false,pinned:false,body:bd,replies:[]};
+ community.unshift(p);save();closeSheet();S.cTab='全部';S.cSort='latest';go('community');toast('已发布，等待社区回复')}
+
 /* ================= 启动 ================= */
-load();drawCap();drawCap2();
+load();drawCap();drawCap2();renderLanding();
 if(!localStorage.getItem(DB))save();
 
 /* ================= Supabase 云端同步 ================= */
@@ -730,7 +1209,7 @@ function sbReq(path,opt){
  opt.headers=Object.assign(h,opt.headers||{});
  return fetch(SB_URL+'/rest/v1/'+path,opt);
 }
-function sbState(){return {users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs}}
+function sbState(){return {users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community}}
 function sbPush(){
  if(!sbReady)return;
  clearTimeout(sbTimer);
@@ -746,10 +1225,10 @@ function sbBoot(){
   if(d&&d.state&&Array.isArray(d.state.users)&&d.state.users.length){
    var s=d.state;
    users=s.users;res=s.res||res;chans=s.chans||chans;logs=s.logs||logs;
-   apiHist=s.apiHist||apiHist;apiSaved=s.apiSaved||apiSaved;prefs=s.prefs||prefs;
-   try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs}))}catch(e){}
+   apiHist=s.apiHist||apiHist;apiSaved=s.apiSaved||apiSaved;prefs=s.prefs||prefs;if(Array.isArray(s.community)&&s.community.length)community=s.community;
+   try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community}))}catch(e){}
   }
-  sbReady=true;sbPush();
+  sbReady=true;renderLanding();sbPush();
  }).catch(function(){sbReady=true});
 }
 sbBoot();
