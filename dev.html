@@ -475,6 +475,12 @@ tbody tr:last-child td{border-bottom:0}
 .cm-write textarea:focus{border-color:rgba(255,209,102,.4)}
 .cm-wacts{display:flex;align-items:center;justify-content:space-between;margin-top:9px;font-size:10px;color:var(--sub);font-family:var(--mono)}
 .cm-wacts button{background:linear-gradient(135deg,#ffd166,#e0a83c);border:0;color:#20180a;font-weight:600;font-size:12px;padding:9px 18px;border-radius:7px;cursor:pointer}
+
+.cm-mini{display:flex;align-items:center;gap:10px;padding:11px 2px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer}
+.cm-mini:last-child{border-bottom:0}
+.cm-mini:hover b{color:#ffd166}
+.cm-mini b{font-size:12px;font-weight:500;color:#cfd8e6;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cm-mini .m{font-family:var(--mono);font-size:9.5px;color:var(--sub);flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -790,7 +796,10 @@ function vOverview(){
  '</div></div>'+
  '<div class="panel" style="margin-top:0"><div class="hd"><h3>最近事件</h3><span class="tag">LOG</span></div><div class="bd">'+
  logs.slice(0,4).map(l=>'<div class="hist"><b>'+l.t+'</b><span style="color:'+(l.lv==='ERROR'?'#ff9aa5':l.lv==='WARN'?'#ffcf8a':'#7fe9d7')+'">'+l.lv+'</span><span>'+l.m+'</span></div>').join('')+
- '</div></div></div>'}
+ '</div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>社区正在讨论</h3><span class="tag" style="cursor:pointer" onclick="go(\'community\')">进入社区 →</span></div><div class="bd">'+
+ community.slice(0,3).map(p=>'<div class="cm-mini" onclick="openPost(\''+p.id+'\')"><span class="cm-cat '+(p.cat==='疑难问答'?'qa':p.cat==='经验分享'?'exp':'')+'">'+p.cat+'</span><b>'+esc(p.title)+'</b><span class="m">'+(p.solved?'已解决 · ':'')+p.replies.length+' 回复 · '+ago(p.ts)+'</span></div>').join('')+
+ '</div></div>'}
 function grow(){const ls=document.querySelectorAll('.lines .b');
  ls.forEach((b,i)=>setTimeout(()=>{b.style.height=(parseInt(b.dataset.h,10)/160*100)+'%'},i*22))}
 
@@ -1171,7 +1180,7 @@ function addReply(id){const p=community.find(x=>x.id===id);if(!p)return;
  p.replies.push({acc:S.user.acc,by:S.user.name,role:S.user.role,ts:Date.now(),text:v,best:false});save();openPost(id);toast('回复已发布')}
 function acceptReply(id,i){const p=community.find(x=>x.id===id);if(!p)return;
  p.replies.forEach((r,j)=>r.best=(j===i));p.solved=true;save();openPost(id);toast('已采纳为最佳答案，问题标记为已解决')}
-function pinPost(id){const p=community.find(x=>x.id===id);if(!p)return;p.pinned=!p.pinned;save();openPost(id);go('community');toast(p.pinned?'已置顶':'已取消置顶')}
+function pinPost(id){const p=community.find(x=>x.id===id);if(!p)return;p.pinned=!p.pinned;save();closeSheet();go('community');toast(p.pinned?'已置顶':'已取消置顶')}
 function delPost(id){const p=community.find(x=>x.id===id);if(!p)return;
  openSheet('<h4>删除讨论</h4><div style="font-size:12px;color:#8b98ad;line-height:1.9">《'+esc(p.title)+'》及其 '+p.replies.length+' 条回复会被删除，操作不可撤销。</div>'+
  '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="doDelPost(\''+id+'\')">确认删除</button></div>','min(420px,94vw)')}
