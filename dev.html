@@ -264,6 +264,10 @@ tbody tr:last-child td{border-bottom:0}
 .lp-nav a:hover{color:#5affd6}
 .lp-nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:#5affd6;transition:.25s}
 .lp-nav a:hover::after{right:0}
+.lp-notice{display:none;align-items:center;gap:8px;margin-top:14px;padding:7px 12px;border-radius:999px;
+ border:1px solid rgba(200,162,74,.35);background:rgba(200,162,74,.08);color:#e6c98a;font-size:10.5px;letter-spacing:.04em;width:fit-content}
+.lp-notice.on{display:inline-flex}
+.lp-notice i{width:5px;height:5px;border-radius:50%;background:#d8b566;box-shadow:0 0 8px #c8a24a}
 .lp-act{margin-left:auto;display:flex;gap:10px}
 .lp-ghost,.lp-solid{border-radius:7px;font-size:12px;padding:9px 16px;cursor:pointer;transition:.2s}
 .lp-ghost{background:transparent;border:1px solid rgba(255,255,255,.16);color:#cfd8e6}
@@ -718,6 +722,170 @@ tbody tr:last-child td{border-bottom:0}
  .cards.assets,.cardsw,.cm-feature{grid-template-columns:1fr}
  .cm-feature .side{border-left:0;border-top:1px solid rgba(255,209,102,.14)}
 }
+
+/* ============================================================
+   管理端 · 独立后台
+   暖白纸面 + 深墨侧栏 + 森林绿，和开发者端完全分离
+   ============================================================ */
+.lp-admin{border:0;background:transparent;color:rgba(232,238,247,.48);font-size:11px;letter-spacing:.08em;cursor:pointer;padding:6px 2px}
+.lp-admin:hover{color:#c8a24a}
+#login.admin-mode .lb{border-color:rgba(200,162,74,.28)}
+#login.admin-mode .card{background:#12130f;border-color:rgba(200,162,74,.3)}
+#login.admin-mode .card .top .dot i{background:#c8a24a;box-shadow:0 0 10px #c8a24a}
+#login.admin-mode .submit{background:linear-gradient(135deg,#d8b566,#a67f2f);color:#1a1508;box-shadow:0 14px 30px -16px rgba(200,162,74,.7)}
+#login.admin-mode .sw{display:none}
+#login.admin-mode .lb-left .lp-brand .mk{background:linear-gradient(135deg,#2a2413,#4a3a12);border-color:rgba(200,162,74,.45)}
+#login.admin-mode .lb-left .lp-brand .mk svg{stroke:#e2c27a}
+
+#admin{position:fixed;inset:0;display:grid;grid-template-columns:248px 1fr;background:#f1efe9;color:#1d211c;
+ --ad:#1f6b4f;--ad2:#2c8a66;--gold:#a67f2f;--ink:#1d211c;--sub:#6b7066;--line:#e1ddd3;--panel:#fffcf6}
+.ad-side{background:#14170f;color:#e8e4d8;display:flex;flex-direction:column;padding:22px 16px 16px;border-right:1px solid #23261a}
+.ad-side .brand{display:flex;align-items:center;gap:10px;padding:0 8px 20px}
+.ad-side .brand .mk{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;border:1px solid rgba(200,162,74,.4);
+ background:linear-gradient(135deg,#2a2413,#4a3a12)}
+.ad-side .brand .mk svg{width:17px;height:17px;fill:none;stroke:#e2c27a;stroke-width:1.6}
+.ad-side .brand b{font-size:15px;letter-spacing:.04em;display:block}
+.ad-side .brand small{display:block;font-family:var(--mono);font-size:8px;letter-spacing:.24em;color:#8d8a76;margin-top:3px}
+.ad-side nav{flex:1;display:flex;flex-direction:column;gap:2px}
+.ad-side nav .g{font-family:var(--mono);font-size:8.5px;letter-spacing:.24em;color:#6f7060;padding:16px 10px 6px}
+.ad-side nav button{display:flex;align-items:center;gap:10px;border:0;background:transparent;color:#a9a894;font-size:12.5px;
+ padding:9px 10px;border-radius:7px;cursor:pointer;text-align:left;position:relative;transition:.18s}
+.ad-side nav button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.ad-side nav button:hover{background:rgba(255,255,255,.05);color:#ece8dc}
+.ad-side nav button.on{background:rgba(200,162,74,.12);color:#f0d79a}
+.ad-side nav button.on::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:2px;background:#c8a24a;border-radius:2px}
+.ad-side nav button .cnt{margin-left:auto;font-family:var(--mono);font-size:9px;padding:2px 5px;border-radius:4px;background:rgba(200,162,74,.16);color:#e2c27a}
+.ad-side .me{border-top:1px solid #23261a;padding-top:13px;display:flex;align-items:center;gap:10px}
+.ad-side .me .av{width:32px;height:32px;border-radius:50%;background:#2b2a1c;color:#e2c27a;display:grid;place-items:center;font-size:12px;border:1px solid rgba(200,162,74,.3)}
+.ad-side .me .who b{font-size:12px;display:block}
+.ad-side .me .who span{font-family:var(--mono);font-size:9px;color:#8d8a76;letter-spacing:.12em}
+.ad-side .me button{margin-left:auto;border:0;background:transparent;color:#8d8a76;font-size:10px;cursor:pointer}
+
+.ad-main{display:flex;flex-direction:column;min-width:0}
+.ad-top{height:60px;flex:0 0 auto;display:flex;align-items:center;gap:16px;padding:0 34px;border-bottom:1px solid var(--line);background:rgba(255,252,246,.78);backdrop-filter:blur(10px)}
+.ad-top .crumb{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:#8a8e80}
+.ad-top .crumb b{color:var(--ink)}
+.ad-top .sp{flex:1}
+.ad-top .tag{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:#5d6659;border:1px solid var(--line);padding:5px 9px;border-radius:5px;background:#fffdf8}
+.ad-top .ava{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#1f6b4f;color:#f4f1e6;font-size:11px}
+.ad-content{flex:1;overflow-y:auto;padding:30px 36px 56px;background:
+ radial-gradient(900px 460px at 88% -10%,rgba(200,162,74,.10),transparent 62%),
+ radial-gradient(700px 420px at -8% 100%,rgba(31,107,79,.08),transparent 60%),#f1efe9}
+.ad-page{max-width:1220px;margin:0 auto;animation:pgIn .4s cubic-bezier(.22,.8,.3,1) both}
+.ad-hero{display:flex;align-items:flex-end;gap:20px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.ad-hero .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.26em;color:var(--ad);margin-bottom:9px}
+.ad-hero h1{font-family:"Noto Serif SC",serif;font-size:30px;font-weight:700;letter-spacing:.02em;line-height:1.2}
+.ad-hero p{font-size:11.5px;color:var(--sub);margin-top:8px;line-height:1.8}
+.ad-hero .side{margin-left:auto;text-align:right;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:#8a8e80;
+ background:transparent;border:0;padding:0;display:block;flex-direction:row;min-height:0;justify-content:flex-end}
+.ad-hero .side b{display:block;font-size:13px;color:var(--ink);letter-spacing:0;margin-top:5px;font-family:"Noto Sans SC",sans-serif}
+
+.ad-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.ad-kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:17px 18px 15px;position:relative;overflow:hidden;
+ box-shadow:0 1px 0 #fff inset,0 12px 26px -30px rgba(30,35,25,.55)}
+.ad-kpi .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;color:#8a8e80}
+.ad-kpi .v{font-family:"Noto Serif SC",serif;font-size:32px;line-height:1.15;margin-top:8px;letter-spacing:-.01em}
+.ad-kpi .d{font-size:10px;color:var(--sub);margin-top:6px}
+.ad-kpi .tick{position:absolute;right:14px;top:16px;font-family:var(--mono);font-size:9px;color:var(--ad)}
+.ad-kpi.warn .v{color:#a9712c}.ad-kpi.warn .tick{color:#a9712c}
+
+.ad-grid2{display:grid;grid-template-columns:1.35fr .65fr;gap:16px}
+.ad-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 0 #fff inset,0 16px 34px -38px rgba(30,35,25,.6)}
+.ad-card .hd{display:flex;align-items:center;justify-content:space-between;padding:13px 17px;border-bottom:1px solid var(--line);background:#faf7ef}
+.ad-card .hd h3{font-size:12px;letter-spacing:.02em;font-weight:600}
+.ad-card .hd .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.18em;color:#8a8e80}
+.ad-card .bd{padding:14px 17px}
+.ad-card .link{font-size:10.5px;color:var(--ad);cursor:pointer;font-family:var(--mono);letter-spacing:.06em;background:none;border:0}
+.ad-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed #e9e4d8}
+.ad-row:last-child{border-bottom:0}
+.ad-row .dot{width:6px;height:6px;border-radius:50%;background:#c9c3b4;flex:0 0 auto}
+.ad-row .dot.hot{background:#b24a3d}.ad-row .dot.ok{background:#1f6b4f}.ad-row .dot.warn{background:#c08a3e}
+.ad-row .tx{flex:1;min-width:0}
+.ad-row .tx b{display:block;font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ad-row .tx span{font-size:10px;color:var(--sub);display:block;margin-top:3px}
+.ad-row .tm{font-family:var(--mono);font-size:9px;color:#9a9c8f;flex:0 0 auto}
+.ad-empty{padding:26px 0;text-align:center;font-size:11.5px;color:#8a8e80}
+
+.ad-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.ad-search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:8px 11px}
+.ad-search svg{width:14px;height:14px;stroke:#8a8e80;fill:none;stroke-width:1.7}
+.ad-search input{border:0;outline:none;background:transparent;font-size:11.5px;width:100%;color:var(--ink)}
+.ad-chip{font-family:var(--mono);font-size:9px;letter-spacing:.1em;border:1px solid var(--line);background:var(--panel);color:#6b7066;
+ padding:7px 10px;border-radius:6px;cursor:pointer}
+.ad-chip.on{background:#1f6b4f;border-color:#1f6b4f;color:#f4f1e6}
+.abtn{border:1px solid var(--line);background:var(--panel);color:#3f443b;font-size:11px;padding:7px 12px;border-radius:6px;cursor:pointer;transition:.15s}
+.abtn:hover{border-color:#c9c1ae;background:#fffdf8}
+.abtn.p{background:#1f6b4f;border-color:#1f6b4f;color:#f4f1e6}
+.abtn.p:hover{background:#18573f}
+.abtn.d{color:#a33f31;border-color:#e6c8c2;background:#fffaf8}
+.abtn.s{color:#8a6220;border-color:#e5d3ae;background:#fffbef}
+.abtn.xs{padding:5px 8px;font-size:10px}
+
+.ad-table{width:100%;border-collapse:collapse}
+.ad-table th{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;color:#8a8e80;font-weight:400;text-align:left;
+ padding:9px 12px;border-bottom:1px solid var(--line);background:#faf7ef}
+.ad-table td{padding:12px;border-bottom:1px solid #ece8dd;font-size:11.5px;vertical-align:middle;color:#1d211c}
+.ad-table tr:last-child td{border-bottom:0}
+.ad-table tr:hover td{background:#fbf9f3}
+.ad-table .mono{font-family:var(--mono);font-size:10.5px;color:#4f554a}
+.ad-table .nm{display:flex;align-items:center;gap:8px}
+.ad-table .nm i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:10px;
+ background:#e9efe9;color:#1f6b4f;border:1px solid #d3e3d8}
+.ad-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;padding:3px 7px;border-radius:4px;letter-spacing:.04em}
+.ad-badge.ok{background:#e7f1e9;color:#1d6146;border:1px solid #cfe3d6}
+.ad-badge.warn{background:#f8eedb;color:#8a6220;border:1px solid #ecd9b5}
+.ad-badge.bad{background:#f8e5e1;color:#9c3d2f;border:1px solid #eccdc5}
+.ad-badge.mut{background:#efede6;color:#6b7066;border:1px solid #e1ddd3}
+.ad-badge.gold{background:#f4ecd7;color:#7c5c1e;border:1px solid #e6d6ac}
+
+.ad-tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 17px}
+.ad-tile .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;color:#8a8e80}
+.ad-tile h3{font-size:14px;margin:7px 0 6px;font-weight:600}
+.ad-tile p{font-size:11px;line-height:1.85;color:var(--sub)}
+.ad-tile .go{margin-top:12px}
+.ad-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.ad-quick button{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;cursor:pointer;transition:.18s}
+.ad-quick button:hover{border-color:#bfb59e;transform:translateY(-2px);box-shadow:0 18px 30px -30px rgba(30,35,25,.8)}
+.ad-quick button b{display:block;font-size:12px;margin-bottom:4px}
+.ad-quick button span{font-size:10px;color:var(--sub)}
+
+.ad-switch{position:relative;width:40px;height:22px;border-radius:999px;background:#d9d5c9;cursor:pointer;transition:.2s;border:1px solid #cdc7b8;display:inline-block;vertical-align:middle}
+.ad-switch.on{background:#1f6b4f;border-color:#1f6b4f}
+.ad-switch i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.ad-switch.on i{left:20px}
+.ad-set{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ad-set .ad-card .bd{padding:18px}
+.ad-lbl{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;color:#8a8e80;margin:0 0 7px}
+.ad-in{width:100%;background:#fffdf8;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:12px;outline:none;color:var(--ink)}
+.ad-in:focus{border-color:#1f6b4f}
+.ad-note{font-size:10px;line-height:1.85;color:#8a8e80;margin-top:8px}
+.ad-ann{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.ad-anncard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 17px;position:relative}
+.ad-anncard.on{border-color:#cfe3d6;background:linear-gradient(160deg,#fbfdf9,#fffcf6)}
+.ad-anncard .tag{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:#1f6b4f}
+.ad-anncard h4{font-size:14px;margin:8px 0;line-height:1.5}
+.ad-anncard p{font-size:11px;line-height:1.85;color:var(--sub);min-height:42px}
+.ad-anncard .ft{display:flex;align-items:center;gap:8px;margin-top:12px;font-family:var(--mono);font-size:9px;color:#8a8e80}
+.ad-anncard .ft .sp{flex:1}
+
+.adm .sheet{background:#fffcf6;border-color:#d9d3c6;color:#1d211c;box-shadow:0 30px 80px -30px rgba(20,23,15,.5)}
+.adm .sheet h4{font-family:"Noto Serif SC",serif;font-size:17px}
+.adm .sheet label{color:#8a8e80}
+.adm .sheet input,.adm .sheet select,.adm .sheet textarea{background:#fffdf8;border-color:#ddd7ca;color:#1d211c;font-family:"Noto Sans SC",sans-serif;font-size:12px}
+.adm .sheet textarea{min-height:110px;resize:vertical}
+.adm .sheet .btn{background:#fffdf8;border-color:#ddd7ca;color:#3f443b}
+.adm .sheet .btn-p{background:#1f6b4f;border-color:#1f6b4f;color:#f4f1e6}
+.adm .sheet .btn-r{color:#a33f31;border-color:#e6c8c2}
+
+@media(max-width:1100px){
+ #admin{grid-template-columns:1fr}
+ .ad-side{flex-direction:row;align-items:center;overflow-x:auto;padding:10px}
+ .ad-side .brand small,.ad-side nav .g{display:none}
+ .ad-side nav{flex-direction:row}
+ .ad-side .me{border:0;padding:0 0 0 8px}
+ .ad-kpis,.ad-set,.ad-ann,.ad-quick{grid-template-columns:1fr 1fr}
+ .ad-grid2{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -730,11 +898,12 @@ tbody tr:last-child td{border-bottom:0}
     <div class="lp-brand"><div class="mk"><svg viewBox="0 0 24 24"><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/></svg></div>
       <div><b>DevRealm</b><small>FOR GAME DEVELOPERS</small></div></div>
     <nav class="lp-nav"><a href="#lp-cap">平台能力</a><a href="#lp-comm">开发者社区</a><a href="#lp-res">资源库</a><a href="#lp-flow">工作流</a></nav>
-    <div class="lp-act"><button class="lp-ghost" onclick="openLogin('login')">登录</button><button class="lp-solid" onclick="openLogin('reg')">申请开发者</button></div>
+    <div class="lp-act"><button class="lp-admin" onclick="openLogin('login','admin')">管理员入口</button><button class="lp-ghost" onclick="openLogin('login')">登录</button><button class="lp-solid" onclick="openLogin('reg')">申请开发者</button></div>
   </header>
 
   <div class="lp-hero">
     <div class="lp-kicker"><i></i>INDEPENDENT GAME STUDIO · 2026</div>
+    <div class="lp-notice" id="lpNotice"></div>
     <h1>一个人做游戏，<br>也该有一个<em>像样的后台</em></h1>
     <p>DevRealm 把资源、接口、发行渠道和社区讨论收在同一个地方。你不必再在网盘、聊天群和一堆脚本之间来回找东西，打开一个页面就能推进今天的进度。</p>
     <div class="lp-cta"><button class="lp-main" onclick="openLogin('login')">进入控制台 <span>→</span></button>
@@ -807,13 +976,13 @@ tbody tr:last-child td{border-bottom:0}
     <div class="lb-left">
       <div class="lp-brand"><div class="mk"><svg viewBox="0 0 24 24"><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/></svg></div>
         <div><b>DevRealm</b><small>DEV CONSOLE ACCESS</small></div></div>
-      <h2>回到你的工作台</h2>
-      <p>资源、接口、渠道和社区都在同一个账号下。演示账号可以直接登录查看完整功能。</p>
+      <h2 id="lbTitle">回到你的工作台</h2>
+      <p id="lbSub">资源、接口、渠道和社区都在同一个账号下。演示账号可以直接登录查看完整功能。</p>
       <div class="lb-facts"><div><b>36</b><span>RESOURCES</span></div><div><b>8</b><span>MEMBERS</span></div><div><b>96</b><span>POSTS</span></div></div>
-      <div class="lb-note">DEMO · admin / admin123　dev / dev123</div>
+      <div class="lb-note" id="lbNote">DEMO · dev / dev123</div>
     </div>
     <div class="card">
-      <div class="top"><span>DEV CONSOLE</span><span class="dot"><i></i>ONLINE</span></div>
+      <div class="top"><span id="lbTop">DEV CONSOLE</span><span class="dot"><i></i>ONLINE</span></div>
       <div class="sw"><button id="swLogin" class="on" onclick="switchTab('login')">账号登录</button><button id="swReg" onclick="switchTab('reg')">申请开发者</button></div>
       <form id="loginForm" onsubmit="return doLogin(event)">
         <label class="fld"><span>ACCOUNT</span><input id="acc" placeholder="dev / admin"><em class="err" id="e-acc"></em></label>
@@ -822,8 +991,8 @@ tbody tr:last-child td{border-bottom:0}
           <div style="display:flex;gap:9px;align-items:center"><input id="cap" maxlength="4" placeholder="右侧 4 位" style="flex:1">
           <canvas id="capImg" width="104" height="40" onclick="drawCap()" style="border-radius:8px;cursor:pointer;background:#fff"></canvas></div>
           <em class="err" id="e-cap"></em></label>
-        <button class="submit" type="submit">进 入 控 制 台</button>
-        <div class="hint">演示：admin / admin123 · 开发者 dev / dev123</div>
+        <button class="submit" id="lbSubmit" type="submit">进 入 控 制 台</button>
+        <div class="hint" id="lbHint">演示：开发者 dev / dev123 · 管理员 admin / admin123</div>
       </form>
       <form id="regForm" class="hide" onsubmit="return doReg(event)">
         <label class="fld"><span>STUDIO NAME</span><input id="r-name" placeholder="如 陶云工作室"><em class="err" id="e-rname"></em></label>
@@ -857,6 +1026,33 @@ tbody tr:last-child td{border-bottom:0}
     </div>
     <div class="content"><div class="page" id="page" data-page="overview"></div></div>
   </div>
+</div>
+
+<div id="admin" class="hide">
+  <aside class="ad-side">
+    <div class="brand"><div class="mk"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div><b>DevRealm</b><small>PLATFORM ADMIN</small></div></div>
+    <nav id="adNav">
+      <div class="g">运营</div>
+      <button data-a="dash" onclick="adGo('dash')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>控制台</span></button>
+      <button data-a="users" onclick="adGo('users')"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.2 2.6-5.2 6-5.2s6 2 6 5.2"/><path d="M16 7.8a3 3 0 010 5.8"/><path d="M17.5 15c2 .6 3.5 2.4 3.5 5"/></svg><span>用户与权限</span><em class="cnt" id="adUserCnt">0</em></button>
+      <button data-a="mod" onclick="adGo('mod')"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H4z"/><path d="M8 20h8"/><path d="M12 16v4"/></svg><span>资源审核</span><em class="cnt" id="adResCnt">0</em></button>
+      <button data-a="posts" onclick="adGo('posts')"><svg viewBox="0 0 24 24"><path d="M4 5h16v12H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg><span>社区管理</span><em class="cnt" id="adPostCnt">0</em></button>
+      <div class="g">平台</div>
+      <button data-a="chans" onclick="adGo('chans')"><svg viewBox="0 0 24 24"><path d="M10 8H6a4 4 0 000 8h4"/><path d="M14 8h4a4 4 0 010 8h-4"/><path d="M8 12h8"/></svg><span>渠道与密钥</span></button>
+      <button data-a="ann" onclick="adGo('ann')"><svg viewBox="0 0 24 24"><path d="M4 10v4h3l6 4V6L7 10H4z"/><path d="M17 9a4 4 0 010 6"/></svg><span>公告与运营</span></button>
+      <button data-a="audit" onclick="adGo('audit')"><svg viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>审计日志</span></button>
+      <div class="g">系统</div>
+      <button data-a="set" onclick="adGo('set')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3L5.6 18.4"/></svg><span>系统设置</span></button>
+    </nav>
+    <div class="me"><div class="av" id="adAv">陶</div><div class="who"><b id="adName">陶云</b><span id="adRole">ADMIN · 平台运营</span></div>
+      <button onclick="adLogout()">退出</button></div>
+  </aside>
+  <main class="ad-main">
+    <header class="ad-top"><div class="crumb">PLATFORM ADMIN / <b id="adCrumb">控制台</b></div><div class="sp"></div>
+      <div class="tag">PROD · 生产环境</div><div class="ava" id="adTopAv">陶</div></header>
+    <div class="ad-content"><div class="ad-page" id="adPage" data-p="dash"></div></div>
+  </main>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -912,7 +1108,8 @@ const DB='devrealm_db_v1';
 let users=[{acc:'admin',pwd:'admin123',name:'陶云',role:'admin',created:'2026-11-01'},{acc:'dev',pwd:'dev123',name:'李承宇',role:'dev',created:'2026-11-08'}];
 let res=RES.slice(),logs=LOGS.slice(),chans=CHANNELS.map(x=>({...x})),apiHist=[],apiSaved=[];
 let prefs={mail:true,daily:false};
-function save(){try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community}))}catch(e){}sbPush();}
+let ann=[],audit=[],platform={site:'DevRealm',contact:'ops@devrealm.dev',regOpen:true,maintenance:false,rate:60};
+function save(){try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community,ann:ann,audit:audit.slice(0,80),platform:platform}))}catch(e){}sbPush();}
 function load(){try{const d=JSON.parse(localStorage.getItem(DB)||'{}');
  if(Array.isArray(d.users)&&d.users.length)users=d.users;
  if(Array.isArray(d.res)&&d.res.length)res=d.res;
@@ -921,7 +1118,11 @@ function load(){try{const d=JSON.parse(localStorage.getItem(DB)||'{}');
  if(Array.isArray(d.apiHist))apiHist=d.apiHist;
  if(Array.isArray(d.apiSaved))apiSaved=d.apiSaved;
  if(d.prefs&&typeof d.prefs==='object')prefs=Object.assign(prefs,d.prefs);
- if(Array.isArray(d.community))community=d.community;}catch(e){}if(!community.length)seedCommunity();}
+ if(Array.isArray(d.community))community=d.community;
+ if(Array.isArray(d.ann))ann=d.ann;
+ if(Array.isArray(d.audit))audit=d.audit;
+ if(d.platform&&typeof d.platform==='object')platform=Object.assign(platform,d.platform);
+ res.forEach(r=>{if(!r.status)r.status='published'});}catch(e){}if(!community.length)seedCommunity();if(!ann.length)seedAdmin();}
 let capCode='',capCode2='';const CH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function rc(){let s='';for(let i=0;i<4;i++)s+=CH[Math.floor(Math.random()*CH.length)];return s}
 function draw(cv,code){const c=cv.getContext('2d'),w=cv.width,h=cv.height;c.clearRect(0,0,w,h);
@@ -937,6 +1138,7 @@ function switchTab(m){document.getElementById('loginForm').classList.toggle('hid
  document.getElementById('swLogin').classList.toggle('on',m==='login');
  document.getElementById('swReg').classList.toggle('on',m!=='login');if(m!=='login')drawCap2()}
 function err(id,m){document.getElementById(id).textContent=m||''}
+let loginMode='dev';
 function doLogin(e){e.preventDefault();['e-acc','e-pwd','e-cap'].forEach(i=>err(i,''));
  const a=document.getElementById('acc'),p=document.getElementById('pwd'),c=document.getElementById('cap');let ok=true;
  if(!a.value.trim()){err('e-acc','请输入账号');ok=false}
@@ -946,8 +1148,14 @@ function doLogin(e){e.preventDefault();['e-acc','e-pwd','e-cap'].forEach(i=>err(
  const u=users.find(x=>x.acc===a.value.trim());
  if(!u){err('e-acc','账号不存在');drawCap();c.value='';return false}
  if(u.pwd!==p.value){err('e-pwd','账号或密码错误');drawCap();c.value='';return false}
+ if(loginMode!=='admin'&&platform.maintenance){err('e-acc','平台正在维护，开发者端暂停登录');drawCap();c.value='';return false}
+ if(loginMode==='admin'){
+   if(u.role!=='admin'){err('e-acc','该账号没有管理端权限，请使用管理员账号');drawCap();c.value='';return false}
+   enterAdmin(u);return false}
+ if(u.role==='admin'){err('e-acc','管理员账号请从「管理员入口」登录');drawCap();c.value='';return false}
  enter(u);return false}
 function doReg(e){e.preventDefault();['e-rname','e-rmail','e-rpwd','e-rcap'].forEach(i=>err(i,''));
+ if(!platform.regOpen){err('e-rpwd','开发者注册暂未开放，请联系平台运营');return false}
  const n=document.getElementById('r-name'),m=document.getElementById('r-mail'),
  p=document.getElementById('r-pwd'),c=document.getElementById('r-cap');let ok=true;
  if(!n.value.trim()){err('e-rname','请输入工作室名称');ok=false}
@@ -962,16 +1170,28 @@ function enter(u){S.role=u.role;S.user=u;
  document.getElementById('login').classList.add('hide');
  document.getElementById('landing').classList.add('hide');
  document.getElementById('app').classList.remove('hide');
+ document.getElementById('admin').classList.add('hide');
+ document.body.classList.remove('adm');
  const v=document.querySelector('#landing video');if(v){try{v.pause()}catch(e){}}
  document.getElementById('meAv').textContent=u.name.slice(0,1);
  document.getElementById('meName').textContent=u.name;
  document.getElementById('meRole').textContent=u.role.toUpperCase();
  buildNav();go(PERM[u.role][0]);toast('WELCOME · '+u.name)}
 function logout(){document.getElementById('app').classList.add('hide');
+ document.getElementById('admin').classList.add('hide');
+ document.body.classList.remove('adm');
  document.getElementById('landing').classList.remove('hide');
  document.getElementById('login').classList.add('hide');
  const v=document.querySelector('#landing video');if(v){v.play().catch(()=>{})}renderLanding()}
-function openLogin(m){document.getElementById('login').classList.remove('hide');switchTab(m||'login');drawCap();drawCap2();
+function openLogin(m,mode){loginMode=mode==='admin'?'admin':'dev';
+ const L=document.getElementById('login');L.classList.toggle('admin-mode',loginMode==='admin');
+ document.getElementById('lbTop').textContent=loginMode==='admin'?'ADMIN CONSOLE':'DEV CONSOLE';
+ document.getElementById('lbTitle').textContent=loginMode==='admin'?'平台运营登录':'回到你的工作台';
+ document.getElementById('lbSub').textContent=loginMode==='admin'?'仅限平台运营与管理员账号。普通开发者请从首页「登录」进入开发者控制台。':'资源、接口、渠道和社区都在同一个账号下。演示账号可以直接登录查看完整功能。';
+ document.getElementById('lbNote').textContent=loginMode==='admin'?'ADMIN ONLY · admin / admin123':'DEMO · dev / dev123';
+ document.getElementById('lbSubmit').textContent=loginMode==='admin'?'进 入 管 理 端':'进 入 控 制 台';
+ document.getElementById('lbHint').textContent=loginMode==='admin'?'管理员账号仅可进入管理端，开发者账号无法登录此入口。':'演示：开发者 dev / dev123；管理员请走「管理员入口」';
+ L.classList.remove('hide');switchTab('login');drawCap();drawCap2();
  const el=document.getElementById('acc');if(el&&!el.value)el.value='';}
 function closeLogin(){document.getElementById('login').classList.add('hide')}
 function lpScroll(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
@@ -985,7 +1205,10 @@ function renderLanding(){
  }
  if(r){r.innerHTML=res.slice(0,3).map(x=>'<div class="lp-card"><div class="t">'+x.t.toUpperCase()+' · v'+x.v+'</div><h4>'+esc(x.n)+'</h4><p>'+esc(x.d)+'</p>'+
    '<div class="f"><span>'+x.size+'</span><span>'+x.id.toUpperCase()+'</span></div></div>').join('')}
-
+ const nt=document.getElementById('lpNotice');
+ if(nt){const a=ann.filter(x=>x.on)[0];
+  nt.className='lp-notice'+(a?' on':'');nt.innerHTML=a?('<i></i>'+esc(a.title)+(a.tag?' · '+esc(a.tag):'')):''}
+ if(platform.site){document.querySelectorAll('.lp-brand b').forEach(el=>el.textContent=platform.site);document.title=platform.site+' · 面向游戏开发者的综合服务平台'}
 }
 
 /* ================= 框架 ================= */
@@ -1481,12 +1704,272 @@ const SB_URL='https://qthwgfzmojeopscrkwcv.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0aHdnZnptb2plb3BzY3Jrd2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxODQ5OTMsImV4cCI6MjExMDc2MDk5M30.3ALgKCl6RSafyjO3RCQveP2is_awAIflkPEqmvGcVQM';
 const SB_ROW=3;
 let sbReady=false,sbTimer=null;
+/* ================= 管理端 ================= */
+let AS={a:'dash',uq:'',rq:'',pq:'',pf:'all',aq:''};
+function todayStr(){return new Date(Date.now()+8*3600e3).toISOString().slice(0,10)}
+function seedAdmin(){
+ const now=Date.now(),H=3600000;
+ ann=[{id:'a1',title:'创作者激励计划 12 月开放申请',tag:'运营',body:'面向独立开发者与三人以下小团队，提交 2026 年内上线的 Demo 即可申请。通过审核后获得资源库高级额度与社区置顶位。',on:true,ts:now-6*H},
+  {id:'a2',title:'Steamworks 渠道升级维护通知',tag:'系统',body:'11 月 24 日 02:00–04:00 对 Steamworks 回调服务做升级，期间发行构建上传会短暂排队，不影响已有构建下载。',on:false,ts:now-2*86400000}];
+ audit=[{t:'09:41:02',by:'admin',act:'审核资源',det:'通过 Sprite Atlas Packer',ts:now-2*H},
+  {t:'09:22:18',by:'admin',act:'社区管理',det:'置顶《帧同步确定性坑》',ts:now-4*H},
+  {t:'08:50:33',by:'admin',act:'渠道管理',det:'轮换 Steamworks 密钥',ts:now-6*H}];
+}
+function alog(act,det){audit.unshift({t:nowT(),by:(S.user&&S.user.acc)||'admin',act:act,det:det,ts:Date.now()});
+ audit=audit.slice(0,80);save();adBadges()}
+function adBadges(){
+ const uc=document.getElementById('adUserCnt'),rc=document.getElementById('adResCnt'),pc=document.getElementById('adPostCnt');
+ if(uc)uc.textContent=users.length;
+ if(rc)rc.textContent=res.filter(r=>r.status!=='published').length;
+ if(pc)pc.textContent=community.filter(p=>!p.solved).length}
+function enterAdmin(u){S.role=u.role;S.user=u;
+ document.getElementById('login').classList.add('hide');
+ document.getElementById('landing').classList.add('hide');
+ document.getElementById('app').classList.add('hide');
+ document.getElementById('admin').classList.remove('hide');
+ document.body.classList.add('adm');
+ const v=document.querySelector('#landing video');if(v){try{v.pause()}catch(e){}}
+ document.getElementById('adAv').textContent=u.name.slice(0,1);
+ document.getElementById('adTopAv').textContent=u.name.slice(0,1);
+ document.getElementById('adName').textContent=u.name;
+ adGo('dash');alog('登录管理端','管理员会话建立');toast('ADMIN SESSION · '+u.name)}
+function adLogout(){document.getElementById('admin').classList.add('hide');document.body.classList.remove('adm');
+ document.getElementById('landing').classList.remove('hide');
+ const v=document.querySelector('#landing video');if(v){v.play().catch(()=>{})}renderLanding()}
+const AD_NAMES={dash:'控制台',users:'用户与权限',mod:'资源审核',posts:'社区管理',chans:'渠道与密钥',ann:'公告与运营',audit:'审计日志',set:'系统设置'};
+function adGo(t){AS.a=t;const p=document.getElementById('adPage');p.setAttribute('data-p',t);p.innerHTML=adView(t);
+ document.getElementById('adCrumb').textContent=AD_NAMES[t]||t;
+ document.querySelectorAll('#adNav button').forEach(b=>b.classList.toggle('on',b.dataset.a===t));
+ document.querySelector('.ad-content').scrollTop=0;adBadges()}
+function adView(t){
+ if(t==='dash')return adDash();if(t==='users')return adUsers();if(t==='mod')return adMod();
+ if(t==='posts')return adPosts();if(t==='chans')return adChans();if(t==='ann')return adAnn();
+ if(t==='audit')return adAudit();return adSet()}
+function adPh(k,title,sub,right){
+ return '<div class="ad-hero"><div><div class="k">'+k+'</div><h1>'+title+'</h1><p>'+sub+'</p></div>'+
+ (right?'<div class="side">'+right+'</div>':'')+'</div>'}
+
+function adDash(){
+ const pend=community.filter(p=>!p.solved),off=chans.filter(c=>!c.on),pendRes=res.filter(r=>r.status!=='published');
+ const acts=audit.slice(0,5);
+ return adPh('OPERATIONS / OVERVIEW','平台运营台','账号、内容、渠道与公告都在这里统一治理。左侧按业务分组，不做与开发者端重复的调试功能。','<b>'+todayStr()+'</b>PROD · CN-SH')+
+ '<div class="ad-kpis">'+
+ '<div class="ad-kpi"><div class="k">TOTAL USERS</div><div class="v">'+users.length+'</div><div class="d">管理员 '+users.filter(u=>u.role==='admin').length+' · 开发者 '+users.filter(u=>u.role!=='admin').length+'</div><span class="tick">ACCOUNTS</span></div>'+
+ '<div class="ad-kpi"><div class="k">RESOURCES</div><div class="v">'+res.length+'</div><div class="d">已发布 '+res.filter(r=>r.status==='published').length+' · 待处理 '+pendRes.length+'</div><span class="tick">ASSETS</span></div>'+
+ '<div class="ad-kpi"><div class="k">DISCUSSIONS</div><div class="v">'+community.length+'</div><div class="d">回复 '+community.reduce((a,p)=>a+p.replies.length,0)+' · 已解决 '+community.filter(p=>p.solved).length+'</div><span class="tick">COMMUNITY</span></div>'+
+ '<div class="ad-kpi warn"><div class="k">NEEDS ATTENTION</div><div class="v">'+(pend.length+off.length+pendRes.length)+'</div><div class="d">待解答 '+pend.length+' · 未连接渠道 '+off.length+'</div><span class="tick">QUEUE</span></div></div>'+
+ '<div class="ad-grid2"><div class="ad-card"><div class="hd"><h3>待处理队列</h3><button class="link" onclick="adGo(\'posts\')">全部 →</button></div><div class="bd">'+
+ (pend.slice(0,3).map(p=>'<div class="ad-row"><span class="dot hot"></span><div class="tx"><b>'+esc(p.title)+'</b><span>'+p.cat+' · '+p.replies.length+' 条回复 · '+ago(p.ts)+'</span></div><button class="abtn xs" onclick="openPost(\''+p.id+'\')">查看</button></div>').join('')||'<div class="ad-empty">没有待解答的讨论</div>')+
+ (off.map(c=>'<div class="ad-row"><span class="dot warn"></span><div class="tx"><b>'+c.n+' 未连接</b><span>发行流程会跳过该渠道</span></div><button class="abtn xs" onclick="adGo(\'chans\')">处理</button></div>').join('')||'')+
+ (pendRes.map(r=>'<div class="ad-row"><span class="dot warn"></span><div class="tx"><b>'+esc(r.n)+'</b><span>资源状态待处理 · '+r.t+'</span></div><button class="abtn xs" onclick="adGo(\'mod\')">审核</button></div>').join('')||'')+
+ '</div></div>'+
+ '<div class="ad-card"><div class="hd"><h3>最近运营动作</h3><button class="link" onclick="adGo(\'audit\')">审计日志 →</button></div><div class="bd">'+
+ (acts.length?acts.map(a=>'<div class="ad-row"><span class="dot ok"></span><div class="tx"><b>'+esc(a.act)+'</b><span>'+esc(a.det)+'</span></div><span class="tm">'+a.t+'</span></div>').join(''):'<div class="ad-empty">暂无操作记录</div>')+
+ '</div></div></div>'+
+ '<div class="ad-quick">'+
+ '<button onclick="adGo(\'users\')"><b>用户与权限</b><span>停用、重置密码、删除账号</span></button>'+
+ '<button onclick="adGo(\'mod\')"><b>资源审核</b><span>发布、下架与资源入库</span></button>'+
+ '<button onclick="adGo(\'ann\')"><b>发布公告</b><span>配置首页可见的运营通知</span></button>'+
+ '<button onclick="adGo(\'set\')"><b>系统设置</b><span>注册开关、维护模式与速率</span></button></div>'}
+
+function adUsers(){
+ return adPh('GOVERNANCE / ACCOUNTS','用户与权限','管理员账号只能从管理端登录；开发者账号只能进开发者控制台。停用、重置与删除都在这里生效。','<b>'+users.length+'</b>ACCOUNTS')+
+ '<div class="ad-toolbar"><div class="ad-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg>'+
+ '<input id="adUq" value="'+esc(AS.uq)+'" oninput="AS.uq=this.value;adUsersBody()" placeholder="搜索账号或名称"></div>'+
+ '<button class="abtn p" onclick="adNewUser()">+ 新建开发者账号</button></div>'+
+ '<div class="ad-card"><div class="hd"><h3>账号列表</h3><span class="k" id="adUCount">'+users.length+' 条</span></div>'+
+ '<table class="ad-table"><thead><tr><th>账号</th><th>名称</th><th>角色</th><th>状态</th><th>创建</th><th style="text-align:right">操作</th></tr></thead><tbody id="adUb">'+adUserRows()+'</tbody></table></div>'+
+ '<div class="ad-tile" style="margin-top:16px"><div class="k">POLICY</div><h3>权限边界</h3><p>admin 账号仅用于平台运营，登录后直接进入管理端，无法访问开发者工作台；dev 账号看不到管理入口，也无法通过接口写入管理数据。管理员账号不可被删除，至少保留一个。</p></div>'}
+function adUserRows(){
+ const q=(AS.uq||'').toLowerCase();const list=users.filter(u=>!q||(u.acc+u.name).toLowerCase().includes(q));
+ const self=S.user&&S.user.acc;
+ return list.length?list.map(u=>'<tr><td class="mono">'+esc(u.acc)+'</td><td><div class="nm"><i>'+esc(u.name.slice(0,1))+'</i>'+esc(u.name)+'</div></td>'+
+ '<td><span class="ad-badge '+(u.role==='admin'?'gold':'mut')+'">'+u.role.toUpperCase()+'</span></td>'+
+ '<td><span class="ad-badge '+(u.disabled?'bad':'ok')+'">'+(u.disabled?'已停用':'正常')+'</span></td>'+
+ '<td class="mono">'+esc(u.created||'2026-11-01')+'</td><td style="text-align:right">'+
+ '<button class="abtn xs" onclick="adResetPw(\''+u.acc+'\')">改密码</button> '+
+ '<button class="abtn xs '+(u.disabled?'s':'')+'" onclick="adToggleUser(\''+u.acc+'\')">'+(u.disabled?'启用':'停用')+'</button> '+
+ (u.acc===self||u.role==='admin'?'':'<button class="abtn xs d" onclick="adDelUser(\''+u.acc+'\')">删除</button>')+
+ '</td></tr>').join(''):'<tr><td colspan="6" class="ad-empty">没有匹配的账号</td></tr>'}
+function adUsersBody(){const b=document.getElementById('adUb');if(b)b.innerHTML=adUserRows();
+ const c=document.getElementById('adUCount');if(c)c.textContent=users.length+' 条'}
+function adNewUser(){
+ openSheet('<h4>新建开发者账号</h4><label>账号<input id="nuA" placeholder="3–16 位字母或数字"></label>'+
+ '<label>显示名称<input id="nuN" placeholder="如 王工"></label><label>初始密码<input id="nuP" placeholder="6–16 位字母或数字"></label>'+
+ '<label>角色<input value="开发者（dev）" disabled></label>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-p" onclick="adSaveUser()">创建账号</button></div>')}
+function adSaveUser(){
+ const a=document.getElementById('nuA').value.trim(),n=document.getElementById('nuN').value.trim(),p=document.getElementById('nuP').value.trim();
+ if(!/^[A-Za-z0-9]{3,16}$/.test(a)){toast('账号为 3–16 位字母或数字');return}
+ if(users.some(u=>u.acc===a)){toast('该账号已存在');return}
+ if(!n){toast('请填写显示名称');return}
+ if(!/^[A-Za-z0-9]{6,16}$/.test(p)){toast('密码为 6–16 位字母或数字');return}
+ users.push({acc:a,name:n,pwd:p,role:'dev',created:todayStr()});save();closeSheet();adGo('users');alog('新建账号',a+' / '+n);toast('已创建开发者账号 '+a)}
+function adToggleUser(acc){const u=users.find(x=>x.acc===acc);if(!u)return;
+ if(acc===(S.user&&S.user.acc)){toast('不能停用当前管理员账号');return}
+ u.disabled=!u.disabled;save();adGo('users');alog(u.disabled?'停用账号':'启用账号',acc);toast(u.name+(u.disabled?' 已停用':' 已启用'))}
+function adResetPw(acc){const u=users.find(x=>x.acc===acc);if(!u)return;
+ openSheet('<h4>重置密码 · '+esc(u.name)+'</h4><label>新密码<input id="rnp" placeholder="6–16 位字母或数字"></label>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-p" onclick="adDoReset(\''+acc+'\')">确认重置</button></div>')}
+function adDoReset(acc){const v=document.getElementById('rnp').value.trim();
+ if(!/^[A-Za-z0-9]{6,16}$/.test(v)){toast('密码为 6–16 位字母或数字');return}
+ const u=users.find(x=>x.acc===acc);u.pwd=v;save();closeSheet();adGo('users');alog('重置密码',acc);toast('已重置 '+u.name+' 的密码')}
+function adDelUser(acc){const u=users.find(x=>x.acc===acc);if(!u)return;
+ if(u.role==='admin'){toast('管理员账号不可删除');return}
+ openSheet('<h4>删除账号 · '+esc(u.name)+'</h4><div style="font-size:12px;line-height:1.9;color:#6b7066">账号 '+esc(acc)+' 将被移除，其历史日志与社区帖子保留。该操作不可撤销。</div>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="adDoDel(\''+acc+'\')">确认删除</button></div>')}
+function adDoDel(acc){users=users.filter(u=>u.acc!==acc);save();closeSheet();adGo('users');alog('删除账号',acc);toast('账号已删除')}
+
+function adMod(){
+ return adPh('CONTENT / RESOURCES','资源审核','平台资源库的入库、发布与下架。开发者端只看到已发布资源，管理端可以看到全部状态。','<b>'+res.length+'</b>REGISTRY')+
+ '<div class="ad-toolbar"><div class="ad-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg>'+
+ '<input id="adRq" value="'+esc(AS.rq)+'" oninput="AS.rq=this.value;adResBody()" placeholder="搜索资源名称 / 类型"></div>'+
+ '<button class="abtn p" onclick="adEditRes()">+ 新增资源</button><button class="abtn" onclick="adGo(\'mod\')">刷新</button></div>'+
+ '<div class="ad-card"><div class="hd"><h3>资源清单</h3><span class="k">STATUS · PUBLISHED / PENDING</span></div>'+
+ '<table class="ad-table"><thead><tr><th>资源</th><th>类型</th><th>版本</th><th>体积</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody id="adRb">'+adResRows()+'</tbody></table></div>'}
+function adResRows(){
+ const q=(AS.rq||'').toLowerCase();const list=res.filter(r=>!q||(r.n+r.t).toLowerCase().includes(q));
+ return list.length?list.map(r=>'<tr><td><b style="font-size:12px">'+esc(r.n)+'</b><div style="font-size:10px;color:#8a8e80;margin-top:3px">'+esc(r.id)+'</div></td>'+
+ '<td><span class="ad-badge mut">'+esc(r.t)+'</span></td><td class="mono">'+esc(r.v)+'</td><td class="mono">'+esc(r.size)+'</td>'+
+ '<td><span class="ad-badge '+(r.status==='published'?'ok':'warn')+'">'+(r.status==='published'?'已发布':'待审核')+'</span></td>'+
+ '<td style="text-align:right"><button class="abtn xs" onclick="adEditRes(\''+r.id+'\')">编辑</button> '+
+ '<button class="abtn xs '+(r.status==='published'?'s':'p')+'" onclick="adResStatus(\''+r.id+'\')">'+(r.status==='published'?'下架':'发布')+'</button> '+
+ '<button class="abtn xs d" onclick="adDelRes(\''+r.id+'\')">删除</button></td></tr>').join(''):'<tr><td colspan="6" class="ad-empty">没有匹配的资源</td></tr>'}
+function adResBody(){const b=document.getElementById('adRb');if(b)b.innerHTML=adResRows()}
+function adResStatus(id){const r=res.find(x=>x.id===id);if(!r)return;r.status=r.status==='published'?'pending':'published';save();adGo('mod');alog(r.status==='published'?'发布资源':'下架资源',r.n);toast(r.n+(r.status==='published'?' 已发布':' 已下架'))}
+function adEditRes(id){const r=id?res.find(x=>x.id===id):{n:'',t:'插件',v:'1.0.0',d:'',size:'-- MB',status:'pending'};if(!r)return;
+ openSheet('<h4>'+(id?'编辑资源':'新增资源')+'</h4><label>名称<input id="arN" value="'+esc(r.n)+'"></label>'+
+ '<label>类型<input id="arT" value="'+esc(r.t)+'"></label><label>版本<input id="arV" value="'+esc(r.v)+'"></label>'+
+ '<label>体积<input id="arS" value="'+esc(r.size)+'"></label><label>描述<textarea id="arD">'+esc(r.d)+'</textarea></label>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-p" onclick="adSaveRes(\''+(id||'')+'\')">保存</button></div>',null,true)}
+function adSaveRes(id){const g=x=>document.getElementById(x).value.trim();
+ const n=g('arN'),t=g('arT'),v=g('arV'),s=g('arS'),d=g('arD');
+ if(!n){toast('名称不能为空');return}
+ if(id){Object.assign(res.find(x=>x.id===id),{n:n,t:t,v:v,size:s,d:d})}
+ else res.unshift({id:'r'+Date.now(),n:n,t:t,v:v,d:d,size:s,status:'pending'});
+ save();closeSheet();adGo('mod');alog(id?'编辑资源':'新增资源',n);toast(id?'资源已更新':'已入库，等待发布')}
+function adDelRes(id){const r=res.find(x=>x.id===id);if(!r)return;
+ openSheet('<h4>删除资源 · '+esc(r.n)+'</h4><div style="font-size:12px;line-height:1.9;color:#6b7066">删除后开发者端将立刻不可见，历史下载记录不受影响。</div>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="adDoDelRes(\''+id+'\')">确认删除</button></div>')}
+function adDoDelRes(id){const r=res.find(x=>x.id===id);res=res.filter(x=>x.id!==id);save();closeSheet();adGo('mod');alog('删除资源',r?r.n:id);toast('资源已删除')}
+
+function adPosts(){
+ const list=AS.pf==='all'?community:AS.pf==='open'?community.filter(p=>!p.solved):AS.pf==='solved'?community.filter(p=>p.solved):community.filter(p=>p.pinned);
+ return adPh('COMMUNITY / MODERATION','社区管理','置顶、采纳状态与违规内容处理。管理端不替代开发者发帖，只做治理。','<b>'+community.length+'</b>POSTS')+
+ '<div class="ad-toolbar">'+[['all','全部'],['open','待解决'],['solved','已解决'],['pin','置顶']].map(x=>'<button class="ad-chip '+(AS.pf===x[0]?'on':'')+'" onclick="AS.pf=\''+x[0]+'\';adGo(\'posts\')">'+x[1]+'</button>').join('')+
+ '<div class="ad-search" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg>'+
+ '<input id="adPq" value="'+esc(AS.pq)+'" oninput="AS.pq=this.value;adPostBody()" placeholder="搜索标题 / 作者"></div></div>'+
+ '<div class="ad-card"><div class="hd"><h3>'+(AS.pf==='all'?'全部讨论':AS.pf==='open'?'待解决':AS.pf==='solved'?'已解决':'置顶')+'</h3><span class="k">MODERATION QUEUE</span></div>'+
+ '<table class="ad-table"><thead><tr><th>标题</th><th>版块</th><th>作者</th><th>回复</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody id="adPb">'+adPostRows()+'</tbody></table></div>'}
+function adPostRows(){
+ const q=(AS.pq||'').toLowerCase();let list=AS.pf==='all'?community:AS.pf==='open'?community.filter(p=>!p.solved):AS.pf==='solved'?community.filter(p=>p.solved):community.filter(p=>p.pinned);
+ list=list.filter(p=>!q||(p.title+p.author).toLowerCase().includes(q));
+ return list.length?list.map(p=>'<tr><td><b style="font-size:11.5px">'+esc(p.title)+'</b>'+(p.pinned?' <span class="ad-badge gold">置顶</span>':'')+'</td>'+
+ '<td><span class="ad-badge mut">'+esc(p.cat)+'</span></td><td>'+esc(p.author)+'</td><td class="mono">'+p.replies.length+'</td>'+
+ '<td><span class="ad-badge '+(p.solved?'ok':'warn')+'">'+(p.solved?'已解决':'待解决')+'</span></td>'+
+ '<td style="text-align:right"><button class="abtn xs" onclick="openPost(\''+p.id+'\')">查看</button> '+
+ '<button class="abtn xs s" onclick="adPostPin(\''+p.id+'\')">'+(p.pinned?'取消置顶':'置顶')+'</button> '+
+ '<button class="abtn xs" onclick="adPostSolve(\''+p.id+'\')">'+(p.solved?'改回待解决':'标记解决')+'</button> '+
+ '<button class="abtn xs d" onclick="adPostDel(\''+p.id+'\')">删除</button></td></tr>').join(''):'<tr><td colspan="6" class="ad-empty">没有符合条件的讨论</td></tr>'}
+function adPostBody(){const b=document.getElementById('adPb');if(b)b.innerHTML=adPostRows()}
+function adPostPin(id){const p=community.find(x=>x.id===id);p.pinned=!p.pinned;save();adGo('posts');alog('社区'+(p.pinned?'置顶':'取消置顶'),p.title);toast(p.pinned?'已置顶':'已取消置顶')}
+function adPostSolve(id){const p=community.find(x=>x.id===id);p.solved=!p.solved;save();adGo('posts');alog('社区状态',p.title+' · '+(p.solved?'已解决':'待解决'));toast(p.solved?'已标记解决':'已改回待解决')}
+function adPostDel(id){const p=community.find(x=>x.id===id);if(!p)return;
+ openSheet('<h4>删除讨论 · '+esc(p.title)+'</h4><div style="font-size:12px;line-height:1.9;color:#6b7066">帖子与其 '+p.replies.length+' 条回复会一起删除，操作不可撤销。</div>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="adDoDelPost(\''+id+'\')">确认删除</button></div>')}
+function adDoDelPost(id){const p=community.find(x=>x.id===id);community=community.filter(x=>x.id!==id);save();closeSheet();adGo('posts');alog('删除讨论',p?p.title:id);toast('讨论已删除')}
+
+function adChans(){
+ return adPh('PLATFORM / CHANNELS','渠道与密钥','发行渠道的开关、握手测试与密钥轮换。密钥只在管理端可见，开发者端不开放此页。','<b>'+chans.filter(c=>c.on).length+' / '+chans.length+'</b>CONNECTED')+
+ '<div class="ad-card"><div class="hd"><h3>渠道状态</h3><span class="k">KEYS · MASKED</span></div>'+
+ '<table class="ad-table"><thead><tr><th>渠道</th><th>密钥</th><th>最近同步</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ chans.map(c=>'<tr><td><div class="nm"><i>'+esc(c.code)+'</i><b>'+esc(c.n)+'</b></div></td><td class="mono">'+esc(c.k)+'</td>'+
+ '<td class="mono">'+esc(c.last)+'</td><td><span class="ad-badge '+(c.on?'ok':'bad')+'">'+(c.on?'已连接':'未连接')+'</span></td>'+
+ '<td style="text-align:right"><span class="ad-switch '+(c.on?'on':'')+'" onclick="adChToggle(\''+c.id+'\')"><i></i></span> '+
+ '<button class="abtn xs" onclick="adChTest(\''+c.id+'\')">测试</button> <button class="abtn xs s" onclick="adChRot(\''+c.id+'\')">轮换</button></td></tr>').join('')+
+ '</tbody></table></div>'+
+ '<div class="ad-tile" style="margin-top:16px"><div class="k">SECURITY</div><h3>密钥策略</h3><p>前端只展示掩码，轮换后旧密钥 10 分钟内失效。停用渠道会跳过该渠道的构建上传，但不会删除已有构建；每次测试与轮换都会写入审计日志与监控日志。</p></div>'}
+function adChToggle(id){const c=chans.find(x=>x.id===id);c.on=!c.on;logs.unshift({t:nowT(),lv:'INFO',m:(c.on?'ENABLE':'DISABLE')+' '+c.n,u:S.user.acc});save();adGo('chans');alog('渠道开关',c.n+(c.on?' 已连接':' 已断开'));toast(c.n+(c.on?' 已连接':' 已断开'))}
+function adChTest(id){const c=chans.find(x=>x.id===id);const ms=40+Math.floor(Math.random()*60);
+ logs.unshift({t:nowT(),lv:c.on?'INFO':'WARN',m:'HANDSHAKE '+c.n+' '+(c.on?'200':'403')+' '+ms+'ms',u:S.user.acc});
+ save();alog('渠道测试',c.n+' '+(c.on?'200':'403')+' '+ms+'ms');toast(c.n+' 握手 '+(c.on?'成功 · '+ms+'ms':'失败 · 未连接'))}
+function adChRot(id){const c=chans.find(x=>x.id===id);c.k=c.code.toLowerCase()+'_api_'+Math.random().toString(36).slice(2,6)+'••••'+Math.random().toString(36).slice(2,6);
+ logs.unshift({t:nowT(),lv:'INFO',m:'ROTATE KEY '+c.n,u:S.user.acc});save();adGo('chans');alog('轮换密钥',c.n);toast('密钥已轮换，旧密钥 10 分钟后失效')}
+
+function adAnn(){
+ return adPh('OPERATIONS / ANNOUNCEMENTS','公告与运营','首页可见的运营通知，发布后立即出现在浏览端标题下方。支持草稿、编辑与下线。','<b>'+ann.filter(a=>a.on).length+'</b>LIVE')+
+ '<div class="ad-toolbar"><div style="flex:1;font-size:11px;color:#6b7066">同一时间只展示最新一条已发布公告；其余保留为草稿或历史记录。</div>'+
+ '<button class="abtn p" onclick="adAnnForm()">+ 新建公告</button></div>'+
+ '<div class="ad-ann">'+(ann.length?ann.map(a=>'<div class="ad-anncard '+(a.on?'on':'')+'"><div class="tag">'+esc(a.tag||'运营')+' · '+(a.on?'PUBLISHED':'DRAFT')+'</div>'+
+ '<h4>'+esc(a.title)+'</h4><p>'+esc(a.body)+'</p><div class="ft"><span>'+esc(a.ts?new Date(a.ts+8*3600e3).toISOString().slice(0,10):todayStr())+'</span><span class="sp"></span>'+
+ '<button class="abtn xs" onclick="adAnnForm(\''+a.id+'\')">编辑</button><button class="abtn xs '+(a.on?'s':'p')+'" onclick="adAnnToggle(\''+a.id+'\')">'+(a.on?'下线':'发布')+'</button>'+
+ '<button class="abtn xs d" onclick="adAnnDel(\''+a.id+'\')">删除</button></div></div>').join(''):'<div class="ad-empty">还没有公告</div>')+'</div>'}
+function adAnnForm(id){const a=id?ann.find(x=>x.id===id):{title:'',body:'',tag:'运营',on:false};if(!a)return;
+ openSheet('<h4>'+(id?'编辑公告':'新建公告')+'</h4><label>标题<input id="anT" value="'+esc(a.title)+'"></label>'+
+ '<label>标签<input id="anG" value="'+esc(a.tag||'运营')+'" placeholder="运营 / 系统 / 活动"></label>'+
+ '<label>正文<textarea id="anB">'+esc(a.body)+'</textarea></label>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-p" onclick="adSaveAnn(\''+(id||'')+'\')">保存</button></div>',null,true)}
+function adSaveAnn(id){const t=document.getElementById('anT').value.trim(),g=document.getElementById('anG').value.trim(),b=document.getElementById('anB').value.trim();
+ if(t.length<4){toast('标题至少 4 个字');return}if(b.length<10){toast('正文至少 10 个字');return}
+ if(id){Object.assign(ann.find(x=>x.id===id),{title:t,tag:g,body:b})}
+ else ann.unshift({id:'a'+Date.now(),title:t,tag:g,body:b,on:true,ts:Date.now()});
+ save();closeSheet();adGo('ann');alog(id?'编辑公告':'发布公告',t);renderLanding();toast(id?'公告已更新':'公告已发布到首页')}
+function adAnnToggle(id){const a=ann.find(x=>x.id===id);a.on=!a.on;if(a.on)ann.forEach(x=>{if(x.id!==id)x.on=false});save();adGo('ann');alog(a.on?'发布公告':'下线公告',a.title);renderLanding();toast(a.on?'公告已上线':'公告已下线')}
+function adAnnDel(id){const a=ann.find(x=>x.id===id);if(!a)return;
+ openSheet('<h4>删除公告 · '+esc(a.title)+'</h4><div style="font-size:12px;line-height:1.9;color:#6b7066">删除后不会再出现在首页。</div>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="adDoDelAnn(\''+id+'\')">确认删除</button></div>')}
+function adDoDelAnn(id){const a=ann.find(x=>x.id===id);ann=ann.filter(x=>x.id!==id);save();closeSheet();adGo('ann');alog('删除公告',a?a.title:id);renderLanding();toast('公告已删除')}
+
+function adAudit(){
+ const q=(AS.aq||'').toLowerCase();const list=audit.filter(a=>!q||(a.act+a.det+a.by).toLowerCase().includes(q));
+ return adPh('GOVERNANCE / AUDIT','审计日志','管理端的每一次账号、内容、渠道与公告操作都会落一条记录，可按关键词筛选并导出。','<b>'+audit.length+'</b>EVENTS')+
+ '<div class="ad-toolbar"><div class="ad-search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg>'+
+ '<input id="adAq" value="'+esc(AS.aq)+'" oninput="AS.aq=this.value;adAuditBody()" placeholder="搜索操作 / 详情 / 操作人"></div>'+
+ '<button class="abtn" onclick="adExportAudit()">导出 CSV</button></div>'+
+ '<div class="ad-card"><div class="hd"><h3>操作记录</h3><span class="k">RETENTION · 80</span></div>'+
+ '<table class="ad-table"><thead><tr><th>时间</th><th>操作人</th><th>动作</th><th>详情</th></tr></thead><tbody id="adAb">'+adAuditRows()+'</tbody></table></div>'}
+function adAuditRows(){
+ const q=(AS.aq||'').toLowerCase();const list=audit.filter(a=>!q||(a.act+a.det+a.by).toLowerCase().includes(q));
+ return list.length?list.map(a=>'<tr><td class="mono">'+esc(a.t)+'</td><td class="mono">'+esc(a.by)+'</td>'+
+ '<td><span class="ad-badge mut">'+esc(a.act)+'</span></td><td>'+esc(a.det)+'</td></tr>').join(''):'<tr><td colspan="4" class="ad-empty">没有匹配的记录</td></tr>'}
+function adAuditBody(){const b=document.getElementById('adAb');if(b)b.innerHTML=adAuditRows()}
+function adExportAudit(){
+ const rows=[['TIME','OPERATOR','ACTION','DETAIL']].concat(audit.map(a=>[a.t,a.by,a.act,a.det]));
+ const csv='\ufeff'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+ const b=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');
+ a.href=URL.createObjectURL(b);a.download='devrealm_audit_'+Date.now()+'.csv';document.body.appendChild(a);a.click();a.remove();
+ toast('已导出 '+audit.length+' 条审计记录')}
+
+function adSet(){
+ return adPh('SYSTEM / SETTINGS','系统设置','平台级开关与对外信息，保存后立即生效。账号与内容数据仍随云端同步。','<b>'+esc(platform.site)+'</b>PROD')+
+ '<div class="ad-set"><div class="ad-card"><div class="hd"><h3>站点信息</h3><span class="k">PUBLIC</span></div><div class="bd">'+
+ '<label class="ad-lbl">平台名称</label><input class="ad-in" id="pfSite" value="'+esc(platform.site)+'">'+
+ '<label class="ad-lbl" style="margin-top:14px">运营联系邮箱</label><input class="ad-in" id="pfMail" value="'+esc(platform.contact)+'">'+
+ '<label class="ad-lbl" style="margin-top:14px">接口速率上限（req / min）</label><input class="ad-in" id="pfRate" value="'+esc(platform.rate)+'">'+
+ '<button class="abtn p" style="margin-top:16px" onclick="adSaveSet()">保存设置</button></div></div>'+
+ '<div class="ad-card"><div class="hd"><h3>访问与注册</h3><span class="k">GATE</span></div><div class="bd">'+
+ '<div class="ad-row"><div class="tx"><b>开放开发者注册</b><span>关闭后注册表单提交会被拒绝</span></div><span class="ad-switch '+(platform.regOpen?'on':'')+'" onclick="adSetToggle(\'regOpen\')"><i></i></span></div>'+
+ '<div class="ad-row"><div class="tx"><b>维护模式</b><span>开发者账号无法登录，管理员仍可进入管理端</span></div><span class="ad-switch '+(platform.maintenance?'on':'')+'" onclick="adSetToggle(\'maintenance\')"><i></i></span></div>'+
+ '<div class="ad-note">当前：'+(platform.maintenance?'维护中，仅管理员可登录':'正常运行')+' · 注册'+(platform.regOpen?'开放':'关闭')+'。这两项只影响开发者端，不影响管理端。</div>'+
+ '<button class="abtn" style="margin-top:14px" onclick="adExportAll()">导出全量数据 JSON</button></div></div></div>'+
+ '<div class="ad-tile" style="margin-top:16px"><div class="k">DATA</div><h3>数据与同步</h3><p>用户、资源、渠道、社区、公告与审计记录保存在浏览器，并异步同步到 Supabase（club_state id=3）。换设备登录管理端可拉回最近状态；同名状态以最后一次写入覆盖。清空数据请使用开发者端的「恢复种子数据」，管理端不做破坏性重置。</p></div>'}
+function adSetToggle(k){platform[k]=!platform[k];save();adGo('set');alog('系统设置',k+' = '+(platform[k]?'开':'关'));toast(k==='regOpen'?'注册已'+(platform.regOpen?'开放':'关闭'):'维护模式已'+(platform.maintenance?'开启':'关闭'))}
+function adSaveSet(){const s=document.getElementById('pfSite').value.trim(),m=document.getElementById('pfMail').value.trim(),r=document.getElementById('pfRate').value.trim();
+ if(!s){toast('平台名称不能为空');return}
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)){toast('邮箱格式不正确');return}
+ if(!/^\d{1,4}$/.test(r)){toast('速率需为数字');return}
+ platform.site=s;platform.contact=m;platform.rate=Number(r);save();adGo('set');renderLanding();alog('保存系统设置',s+' · '+m);toast('设置已保存')}
+function adExportAll(){
+ const data={users:users,res:res,chans:chans,community:community,ann:ann,audit:audit,platform:platform,exported_at:new Date(Date.now()+8*3600e3).toISOString()};
+ const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');
+ a.href=URL.createObjectURL(b);a.download='devrealm_admin_'+Date.now()+'.json';document.body.appendChild(a);a.click();a.remove();toast('全量数据已导出')}
+
 function sbReq(path,opt){
  opt=opt||{};var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
  opt.headers=Object.assign(h,opt.headers||{});
  return fetch(SB_URL+'/rest/v1/'+path,opt);
 }
-function sbState(){return {users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community}}
+function sbState(){return {users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community,ann:ann,audit:audit.slice(0,80),platform:platform}}
 function sbPush(){
  if(!sbReady)return;
  clearTimeout(sbTimer);
@@ -1503,7 +1986,9 @@ function sbBoot(){
    var s=d.state;
    users=s.users;res=s.res||res;chans=s.chans||chans;logs=s.logs||logs;
    apiHist=s.apiHist||apiHist;apiSaved=s.apiSaved||apiSaved;prefs=s.prefs||prefs;if(Array.isArray(s.community)&&s.community.length)community=s.community;
-   try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community}))}catch(e){}
+   if(Array.isArray(s.ann)&&s.ann.length)ann=s.ann;if(Array.isArray(s.audit)&&s.audit.length)audit=s.audit;if(s.platform)platform=Object.assign(platform,s.platform);
+   res.forEach(r=>{if(!r.status)r.status='published'});
+   try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs,community:community,ann:ann,audit:audit.slice(0,80),platform:platform}))}catch(e){}
   }
   sbReady=true;renderLanding();sbPush();
  }).catch(function(){sbReady=true});
