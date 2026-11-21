@@ -349,7 +349,7 @@ const DB='devrealm_db_v1';
 let users=[{acc:'admin',pwd:'admin123',name:'陶云',role:'admin',created:'2026-11-01'},{acc:'dev',pwd:'dev123',name:'李承宇',role:'dev',created:'2026-11-08'}];
 let res=RES.slice(),logs=LOGS.slice(),chans=CHANNELS.map(x=>({...x})),apiHist=[],apiSaved=[];
 let prefs={mail:true,daily:false};
-function save(){try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs}))}catch(e){}}
+function save(){try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs}))}catch(e){}sbPush();}
 function load(){try{const d=JSON.parse(localStorage.getItem(DB)||'{}');
  if(Array.isArray(d.users)&&d.users.length)users=d.users;
  if(Array.isArray(d.res)&&d.res.length)res=d.res;
@@ -692,7 +692,7 @@ function vSettings(){
  '<div class="panel"><div class="hd"><h3>本地数据</h3><span class="tag">LOCAL DB</span></div><div class="bd" style="display:flex;gap:10px;flex-wrap:wrap">'+
  '<button class="btn" onclick="exportConfig()">导出配置 JSON</button>'+
  '<button class="btn btn-r" onclick="confirmReset()">清空并恢复种子数据</button></div>'+
- '<div class="bd" style="font-size:11px;color:var(--sub);line-height:1.9;padding-top:0">演示版把成员、资源、日志存在浏览器 localStorage（key: devrealm_db_v1）；导出后可换设备导入备份。清空会重新写入 6 条资源与 2 个演示账号。</div></div>'}
+ '<div class="bd" style="font-size:11px;color:var(--sub);line-height:1.9;padding-top:0">成员、资源、日志与收藏默认存浏览器，并异步同步到 Supabase 云端（同一账号换设备可拉回最近进度）；设置页可随时导出 JSON 备份。清空会重新写入 6 条资源与 2 个演示账号。</div></div>'}
 function saveProfile(){const n=document.getElementById('sname').value.trim();
  if(!n){toast('名称不能为空');return}
  S.user.name=n;const u=users.find(x=>x.acc===S.user.acc);if(u)u.name=n;
@@ -719,6 +719,40 @@ function resetAll(){localStorage.removeItem(DB);location.reload()}
 /* ================= 启动 ================= */
 load();drawCap();drawCap2();
 if(!localStorage.getItem(DB))save();
+
+/* ================= Supabase 云端同步 ================= */
+const SB_URL='https://qthwgfzmojeopscrkwcv.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0aHdnZnptb2plb3BzY3Jrd2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxODQ5OTMsImV4cCI6MjExMDc2MDk5M30.3ALgKCl6RSafyjO3RCQveP2is_awAIflkPEqmvGcVQM';
+const SB_ROW=3;
+let sbReady=false,sbTimer=null;
+function sbReq(path,opt){
+ opt=opt||{};var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+ opt.headers=Object.assign(h,opt.headers||{});
+ return fetch(SB_URL+'/rest/v1/'+path,opt);
+}
+function sbState(){return {users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs}}
+function sbPush(){
+ if(!sbReady)return;
+ clearTimeout(sbTimer);
+ sbTimer=setTimeout(function(){
+  sbReq('club_state',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates'},
+   body:JSON.stringify([{id:SB_ROW,data:{v:1,ts:Date.now(),state:sbState()}}])})
+  .catch(function(){});
+ },450);
+}
+function sbBoot(){
+ sbReq('club_state?id=eq.3&select=data').then(function(r){return r.json()}).then(function(rows){
+  var d=rows&&rows[0]&&rows[0].data;
+  if(d&&d.state&&Array.isArray(d.state.users)&&d.state.users.length){
+   var s=d.state;
+   users=s.users;res=s.res||res;chans=s.chans||chans;logs=s.logs||logs;
+   apiHist=s.apiHist||apiHist;apiSaved=s.apiSaved||apiSaved;prefs=s.prefs||prefs;
+   try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs}))}catch(e){}
+  }
+  sbReady=true;sbPush();
+ }).catch(function(){sbReady=true});
+}
+sbBoot();
 </script>
 </body>
 </html>
