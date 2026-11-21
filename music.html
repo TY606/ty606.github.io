@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>声屿 Sonora · 音乐播放器小程序</title>
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;600;700&display=swap">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#141321;--sub:#6b6880;--line:#ece9f4;--paper:#fbfafd;--a:#7b5cf0;--a2:#b18cff;--soft:rgba(123,92,240,.12)}
@@ -92,7 +91,7 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 .hero::after{content:"";position:absolute;right:-46px;top:-46px;width:160px;height:160px;border-radius:50%;
  background:radial-gradient(circle,rgba(255,255,255,.34),transparent 66%);pointer-events:none}
 .hero .k{font-size:10px;letter-spacing:.3em;opacity:.72;text-transform:uppercase}
-.hero h2{font-family:"Noto Serif SC",serif;font-size:25px;line-height:1.3;margin-top:8px;letter-spacing:.02em}
+.hero h2{font-family:"Songti SC","SimSun","Noto Serif SC",serif;font-size:25px;line-height:1.3;margin-top:8px;letter-spacing:.02em}
 .hero p{font-size:11.5px;opacity:.8;margin-top:8px;line-height:1.8}
 .hero .row{display:flex;gap:8px;margin-top:14px}
 .hero .btn{background:rgba(255,255,255,.94);color:#1d1836;border:0;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer}
@@ -166,7 +165,7 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 .disc .label i{font-style:normal;font-size:8.5px;letter-spacing:.08em;opacity:.7;margin-top:5px}
 .disc .hole{position:absolute;z-index:0;width:14px;height:14px;border-radius:50%;background:#07060c;box-shadow:0 0 0 3px rgba(255,255,255,.14)}
 .psong{text-align:center;margin-top:24px}
-.psong h2{font-family:"Noto Serif SC",serif;font-size:22px;letter-spacing:.03em}
+.psong h2{font-family:"Songti SC","SimSun","Noto Serif SC",serif;font-size:22px;letter-spacing:.03em}
 .psong p{font-size:11.5px;color:rgba(255,255,255,.5);margin-top:6px;letter-spacing:.1em}
 .progress{margin-top:22px}
 .bar{height:3px;border-radius:3px;background:rgba(255,255,255,.14);position:relative;cursor:pointer}
@@ -213,6 +212,12 @@ button,input,select,textarea{font-family:inherit;color:inherit}
  #app{padding:0;align-items:stretch}
  .device{width:100%;height:100%;border-radius:0;border:0;box-shadow:none}
  .statusbar{padding-top:env(safe-area-inset-top)}
+}
+/* 移动端/安装包：去掉桌面设备框，全屏显示 */
+@media(max-width:620px){
+ #app{padding:0;display:block;background:var(--paper)}
+ .device{width:100%;height:100%;border-radius:0;border:0;box-shadow:none}
+ .scr{border-radius:0}
 }
 </style>
 </head>
@@ -274,15 +279,18 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 /* ================= 数据 ================= */
 const TONES=[['#7b5cf0','#b18cff'],['#0f93c8','#46c8e8'],['#e0663a','#f2a15c'],['#19a06a','#63f2b4'],['#5b6b8a','#96a6c4'],['#b8478f','#f07ac0'],['#2f6df6','#6fa8ff'],['#8a6d3b','#c9a469']];
 const SONGS=[
- {id:'s1',t:'夜航西飞',a:'陈默与乐队',al:'夜航',len:252,g:0,hot:'city-pop'},
- {id:'s2',t:'晚风收音机',a:'林知夏',al:'收音机时代',len:198,g:1,hot:'民谣'},
- {id:'s3',t:'南方车站',a:'周野',al:'南站',len:226,g:2,hot:'indie'},
- {id:'s4',t:'未完成的夏天',a:'周末乐队',al:'夏日清单',len:241,g:3,hot:'流行'},
- {id:'s5',t:'城市潜水',a:'徐一鸣',al:'潜水',len:214,g:4,hot:'电子'},
- {id:'s6',t:'海湾公路',a:'阿岚',al:'公路电影',len:203,g:5,hot:'民谣'},
- {id:'s7',t:'凌晨三点半',a:'深夜电台',al:'午夜场',len:266,g:6,hot:'city-pop'},
- {id:'s8',t:'风马',a:'高原乐队',al:'风马',len:189,g:7,hot:'摇滚'}
+ {id:'s1',t:'夜航西飞',a:'陈默与乐队',al:'夜航',len:60,g:0,hot:'city-pop'},
+ {id:'s2',t:'晚风收音机',a:'林知夏',al:'收音机时代',len:60,g:1,hot:'民谣'},
+ {id:'s3',t:'南方车站',a:'周野',al:'南站',len:60,g:2,hot:'indie'},
+ {id:'s4',t:'未完成的夏天',a:'周末乐队',al:'夏日清单',len:60,g:3,hot:'流行'},
+ {id:'s5',t:'城市潜水',a:'徐一鸣',al:'潜水',len:60,g:4,hot:'电子'},
+ {id:'s6',t:'海湾公路',a:'阿岚',al:'公路电影',len:60,g:5,hot:'民谣'},
+ {id:'s7',t:'凌晨三点半',a:'深夜电台',al:'午夜场',len:60,g:6,hot:'city-pop'},
+ {id:'s8',t:'风马',a:'高原乐队',al:'风马',len:60,g:7,hot:'摇滚'}
 ];
+const PLAYER=new Audio();PLAYER.preload='auto';
+PLAYER.addEventListener('ended',()=>next(true));
+PLAYER.addEventListener('error',()=>{PLAYER._err=true});
 const LYRICS=[['夜色把城市调成静音','我在耳机里养了一片海','风穿过车窗的缝隙','像谁在耳边轻轻说话'],
  ['把晚风折进信封','寄给还没睡的你','收音机里飘着旧歌','我们都没长大'],
  ['南方的车站没有雪','只有潮湿的告别','最后一班车开走了','我还在原地等风'],
@@ -568,12 +576,12 @@ function vMine(){
  '<div style="padding:0 18px 26px;font-size:10.5px;color:#a8a4bd;line-height:1.9">账号 '+S.user.acc+' · 数据按账号隔离保存在本机，换账号登录会看到各自的收藏与歌单。</div>'}
 
 /* ================= 交互 ================= */
-function playIt(id,fromQueue){if(!fromQueue)S.queue=null;S.playing=id;S.paused=false;S.pos=0;plays=[id].concat(plays.filter(x=>x!==id)).slice(0,40);save();
+function playIt(id,fromQueue){if(!fromQueue)S.queue=null;S.playing=id;S.paused=false;S.pos=0;PLAYER._err=false;PLAYER.src='assets/audio/'+id+'.mp3';PLAYER.currentTime=0;PLAYER.play().catch(function(){});plays=[id].concat(plays.filter(x=>x!==id)).slice(0,40);save();
  go('player');toast('正在播放：'+findSong(id).t)}
-function togglePlay(){if(!S.playing)playIt('s1');else{S.paused=!S.paused;refreshPlayer()}}
+function togglePlay(){if(!S.playing){playIt('s1');return}S.paused=!S.paused;if(S.paused)PLAYER.pause();else PLAYER.play().catch(function(){});refreshPlayer()}
 function refreshPlayer(){if(S.tab!=='player')return;const v=document.getElementById('view');
  const cur=v.scrollTop;v.innerHTML=vPlayer();v.scrollTop=cur;syncPlayer()}
-function next(auto){if(S.repeat&&auto){S.pos=0;refreshPlayer();return}
+function next(auto){if(S.repeat&&auto){S.pos=0;PLAYER.currentTime=0;PLAYER.play().catch(function(){});refreshPlayer();return}
  if(S.shuffle){const r=SONGS[Math.floor(Math.random()*SONGS.length)];playIt(r.id,true);return}
  if(S.queue&&S.queue.length){const i=S.queue.indexOf(S.playing);playIt(S.queue[(i+1)%S.queue.length],true);return}
  const i=SONGS.findIndex(s=>s.id===S.playing);playIt(SONGS[(i+1)%SONGS.length].id)}
@@ -601,20 +609,20 @@ function exportData(){const data={acc:S.user.acc,name:S.user.name,fav:fav,plays:
  const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='sonora_'+S.user.acc+'.json';
  document.body.appendChild(a);a.click();a.remove();toast('已导出我的收藏与歌单')}
-function logout(){document.getElementById('app').classList.add('hide');document.getElementById('login').classList.remove('hide');
+function logout(){PLAYER.pause();document.getElementById('app').classList.add('hide');document.getElementById('login').classList.remove('hide');
  const v=document.querySelector('#login video');if(v){v.play().catch(()=>{})}drawCap()}
 let timer=null;
 function syncPlayer(){clearInterval(timer);timer=setInterval(tick,1000)}
 function tick(){if(S.paused||!S.playing)return;const s=findSong(S.playing);
- S.pos=Math.min(s.len,S.pos+1);const f=document.getElementById('fill'),d=document.getElementById('pdot'),
+ if(!PLAYER._err&&!PLAYER.paused)S.pos=Math.min(s.len,Math.floor(PLAYER.currentTime));else if(PLAYER._err)S.pos=Math.min(s.len,S.pos+1);const f=document.getElementById('fill'),d=document.getElementById('pdot'),
  t=document.getElementById('tcur');
  if(!f){refreshPlayer();return}
  f.style.width=(S.pos/s.len*100)+'%';if(d)d.style.left=(S.pos/s.len*100)+'%';if(t)t.textContent=fmt(S.pos);
  if(S.sleepAt&&Date.now()>S.sleepAt){S.sleepAt=0;S.paused=true;refreshPlayer();toast('定时关闭 · 已暂停播放');return}
  if(S.pos>=s.len)next(true)}
 function seek(e){const s=findSong(S.playing||'s1');const r=document.getElementById('bar').getBoundingClientRect();
- const p=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));S.pos=Math.round(p*s.len);refreshPlayer();toast('已跳转到 '+fmt(S.pos))}
-function setVol(v){document.getElementById('volTxt').textContent=v}
+ const p=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));S.pos=Math.round(p*s.len);PLAYER.currentTime=S.pos;refreshPlayer();toast('已跳转到 '+fmt(S.pos))}
+function setVol(v){document.getElementById('volTxt').textContent=v;PLAYER.volume=v/100}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
  clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1800)}
 function openSheet(html){document.getElementById('sheet').innerHTML=html;document.getElementById('modal').classList.remove('hide')}
@@ -622,6 +630,7 @@ function closeSheet(){document.getElementById('modal').classList.add('hide')}
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeSheet()});
 
 /* ================= 启动 ================= */
+let sbReady=false,sbTimer=null;
 load();
 if(!localStorage.getItem(DBK))save();
 const remembered=localStorage.getItem('sonora_last_acc');
@@ -632,7 +641,7 @@ drawCap();drawCap2();
 const SB_URL='https://qthwgfzmojeopscrkwcv.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0aHdnZnptb2plb3BzY3Jrd2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxODQ5OTMsImV4cCI6MjExMDc2MDk5M30.3ALgKCl6RSafyjO3RCQveP2is_awAIflkPEqmvGcVQM';
 const SB_ROW=2;
-let sbReady=false,sbTimer=null;
+/* 云端请求 */
 function sbReq(path,opt){
  opt=opt||{};var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
  opt.headers=Object.assign(h,opt.headers||{});
