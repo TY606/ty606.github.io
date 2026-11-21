@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DevRealm · 面向游戏开发者的综合服务平台</title>
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#080b12;--panel:#0f141d;--panel2:#131a25;--line:rgba(255,255,255,.08);--ink:#e8eef7;--sub:#8b98ad;
@@ -115,6 +115,14 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 .page[data-page="users"]{--pg:#c084fc}
 .page[data-page="community"]{--pg:#ffd166}
 .page[data-page="settings"]{--pg:#8fb7ff}
+.page[data-page="overview"]{--soft:rgba(56,224,200,.14)}
+.page[data-page="assets"]{--soft:rgba(196,154,96,.16)}
+.page[data-page="users"]{--soft:rgba(192,132,252,.16)}
+.page[data-page="community"]{--soft:rgba(255,209,102,.15)}
+.page[data-page="link"]{--soft:rgba(243,161,92,.16)}
+.page[data-page="monitor"]{--soft:rgba(255,123,138,.14)}
+.page[data-page="docs"]{--soft:rgba(106,169,255,.14)}
+.page[data-page="api"]{--soft:rgba(126,231,135,.14)}
 
 /* 卡片 / 面板 */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -481,6 +489,235 @@ tbody tr:last-child td{border-bottom:0}
 .cm-mini:hover b{color:#ffd166}
 .cm-mini b{font-size:12px;font-weight:500;color:#cfd8e6;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cm-mini .m{font-family:var(--mono);font-size:9.5px;color:var(--sub);flex:0 0 auto}
+
+/* ============================================================
+   逐页视觉系统 v2
+   每个页面一套背景材质 + 版式骨架，不再共用同一张底
+   ============================================================ */
+.content{position:relative;background:#080b12}
+#app::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+#app .content>*{position:relative;z-index:1}
+.page{animation:pgIn .45s cubic-bezier(.22,.8,.3,1) both}
+@keyframes pgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ph>*{position:relative;z-index:2}
+
+/* --- 01 概览：控制室，实拍代码现场压在页头 --- */
+#app[data-page="overview"] .content{background:
+ radial-gradient(900px 480px at 86% -12%,rgba(56,224,200,.13),transparent 62%),
+ radial-gradient(700px 420px at 4% 108%,rgba(36,96,168,.12),transparent 60%),
+ linear-gradient(180deg,#070c11 0%,#070a0f 46%,#05080c 100%)}
+#app[data-page="overview"] .topbar{border-bottom-color:rgba(56,224,200,.14)}
+.page[data-page="overview"] .ph{background:linear-gradient(95deg,rgba(7,12,17,.96) 34%,rgba(7,12,17,.52) 100%);border-color:rgba(56,224,200,.16)}
+.page[data-page="overview"] .ph::before{content:"";position:absolute;inset:0;z-index:0;
+ background:linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px) 0 0/54px 100%,
+ linear-gradient(0deg,rgba(255,255,255,.03) 1px,transparent 1px) 0 0/100% 54px,
+ radial-gradient(420px 190px at 74% 30%,rgba(56,224,200,.20),transparent 72%);
+ -webkit-mask-image:linear-gradient(90deg,transparent 12%,#000 78%);mask-image:linear-gradient(90deg,transparent 12%,#000 78%)}
+.page[data-page="overview"] .ph{background:linear-gradient(95deg,rgba(7,12,17,.97) 30%,rgba(7,12,17,.82) 50%,rgba(7,12,17,.34) 100%)}
+.page[data-page="overview"] .ph::after{height:1px;background:linear-gradient(90deg,#38e0c8,rgba(56,224,200,.15) 55%,transparent)}
+.page[data-page="overview"] .kpi{background:linear-gradient(160deg,rgba(22,32,40,.62),rgba(10,16,22,.9));backdrop-filter:blur(6px)}
+.page[data-page="overview"] .panel{background:rgba(12,18,24,.78);backdrop-filter:blur(8px);border-color:rgba(255,255,255,.07)}
+
+/* --- 02 接口调试：IDE 工作台 --- */
+#app[data-page="api"] .content{background:
+ linear-gradient(90deg,rgba(126,231,135,.035) 1px,transparent 1px) 0 0/76px 100%,
+ radial-gradient(760px 420px at 76% -8%,rgba(126,231,135,.10),transparent 64%),
+ #060d09}
+.page[data-page="api"] .ph{background:transparent;border:0;border-bottom:1px solid rgba(126,231,135,.18);border-radius:0;padding:10px 0 18px;margin-bottom:18px}
+.page[data-page="api"] .ph h1{font-family:var(--mono);font-size:21px;letter-spacing:-.01em}
+.page[data-page="api"] .ph::after{display:none}
+.page[data-page="api"] .ph .mark{top:14px}
+.api-wrap{display:grid;grid-template-columns:212px 1fr;gap:18px;align-items:start}
+.api-side{border:1px solid rgba(126,231,135,.14);border-radius:10px;background:rgba(9,18,12,.72);padding:12px;position:sticky;top:0}
+.api-side .k{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:#7ee787;margin-bottom:9px}
+.api-side button{width:100%;display:flex;align-items:center;gap:8px;background:transparent;border:0;border-bottom:1px dashed rgba(255,255,255,.07);
+ padding:9px 2px;color:#a9c7b0;font-family:var(--mono);font-size:10.5px;text-align:left;cursor:pointer}
+.api-side button:hover{color:#7ee787}
+.api-side button em{font-style:normal;font-size:9px;color:#7ee787;border:1px solid rgba(126,231,135,.25);padding:2px 4px;border-radius:3px}
+.api-side .note{font-size:10px;line-height:1.8;color:#6f8a76;margin-top:10px;font-family:var(--mono)}
+.api-main{min-width:0}
+.apiBox{background:#08120c;border-color:rgba(126,231,135,.18)}
+.apiBox .bar{background:rgba(126,231,135,.04)}
+.apiBox textarea{background:#06100a;color:#c9f5d3}
+.apiBox textarea::placeholder{color:#5f7f68}
+.resp{background:#050e08;border-color:rgba(126,231,135,.18)}
+.resp pre{color:#a8efb6}
+.page[data-page="api"] .panel{background:rgba(8,18,12,.8);border-color:rgba(126,231,135,.12)}
+
+/* --- 03 资源库：暖色画廊（浅色页） --- */
+#app[data-page="assets"] .content{background:
+ radial-gradient(700px 420px at 100% 0,rgba(208,170,120,.22),transparent 62%),
+ linear-gradient(180deg,#efe8dd 0%,#e9e1d4 100%)}
+#app[data-page="assets"] .topbar{background:#ece4d7;border-bottom-color:rgba(60,45,30,.12)}
+#app[data-page="assets"] .topbar .crumb,#app[data-page="assets"] .topbar .env{color:#6d6255}
+#app[data-page="assets"] .topbar .crumb b{color:#241e18}
+.page[data-page="assets"]{--ink:#241e18;--sub:#6d6255;--line:rgba(48,36,24,.12);--panel:#fffdf8;--panel2:#fffdf8;color:#241e18}
+.qin{background:#0c1118;color:inherit}
+.page[data-page="assets"] .qin{background:#fffdf8;border-color:rgba(48,36,24,.14);color:#241e18}
+.page[data-page="assets"] .ph{background:#fffdf8;border-color:rgba(48,36,24,.12);border-radius:16px;box-shadow:0 1px 0 #fff inset,0 18px 40px -34px rgba(60,45,30,.5)}
+.page[data-page="assets"] .ph::after{background:linear-gradient(90deg,#8a6a44,transparent 62%)}
+.page[data-page="assets"] .ph .k{color:#8a6a44}
+.page[data-page="assets"] .ph .mark{color:#8c7f6d}
+.page[data-page="assets"] .ph .mark b{color:#241e18}
+.page[data-page="assets"] #aq{background:#fffdf8;border-color:rgba(48,36,24,.14);color:#241e18}
+.page[data-page="assets"] .btn{background:#fffdf8;border-color:rgba(48,36,24,.16);color:#4a3f33}
+.page[data-page="assets"] .btn-p{background:#241e18;color:#f6f1e7;border:0}
+.page[data-page="assets"] .btn-s{background:#f1e9dc;border-color:#d9c7ad;color:#6b4f2e}
+.page[data-page="assets"] .btn-r{color:#a33b2e;border-color:rgba(163,59,46,.25);background:#fff8f4}
+.page[data-page="assets"] .tag{background:#f2ebdf;border-color:rgba(48,36,24,.12);color:#6d6255}
+.page[data-page="assets"] .tag.acc{background:#f6ead5;border-color:#dcc29c;color:#7a5525}
+.cards.assets{grid-template-columns:repeat(3,1fr);gap:16px}
+.cards.assets .rc{padding:0;overflow:hidden;background:#fffdf8;border-color:rgba(48,36,24,.1);border-radius:14px;
+ box-shadow:0 1px 0 #fff inset,0 20px 36px -34px rgba(60,45,30,.55)}
+.cards.assets .rc:hover{transform:translateY(-4px);box-shadow:0 28px 48px -34px rgba(60,45,30,.6);border-color:#cbb08a}
+.rc .cover{height:88px;display:flex;align-items:flex-end;justify-content:space-between;padding:12px 14px;position:relative;overflow:hidden;
+ background:linear-gradient(135deg,var(--c1,#e7d7bd),var(--c2,#fbf6ee))}
+.rc .cover::after{content:"";position:absolute;right:-14px;top:-28px;width:110px;height:110px;border-radius:50%;border:1px solid rgba(60,45,30,.14)}
+.rc .cover .gl{font-family:var(--mono);font-size:26px;color:rgba(45,32,18,.34);letter-spacing:-.03em}
+.rc .cover .ty{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:rgba(45,32,18,.55)}
+.rc .rb{padding:14px 15px 15px}
+.rc .rb h4{font-size:13.5px;color:#241e18}
+.rc .rb .ver{color:#8a7b66}
+.rc .rb p{color:#6d6255}
+.rc .rb .acts .btn{padding:6px 10px;font-size:11px}
+
+/* --- 04 成员：名录墙 --- */
+#app[data-page="users"] .content{background:
+ radial-gradient(760px 440px at 18% -10%,rgba(192,132,252,.13),transparent 62%),
+ linear-gradient(180deg,#0b0913,#080a12 70%)}
+.page[data-page="users"] .ph{background:linear-gradient(115deg,rgba(192,132,252,.10),rgba(255,255,255,.02));border-color:rgba(192,132,252,.2)}
+.tm-band{display:flex;align-items:center;gap:22px;padding:18px 22px;border:1px solid rgba(192,132,252,.16);border-radius:14px;
+ background:rgba(16,13,24,.72);margin-bottom:14px;overflow:hidden}
+.tm-band .big{font-family:var(--mono);font-size:38px;line-height:1;color:#e6d5ff}
+.tm-band .big span{display:block;font-size:9px;letter-spacing:.22em;color:#a98bc9;margin-top:7px}
+.tm-band .stack{display:flex;margin-left:auto}
+.tm-band .stack i{width:34px;height:34px;border-radius:50%;margin-left:-9px;display:grid;place-items:center;font-style:normal;
+ font-size:11px;background:#241a35;border:1px solid rgba(192,132,252,.35);color:#dcc4fa}
+.tm-band .cap{font-size:11px;color:#8b98ad;line-height:1.9;max-width:330px}
+.page[data-page="users"] table td .uava{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;
+ background:rgba(192,132,252,.14);border:1px solid rgba(192,132,252,.3);color:#dcc4fa;font-size:10.5px;margin-right:8px;vertical-align:middle}
+.page[data-page="users"] tbody tr:hover{background:rgba(192,132,252,.055)}
+
+/* --- 05 社区：深色杂志版 --- */
+#app[data-page="community"] .content{background:
+ radial-gradient(820px 460px at 82% -14%,rgba(255,209,102,.10),transparent 62%),
+ linear-gradient(180deg,#0d0b09,#0a0a0d 78%)}
+.page[data-page="community"] .ph{background:linear-gradient(110deg,rgba(255,209,102,.09),rgba(255,255,255,.015));border-color:rgba(255,209,102,.18)}
+.page[data-page="community"] .ph h1{letter-spacing:.04em}
+.cm-feature{display:grid;grid-template-columns:1.35fr .65fr;gap:0;border:1px solid rgba(255,209,102,.18);border-radius:16px;
+ overflow:hidden;margin-bottom:16px;background:#121009}
+.cm-feature .lead{padding:24px 26px;position:relative}
+.cm-feature .lead .k{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:#ffd166}
+.cm-feature .lead h2{font-size:22px;line-height:1.45;margin:10px 0 12px;font-weight:500}
+.cm-feature .lead p{font-size:12px;line-height:2;color:#b9b2a3;max-width:64ch}
+.cm-feature .lead .go{margin-top:16px;display:inline-flex;align-items:center;gap:8px;border:0;background:linear-gradient(135deg,#ffd166,#dda63a);
+ color:#211a08;font-weight:700;font-size:12px;padding:10px 18px;border-radius:8px;cursor:pointer}
+.cm-feature .side{padding:22px;border-left:1px solid rgba(255,209,102,.14);display:flex;flex-direction:column;gap:14px;
+ background:linear-gradient(180deg,rgba(255,209,102,.05),transparent)}
+.cm-feature .side div b{display:block;font-family:var(--mono);font-size:20px;color:#ffd166}
+.cm-feature .side div span{font-size:10px;color:#9d9484}
+.cm-feature .rule{font-size:10.5px;line-height:1.9;color:#8f8676;margin-top:auto}
+
+/* --- 06 接入：集成墙 --- */
+#app[data-page="link"] .content{background:
+ radial-gradient(680px 380px at 8% -8%,rgba(243,161,92,.12),transparent 60%),
+ radial-gradient(680px 420px at 96% 4%,rgba(96,120,255,.12),transparent 62%),
+ linear-gradient(180deg,#0a0912,#080b12)}
+.page[data-page="link"] .ph{background:linear-gradient(115deg,rgba(243,161,92,.10),rgba(255,255,255,.015));border-color:rgba(243,161,92,.18)}
+.cardsw{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.icard{position:relative;overflow:hidden;background:linear-gradient(165deg,#141216,#0d0f16);border-color:rgba(255,255,255,.09)}
+.icard::before{content:"";position:absolute;left:-40px;top:-60px;width:170px;height:170px;border-radius:50%;
+ background:radial-gradient(circle,color-mix(in srgb,var(--ic,#f3a15c) 26%,transparent),transparent 68%);opacity:.9}
+.icard .nm .sq{background:color-mix(in srgb,var(--ic,#f3a15c) 15%,transparent);color:var(--ic,#f3a15c);border:1px solid color-mix(in srgb,var(--ic,#f3a15c) 32%,transparent)}
+.icard .key{background:rgba(0,0,0,.3)}
+.icard .bar2{height:2px;background:linear-gradient(90deg,var(--ic,#f3a15c),transparent)}
+.icard .btn{align-self:flex-start}
+
+/* --- 07 监控：终端 --- */
+#app[data-page="monitor"] .content{background:
+ radial-gradient(900px 500px at 70% 120%,rgba(255,123,138,.10),transparent 62%),
+ radial-gradient(500px 320px at 10% -10%,rgba(255,123,138,.08),transparent 60%),
+ #05070a}
+.page[data-page="monitor"] .ph{background:rgba(5,7,10,.55);border-color:rgba(255,123,138,.16);border-radius:8px}
+.page[data-page="monitor"] .ph h1{font-family:var(--mono);font-size:19px}
+.page[data-page="monitor"] .grid4 .kpi{background:#070a0f;border-color:rgba(255,123,138,.14);border-radius:6px}
+.term{border:1px solid rgba(255,123,138,.16);border-radius:8px;background:#06080c;overflow:hidden;margin-top:16px}
+.term .tbar{display:flex;align-items:center;gap:7px;padding:10px 12px;border-bottom:1px solid rgba(255,123,138,.14);background:#0a0d13}
+.term .tbar i{width:8px;height:8px;border-radius:50%;background:#3a4048}
+.term .tbar i:nth-child(1){background:#ff5f57}.term .tbar i:nth-child(2){background:#febc2e}.term .tbar i:nth-child(3){background:#28c840}
+.term .tbar span{margin-left:6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:#8b98ad}
+.term table thead th{background:#0a0d13;color:#7f8694}
+.term table td{padding:8px 10px;font-family:var(--mono);font-size:11px;border-bottom:1px solid rgba(255,255,255,.045)}
+.term .tag{font-family:var(--mono);border-radius:3px}
+.page[data-page="monitor"] .panel{border-radius:8px;background:rgba(7,10,15,.8);border-color:rgba(255,123,138,.12)}
+
+/* --- 08 接口文档：纸面阅读页（浅色） --- */
+#app[data-page="docs"] .content{background:
+ radial-gradient(800px 460px at 100% 0,rgba(106,169,255,.10),transparent 62%),
+ linear-gradient(180deg,#f6f3ec,#efece4)}
+#app[data-page="docs"] .topbar{background:#f3f0e8;border-bottom-color:rgba(30,36,48,.10)}
+#app[data-page="docs"] .topbar .crumb,#app[data-page="docs"] .topbar .env{color:#6b6f7a}
+#app[data-page="docs"] .topbar .crumb b{color:#1e2430}
+.page[data-page="docs"]{--ink:#1e2430;--sub:#62697a;--line:rgba(30,36,48,.12);--panel:#fffefa;color:#1e2430}
+.page[data-page="docs"] .ph{background:transparent;border:0;border-radius:0;padding:8px 0 20px;margin-bottom:18px;border-bottom:1px solid rgba(30,36,48,.14)}
+.page[data-page="docs"] .ph::after{display:none}
+.page[data-page="docs"] .ph h1{font-family:"Noto Serif SC",serif;font-size:32px;letter-spacing:.01em}
+.page[data-page="docs"] .ph .k,.page[data-page="docs"] .ph .mark{color:#7d6a4d}
+.page[data-page="docs"] .ph .mark b{color:#1e2430}
+.doc-shell{display:grid;grid-template-columns:196px minmax(0,1fr) 208px;gap:26px;align-items:start}
+.doc-toc{position:sticky;top:0;font-size:11.5px}
+.doc-toc .k{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:#8a8f9c;margin-bottom:10px}
+.doc-toc a{display:block;padding:7px 0;color:#5a6070;text-decoration:none;border-left:2px solid transparent;padding-left:10px;font-size:11.5px}
+.doc-toc a:hover{color:#1e2430;border-left-color:#6aa9ff}
+.doc-toc a b{font-family:var(--mono);font-size:9px;color:#8a6a44;margin-right:6px}
+.doc-main{min-width:0}
+.page[data-page="docs"] .docs .d{background:#fffefa;border-color:rgba(30,36,48,.12);border-radius:10px;margin-bottom:12px;box-shadow:0 1px 0 #fff inset,0 14px 30px -30px rgba(30,36,48,.5)}
+.page[data-page="docs"] .docs .d .h .m{color:#2f6fbf;border-color:rgba(47,111,191,.3);background:#eef4fc}
+.page[data-page="docs"] .docs .d .h .p{color:#1e2430;font-family:var(--mono);font-size:12.5px}
+.page[data-page="docs"] .docs .d .body{color:#5a6070;font-size:12px;line-height:2.05}
+.page[data-page="docs"] .btn{background:#fffefa;border-color:rgba(30,36,48,.16);color:#38404f}
+.page[data-page="docs"] .btn-s{background:#eef4fc;border-color:#c8dcf5;color:#2f6fbf}
+.page[data-page="docs"] .tag{background:#f2efe7;border-color:rgba(30,36,48,.12);color:#62697a}
+.doc-meta{position:sticky;top:0;border-left:1px solid rgba(30,36,48,.12);padding-left:18px}
+.doc-meta .k{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:#8a8f9c;margin-bottom:8px}
+.doc-meta p{font-size:11px;line-height:2;color:#5a6070;margin-bottom:14px}
+.doc-meta code{font-family:var(--mono);font-size:10.5px;background:#f0ece3;border:1px solid rgba(30,36,48,.1);border-radius:4px;padding:2px 5px;color:#3b4351}
+.page[data-page="docs"] .panel{background:#fffefa;border-color:rgba(30,36,48,.12)}
+.page[data-page="docs"] .panel .hd{background:#f4f1e9}
+.page[data-page="docs"] .panel h3,.page[data-page="docs"] .docs .d .h .p{color:#1e2430}
+
+/* --- 09 账号设置：账户中心，窄栏 --- */
+#app[data-page="settings"] .content{background:
+ radial-gradient(700px 420px at 20% -10%,rgba(143,183,255,.13),transparent 62%),
+ radial-gradient(600px 380px at 100% 100%,rgba(56,224,200,.07),transparent 60%),
+ linear-gradient(180deg,#080c14,#080b12)}
+.st-wrap{max-width:900px;margin:0 auto}
+.st-hero{display:flex;align-items:center;gap:18px;padding:22px 24px;border:1px solid rgba(143,183,255,.18);border-radius:16px;
+ background:linear-gradient(120deg,rgba(143,183,255,.10),rgba(255,255,255,.02));margin-bottom:16px;position:relative;overflow:hidden}
+.st-hero::after{content:"";position:absolute;right:-40px;top:-60px;width:220px;height:220px;border-radius:50%;
+ background:radial-gradient(circle,rgba(143,183,255,.22),transparent 68%)}
+.st-hero .ava{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:22px;
+ background:linear-gradient(135deg,#243a5c,#16283f);border:1px solid rgba(143,183,255,.35);color:#dce8ff}
+.st-hero .who b{display:block;font-size:18px;letter-spacing:.02em}
+.st-hero .who span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:#8fb7ff;margin-top:7px}
+.st-hero .tags{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:240px}
+.page[data-page="settings"] .ph{display:none}
+.page[data-page="settings"] .panel{background:rgba(13,18,26,.78);border-color:rgba(255,255,255,.075);backdrop-filter:blur(6px)}
+.page[data-page="settings"] .fld span{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:#8b98ad}
+
+@media(max-width:1180px){
+ .api-wrap{grid-template-columns:1fr}
+ .api-side{position:static;display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
+ .api-side .k,.api-side .note{grid-column:1/-1}
+ .cards.assets{grid-template-columns:repeat(2,1fr)}
+ .doc-shell{grid-template-columns:1fr}
+ .doc-toc,.doc-meta{position:static;border:0;padding:0;display:none}
+}
+@media(max-width:760px){
+ .cards.assets,.cardsw,.cm-feature{grid-template-columns:1fr}
+ .cm-feature .side{border-left:0;border-top:1px solid rgba(255,209,102,.14)}
+}
 </style>
 </head>
 <body>
@@ -758,6 +995,7 @@ function buildNav(){const nav=document.getElementById('nav');
   '<button data-t="'+it[0]+'" onclick="go(\''+it[0]+'\')"><svg viewBox="0 0 24 24">'+it[2]+'</svg><span>'+it[1]+'</span></button>').join('')).join('')}
 function go(t){if(!PERM[S.role].includes(t))t=PERM[S.role][0];
  S.tab=t;const p=document.getElementById('page');p.setAttribute('data-page',t);p.innerHTML=view(t);
+ document.getElementById('app').setAttribute('data-page',t);
  document.getElementById('crumb').textContent=t.toUpperCase();
  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
  document.querySelector('.content').scrollTop=0;
@@ -806,7 +1044,13 @@ function grow(){const ls=document.querySelectorAll('.lines .b');
 function vApi(){
  const m=S.method,path=S.pathVal||'/v1/assets';
  const resp=S.resp||null;
+ const quick=[['GET','/v1/assets'],['GET','/v1/health'],['POST','/v1/assets/upload'],['GET','/v1/integrations']];
+ const rail='<aside class="api-side"><div class="k">QUICK CALLS</div>'+
+  quick.map((q,i)=>'<button onclick="S.method=\''+q[0]+'\';S.pathVal=\''+q[1]+'\';S.resp=null;go(\'api\')"><em>'+q[0]+'</em><span>'+q[1].replace('/v1','')+'</span></button>').join('')+
+  '<button onclick="S.method=\'GET\';S.pathVal=\'/v1/community/posts\';S.resp=null;go(\'api\')"><em>GET</em><span>/community/posts</span></button>'+
+  '<div class="note">Mock 环境<br>不会请求外网<br>记录写入监控日志</div></aside>';
  return ph('API CONSOLE','接口调试台','构造请求、查看响应与耗时；记录会写入调试日志','READY')+
+ '<div class="api-wrap">'+rail+'<div class="api-main">'+
  '<div class="apiSplit">'+
  '<div class="apiBox"><div class="bar"><select id="mth" onchange="S.method=this.value">'+
  ['GET','POST','PUT','DELETE'].map(x=>'<option '+(x===m?'selected':'')+'>'+x+'</option>').join('')+
@@ -823,7 +1067,7 @@ function vApi(){
  '<tr><td colspan="5" style="color:#8b98ad">还没有调试记录，发一次请求试试（点记录可回填重发）</td></tr>')+'</tbody></table></div>'+
  '<div class="panel"><div class="hd"><h3>已收藏请求</h3><span class="tag">'+apiSaved.length+'</span></div><div class="bd" style="display:flex;gap:8px;flex-wrap:wrap">'+
  (apiSaved.length?apiSaved.map((r,i)=>'<button class="btn" onclick="loadSaved('+i+')"><span class="mono" style="font-size:11px">'+r.m+' '+r.p+'</span></button>').join(''):
- '<span style="font-size:11.5px;color:#8b98ad">把常用接口收藏起来，下次一键载入；收藏项保存在本地。</span>')+'</div></div>'}
+ '<span style="font-size:11.5px;color:#8b98ad">把常用接口收藏起来，下次一键载入；收藏项保存在本地。</span>')+'</div></div></div></div>'}
 function sendReq(){
  const mEl=document.getElementById('mth'),pEl=document.getElementById('pth');
  S.method=mEl?mEl.value:(S.method||'GET');
@@ -850,14 +1094,17 @@ function vAssets(){
  const list=res.filter(r=>!q||(r.n+r.t+r.d).toLowerCase().includes(q));
  return ph('REGISTRY','资源库','插件、SDK、美术与音效的统一仓库，支持新增、编辑、删除',''+res.length+' ITEMS')+
  '<div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">'+
- '<input id="aq" value="'+S.q+'" oninput="onQ(this.value)" placeholder="搜索资源名称 / 类型 / 描述" style="flex:1;background:#0c1118;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:12px;outline:none">'+
+ '<input id="aq" class="qin" value="'+S.q+'" oninput="onQ(this.value)" placeholder="搜索资源名称 / 类型 / 描述" style="flex:1;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:12px;outline:none">'+
  '<button class="btn btn-p" onclick="editRes()">+ 新增资源</button></div>'+
- '<div class="cards">'+list.map(r=>'<div class="rc"><div class="h"><h4>'+r.n+'</h4><span class="ver">'+r.v+'</span></div>'+
- '<p>'+r.d+'</p><div style="display:flex;gap:6px;margin-bottom:12px"><span class="tag acc">'+r.t+'</span><span class="tag">'+r.size+'</span></div>'+
- '<div class="acts"><button class="btn btn-s" onclick="toast(\'已生成下载链接\')">下载</button>'+
- '<button class="btn" onclick="editRes(\''+r.id+'\')">编辑</button>'+
- '<button class="btn btn-r" onclick="delRes(\''+r.id+'\')">删除</button></div></div>').join('')+
- (list.length?'':'<div class="rc" style="grid-column:1/-1;text-align:center;color:#8b98ad">没有匹配的资源</div>')+'</div>'}
+ '<div class="cards assets">'+list.map(r=>{
+  const ty={'插件':['PLG','#efe2cb','#fbf7ef'],'工具集':['TLS','#e6e2da','#faf8f4'],'工具':['TLS','#e6e2da','#faf8f4'],'SDK':['SDK','#dfe8ee','#f7fafb'],'美术':['ART','#f0ddd6','#fbf5f1'],'美术素材':['ART','#f0ddd6','#fbf5f1'],'音效':['SFX','#e6e0f0','#f8f5fb'],'音效素材':['SFX','#e6e0f0','#f8f5fb'],'模板':['TPL','#e4e9dd','#f7faf4'],'引擎':['ENG','#e9e1d2','#faf6ee']}[r.t]||[String(r.t).slice(0,3).toUpperCase(),'#e8e0d2','#faf6ee'];
+  return '<div class="rc"><div class="cover" style="--c1:'+ty[1]+';--c2:'+ty[2]+'"><span class="ty">'+ty[0]+'</span><span class="gl">'+r.n.slice(0,2)+'</span></div>'+
+  '<div class="rb"><div class="h"><h4>'+r.n+'</h4><span class="ver">'+r.v+'</span></div>'+
+  '<p>'+r.d+'</p><div style="display:flex;gap:6px;margin-bottom:12px"><span class="tag acc">'+r.t+'</span><span class="tag">'+r.size+'</span></div>'+
+  '<div class="acts"><button class="btn btn-s" onclick="toast(\'已生成下载链接\')">下载</button>'+
+  '<button class="btn" onclick="editRes(\''+r.id+'\')">编辑</button>'+
+  '<button class="btn btn-r" onclick="delRes(\''+r.id+'\')">删除</button></div></div></div>'}).join('')+
+ (list.length?'':'<div class="rc" style="grid-column:1/-1;text-align:center;color:#6d6255">没有匹配的资源</div>')+'</div>'}
 function onQ(v){S.q=v;const p=document.getElementById('page');const top=document.querySelector('.content').scrollTop;
  p.innerHTML=vAssets();document.querySelector('.content').scrollTop=top;const i=document.getElementById('aq');i.focus();i.setSelectionRange(i.value.length,i.value.length)}
 function editRes(id){const r=id?res.find(x=>x.id===id):{n:'',t:'插件',v:'1.0.0',d:'',size:'-- MB'};
@@ -878,7 +1125,7 @@ function delRes(id){res=res.filter(r=>r.id!==id);save();go('assets');toast('资�
 
 function vLink(){
  return ph('INTEGRATIONS','第三方接入','Steam / Discord / 发行渠道 的密钥与连通状态集中管理',''+chans.filter(c=>c.on).length+' / '+chans.length+' CONNECTED')+
- '<div class="cards">'+chans.map(c=>'<div class="icard"><div class="top"><div class="nm"><span class="sq">'+c.code+'</span><b>'+c.n+'</b></div>'+
+ '<div class="cardsw">'+chans.map((c,i)=>'<div class="icard" style="--ic:'+['#f3a15c','#8f9dff','#ff7b8a','#7ee787'][i%4]+'"><div class="top"><div class="nm"><span class="sq">'+c.code+'</span><b>'+c.n+'</b></div>'+
  '<span class="switch '+(c.on?'on':'')+'" onclick="toggleCh(\''+c.id+'\')"><i></i></span></div>'+
  '<div class="key">'+c.k+'</div>'+
  '<div style="display:flex;justify-content:space-between;font-size:11px;color:#8b98ad"><span>最近同步 '+c.last+'</span>'+
@@ -926,7 +1173,7 @@ function vMonitor(){
  ['ALL','INFO','WARN','ERROR'].map(x=>'<button class="btn '+(S.lv===x?'btn-s':'')+'" onclick="setLv(\''+x+'\')">'+x+'</button>').join('')+
  '<input id="lq" value="'+S.lq+'" oninput="onLogQ(this.value)" placeholder="搜索消息 / 操作人" style="flex:1;min-width:180px;background:#0c1118;border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:12px;outline:none">'+
  '<button class="btn" onclick="exportCSV()">导出 CSV</button></div>'+
- '<div class="panel"><div class="hd"><h3>日志流 · '+show.length+' 条</h3><span class="tag">TAIL -F</span></div>'+
+ '<div class="term"><div class="tbar"><i></i><i></i><i></i><span>devrealm@prod — tail -f /var/log/api.log · '+show.length+' 条</span></div>'+
  '<table><thead><tr><th>TIME</th><th>LEVEL</th><th>MESSAGE</th><th>OPERATOR</th></tr></thead><tbody>'+
  (show.length?show.map(l=>'<tr><td class="mono">'+l.t+'</td><td><span class="tag '+(l.lv==='ERROR'?'bad':l.lv==='WARN'?'warn':'ok')+'">'+l.lv+'</span></td>'+
  '<td class="mono">'+l.m+'</td><td class="mono">'+l.u+'</td></tr>').join(''):'<tr><td colspan="4" style="color:#8b98ad">没有符合条件的日志</td></tr>')+
@@ -950,28 +1197,40 @@ function clearLogs(){logs=[];save();go('monitor');toast('日志已清空')}
 
 function vDocs(){
  return ph('REFERENCE','接口文档','服务端 REST 接口说明，含参数与返回结构','v1 · 12 ENDPOINTS')+
- '<div class="docs">'+DOCS.map((d,i)=>'<div class="d" id="doc'+i+'"><div class="h" onclick="toggleDoc('+i+')">'+
+ '<div class="doc-shell">'+
+ '<aside class="doc-toc"><div class="k">ON THIS PAGE</div>'+DOCS.map((d,i)=>'<a onclick="gotoDoc('+i+')"><b>'+d.m+'</b>'+d.p+'</a>').join('')+'</aside>'+
+ '<div class="doc-main"><div class="docs">'+DOCS.map((d,i)=>'<div class="d'+(i===0?' open':'')+'" id="doc'+i+'"><div class="h" onclick="toggleDoc('+i+')">'+
  '<span class="m">'+d.m+'</span><span class="p">'+d.p+'</span>'+
  '<button class="btn btn-s" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();tryDoc('+i+')">试一试</button>'+
  '<span class="tag">'+(i===0?'OPEN':'EXPAND')+'</span></div>'+
- '<div class="body">'+d.d+'<br><span class="mono" style="color:#7fe9d7">Response · 200 application/json</span></div></div>').join('')+'</div>'+
- '<div class="panel"><div class="hd"><h3>约定</h3><span class="tag">CONVENTION</span></div><div class="bd" style="font-size:12px;color:#8b98ad;line-height:2">'+
+ '<div class="body">'+d.d+'<br><span class="mono" style="color:#2f6fbf">Response · 200 application/json</span></div></div>').join('')+'</div>'+
+ '<div class="panel"><div class="hd"><h3>约定</h3><span class="tag">CONVENTION</span></div><div class="bd" style="font-size:12px;color:var(--sub);line-height:2">'+
  '· 所有接口以 <span class="mono">/v1</span> 开头，鉴权使用 Bearer Token；<br>'+
  '· 分页参数统一为 page / size，返回结构为 { list, total, page }；<br>'+
- '· 错误返回包含 error 字段与 trace_id，便于关联监控日志。</div></div>'}
+ '· 错误返回包含 error 字段与 trace_id，便于关联监控日志。</div></div></div>'+
+ '<aside class="doc-meta"><div class="k">BASE URL</div><p><code>https://api.devrealm.dev/v1</code></p>'+
+ '<div class="k">AUTH</div><p>Authorization: Bearer <code>&lt;token&gt;</code>，在账号设置中生成。</p>'+
+ '<div class="k">RATE LIMIT</div><p>60 req / min，超出返回 429，并写入监控日志。</p>'+
+ '<div class="k">FORMAT</div><p>请求与响应均为 JSON，时间字段使用 UTC+8。</p></aside>'+
+ '</div>'}
 function toggleDoc(i){document.getElementById('doc'+i).classList.toggle('open')}
+function gotoDoc(i){const el=document.getElementById('doc'+i);if(!el)return;el.classList.add('open');
+ el.scrollIntoView({behavior:'smooth',block:'center'})}
 function tryDoc(i){const d=DOCS[i];S.method=d.m;S.pathVal=d.p;S.resp=null;go('api');toast('已载入 '+d.m+' '+d.p+'，点发送即可')}
 
 /* ================= 成员管理 ================= */
 function vUsers(){
  const admin=S.role==='admin';
  return ph('TEAM','成员管理','开发者账户、角色与权限；管理员可增删改查',''+users.length+' MEMBERS')+
+ '<div class="tm-band"><div class="big">'+users.length+'<span>MEMBERS</span></div>'+
+ '<div class="cap">一个账号对应一个开发者身份。角色决定可见范围，改动在下次登录时生效。</div>'+
+ '<div class="stack">'+users.slice(0,6).map(u=>'<i title="'+u.name+'">'+u.name.slice(0,1)+'</i>').join('')+'</div></div>'+
  '<div style="display:flex;gap:12px;align-items:center;margin-bottom:14px">'+
  '<div style="flex:1;font-size:11.5px;color:var(--sub);line-height:1.9">管理员可见全部页面；开发者账号看不到「成员管理」与「第三方接入」，渠道密钥只对管理员开放。改角色或删账号后立刻生效。</div>'+
  (admin?'<button class="btn btn-p" onclick="editUser()">+ 新增成员</button>':'')+'</div>'+
  '<div class="panel" style="margin-top:0"><div class="hd"><h3>账户列表</h3><span class="tag">LOCAL DB</span></div>'+
  '<table><thead><tr><th>ACCOUNT</th><th>名称</th><th>角色</th><th>创建</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
- users.map(u=>'<tr><td class="mono">'+u.acc+'</td><td>'+u.name+' '+(u.acc===S.user.acc?'<span class="tag acc">SELF</span>':'')+'</td>'+
+ users.map(u=>'<tr><td class="mono"><span class="uava">'+u.name.slice(0,1)+'</span>'+u.acc+'</td><td>'+u.name+' '+(u.acc===S.user.acc?'<span class="tag acc">SELF</span>':'')+'</td>'+
  '<td>'+(admin&&u.acc!==S.user.acc
    ?'<select onchange="setRole(\''+u.acc+'\',this.value)" style="background:#0c1118;border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:11px;color:#cfd8e6"><option value="admin" '+(u.role==='admin'?'selected':'')+'>admin</option><option value="dev" '+(u.role==='dev'?'selected':'')+'>dev</option></select>'
    :'<span class="tag '+(u.role==='admin'?'acc':'')+'">'+u.role+'</span>')+'</td>'+
@@ -1021,7 +1280,9 @@ function doDelUser(acc){users=users.filter(x=>x.acc!==acc);save();closeSheet();g
 /* ================= 账号设置 ================= */
 function vSettings(){
  const u=S.user;
- return ph('ACCOUNT','账号设置','个人资料、密码、偏好与本地数据',''+u.role.toUpperCase())+
+ return '<div class="st-wrap"><div class="st-hero"><div class="ava">'+u.name.slice(0,1)+'</div>'+
+ '<div class="who"><b>'+u.name+'</b><span>ACCOUNT CENTER · '+u.acc.toUpperCase()+'</span></div>'+
+ '<div class="tags"><span class="tag acc">'+u.role.toUpperCase()+'</span><span class="tag">创建 '+(u.created||'2026-11-01')+'</span></div></div>'+
  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">'+
  '<div class="panel" style="margin-top:0"><div class="hd"><h3>个人资料</h3><span class="tag">'+u.acc+'</span></div><div class="bd">'+
  '<label class="fld" style="display:block"><span>显示名称</span><input id="sname" value="'+u.name+'"></label>'+
@@ -1040,7 +1301,7 @@ function vSettings(){
  '<div class="panel"><div class="hd"><h3>本地数据</h3><span class="tag">LOCAL DB</span></div><div class="bd" style="display:flex;gap:10px;flex-wrap:wrap">'+
  '<button class="btn" onclick="exportConfig()">导出配置 JSON</button>'+
  '<button class="btn btn-r" onclick="confirmReset()">清空并恢复种子数据</button></div>'+
- '<div class="bd" style="font-size:11px;color:var(--sub);line-height:1.9;padding-top:0">成员、资源、日志与收藏默认存浏览器，并异步同步到 Supabase 云端（同一账号换设备可拉回最近进度）；设置页可随时导出 JSON 备份。清空会重新写入 6 条资源与 2 个演示账号。</div></div>'}
+ '<div class="bd" style="font-size:11px;color:var(--sub);line-height:1.9;padding-top:0">成员、资源、日志与收藏默认存浏览器，并异步同步到 Supabase 云端（同一账号换设备可拉回最近进度）；设置页可随时导出 JSON 备份。清空会重新写入 6 条资源与 2 个演示账号。</div></div></div>'}
 function saveProfile(){const n=document.getElementById('sname').value.trim();
  if(!n){toast('名称不能为空');return}
  S.user.name=n;const u=users.find(x=>x.acc===S.user.acc);if(u)u.name=n;
@@ -1141,7 +1402,14 @@ function renderCL(){
 function vCommunity(){
  const total=community.length,replies=community.reduce((a,p)=>a+p.replies.length,0),solved=community.filter(p=>p.solved).length;
  const authors=[...new Set(community.map(p=>p.author))].slice(0,4);
+ const feat=community.find(p=>p.pinned)||community[0];
+ const feature=feat?('<div class="cm-feature"><div class="lead"><div class="k">FEATURED · '+feat.cat+'</div>'+
+  '<h2>'+esc(feat.title)+'</h2><p>'+esc(feat.body.replace(/\n+/g,' ').slice(0,150))+'…</p>'+
+  '<button class="go" onclick="openPost(\''+feat.id+'\')">进入讨论 →</button></div>'+
+  '<div class="side"><div><b>'+feat.replies.length+'</b><span>条回复</span></div><div><b>'+feat.views+'</b><span>次浏览</span></div>'+
+  '<div><b>'+feat.likes+'</b><span>人赞同</span></div><div class="rule">提问写清引擎、平台与复现步骤；回答被采纳后，帖子会自动标记「已解决」。</div></div></div>'):'';
  return ph('COMMUNITY','开发者社区','技术方案、具体问题和上线经验都在这里；回答被采纳后会标记为已解决','OPEN TO MEMBERS')+
+ feature+
  '<div class="cm-kpis"><div><b>'+total+'</b><span>讨论</span></div><div><b>'+replies+'</b><span>回复</span></div>'+
  '<div><b>'+solved+'</b><span>已解决</span></div><div><b>'+users.length+'</b><span>注册成员</span></div>'+
  '<button class="cm-new" onclick="newPost()">发起讨论 +</button></div>'+
