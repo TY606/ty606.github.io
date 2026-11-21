@@ -111,6 +111,7 @@ svg{display:block}
 .track .grow{flex:1;min-width:0}
 .track .mtitle{font-size:14px;font-weight:600;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .track .msub{font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vtag{display:inline-block;font-size:8px;line-height:1.6;padding:0 4px;margin-right:5px;color:#9b3d28;border:1px solid rgba(155,61,40,.4);border-radius:3px;vertical-align:1px;letter-spacing:.04em}
 .heartbtn{width:38px;height:38px;border:0;background:transparent;color:#aaa196;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
 .heartbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7}
 .heartbtn.on{color:var(--accent)}
@@ -157,7 +158,9 @@ svg{display:block}
 
 /* 播放页 */
 .player{position:relative;min-height:100%;color:#fff;padding:calc(10px + env(safe-area-inset-top)) 22px calc(18px + var(--sb));
- display:flex;flex-direction:column;background-color:#0d0c0b;background-size:cover;background-position:center}
+ display:flex;flex-direction:column;background-color:#0d0c0b;overflow:hidden}
+.player .pbg{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(34px) saturate(.7) brightness(.5);transform:scale(1.08);opacity:.62;z-index:0}
+.player > *:not(.pbg){position:relative;z-index:1}
 .player .ptop{display:flex;align-items:center;justify-content:space-between}
 .player .ptop button{border:0;background:transparent;color:rgba(255,255,255,.76);cursor:pointer;padding:6px}
 .player .ptop svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7}
@@ -185,6 +188,15 @@ svg{display:block}
 .lyric{margin-top:16px;text-align:center;min-height:54px;overflow:hidden}
 .lyric span{display:block;font-size:11.5px;line-height:1.95;color:rgba(255,255,255,.28);transition:.3s}
 .lyric span.on{color:rgba(255,255,255,.88)}
+.lyric .lyric-more{color:rgba(255,255,255,.54);font-size:10.5px;text-decoration:underline;text-underline-offset:3px;margin-top:3px}
+.sheet .kicker{font-size:9.5px;letter-spacing:.16em;color:var(--muted);margin-bottom:5px}
+.sheet .meta{font-size:11px;color:var(--muted);margin:-8px 0 14px}
+.lyric-sheet{max-height:44vh;overflow:auto;padding:2px 0 8px;scrollbar-width:none}
+.lyric-sheet::-webkit-scrollbar{display:none}
+.lyric-sheet p{font-size:13px;line-height:2;color:#5f584f;text-align:center}
+.lyric-sheet p.on{color:var(--ink);font-weight:600}
+.lyric-sheet .src{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:9.5px;line-height:1.8;color:var(--faint);text-align:center}
+.about-copy{font-size:12px;line-height:1.95;color:#5f584f;padding:2px 0 6px}
 .player .foot{margin-top:auto;display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.42);padding-top:14px}
 
 /* 我的 */
@@ -290,22 +302,30 @@ svg{display:block}
 /* ================= 数据 ================= */
 const TONES=[['#7b5cf0','#b18cff'],['#0f93c8','#46c8e8'],['#e0663a','#f2a15c'],['#19a06a','#63f2b4'],['#5b6b8a','#96a6c4'],['#b8478f','#f07ac0'],['#2f6df6','#6fa8ff'],['#8a6d3b','#c9a469']];
 const SONGS=[
- {id:'s1',art:'assets/covers/c1.jpg',t:'Exodus',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:361,g:0,hot:'blues',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/HWyH7GDvpBZ03BZjR5YtL8fDgvsn2u1jKikD3RfR.mp3',inst:1},
- {id:'s2',art:'assets/covers/c2.jpg',t:'Light',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:317,g:1,hot:'americana',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/1x6jkowEauRUxjfyw1c1Cddkiak4BX8Ug8NUZcfd.mp3',inst:1},
- {id:'s3',art:'assets/covers/c3.jpg',t:'Funeral',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:167,g:2,hot:'folk',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/dLShVbwPtM0Sm1VJUOKVbdaOp8eAwjG5OiDNBiVM.mp3',inst:1},
- {id:'s4',art:'assets/covers/c4.jpg',t:'Wandering',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:490,g:3,hot:'blues',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/VKAaOVjnhkX5JZbhTVgGPf5O5ASnDbTyGCFMcv2v.mp3',inst:1},
- {id:'s5',art:'assets/covers/c5.jpg',t:'Return',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:410,g:4,hot:'folk',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/QrKEysJuyZWKJEgYYvfTDj5bGYxG3rJ0mhQ1zyvw.mp3',inst:1},
- {id:'s6',art:'assets/covers/c6.jpg',t:'Aftermath',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:362,g:5,hot:'americana',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/bJ8kw6IzAZgXXLBnXeLJ2n2f7PkSDU6CkKLykXsD.mp3',inst:1},
- {id:'s7',art:'assets/covers/c7.jpg',t:'Dreamshifter',a:'HoliznaCC0',al:'Public Domain Lofi',len:157,g:6,hot:'lofi',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/u3xjENJMKOtoKQIL2wFKohuXvNimTXRPWLldST7m.mp3',inst:1},
- {id:'s8',art:'assets/covers/c8.jpg',t:'Calm Currents',a:'HoliznaCC0',al:'Public Domain Lofi',len:148,g:7,hot:'lofi',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/4rKapZUMNnNSPAOvpjlfSH6B5Ib8rgEWdvjnM7C6.mp3',inst:1}
+ {id:'s1',art:'assets/covers/a1.jpg',t:'House of the Rising Sun',a:'HoliznaCC0',al:'House Of The Rising Sun',len:306,g:0,hot:'folk',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/UuS2LvIJRrA6rYTTrGuFI0XzTtESTF0e8XI0reUj.mp3',inst:0},
+ {id:'s2',art:'assets/covers/a2.jpg',t:'St. James Infirmary Blues',a:'Austin Moffa',al:"That's One Way To Spend Your Day",len:187,g:1,hot:'blues',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/M8mcMvg7oIwoFnAupeI1iPyEuYL1ZjwgzrTa093D.mp3',inst:0},
+ {id:'s3',art:'assets/covers/a2.jpg',t:'Oh Shenandoah',a:'Austin Moffa',al:"That's One Way To Spend Your Day",len:175,g:2,hot:'folk',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/yQE2qhz9wVTdRXROBoVmvNr97yI0yrbqkBjpSnmB.mp3',inst:0},
+ {id:'s4',art:'assets/covers/a2.jpg',t:"Dink's Song (Fare Thee Well)",a:'Austin Moffa',al:"That's One Way To Spend Your Day",len:205,g:3,hot:'folk',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/hd9xVqB3iEQWhE2OUqDf6onV7sSUulLSPrJAfCZ2.mp3',inst:0},
+ {id:'s5',art:'assets/covers/a2.jpg',t:'Silver Dagger',a:'Austin Moffa',al:"That's One Way To Spend Your Day",len:149,g:4,hot:'folk',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/VEWm5UFxSsVnuJfU4a96dJX3UK4clizvhitrYqJL.mp3',inst:0},
+ {id:'s6',art:'assets/covers/a5.jpg',t:'Wandering',a:'Daniel William Lawrence',al:'King of the Crow Tree',len:490,g:5,hot:'americana',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/VKAaOVjnhkX5JZbhTVgGPf5O5ASnDbTyGCFMcv2v.mp3',inst:1},
+ {id:'s7',art:'assets/covers/a4.jpg',t:'Dreamshifter',a:'HoliznaCC0',al:'Public Domain Lofi',len:157,g:6,hot:'lofi',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/u3xjENJMKOtoKQIL2wFKohuXvNimTXRPWLldST7m.mp3',inst:1},
+ {id:'s8',art:'assets/covers/a4.jpg',t:'Calm Currents',a:'HoliznaCC0',al:'Public Domain Lofi',len:148,g:7,hot:'lofi',u:'https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/4rKapZUMNnNSPAOvpjlfSH6B5Ib8rgEWdvjnM7C6.mp3',inst:1}
 ];
+const LYRICS={
+ s1:['There is a house in New Orleans','They call the Rising Sun','And it\'s been the ruin of many a poor boy','And God, I know I\'m one','My mother was a tailor','She sewed my new blue jeans','My father was a gamblin\' man','Down in New Orleans','Now the only thing a gambler needs','Is a suitcase and a trunk','And the only time he\'ll be satisfied','Is when he\'s all drunk','Oh mothers, tell your children','Not to do what I have done','Spend your lives in sin and misery','In the House of the Rising Sun','Well, I\'ve got one foot on the platform','The other foot on the train','I\'m goin\' back to New Orleans','To wear that ball and chain'],
+ s2:['I went down to St. James Infirmary','Saw my baby there','Stretched out on a long white table','So cold, so sweet, so fair','Let her go, let her go, God bless her','Wherever she may be','She can search this whole wide world over','But she\'ll never find another man like me','When I die, I want you to bury me','In a box-back coat and a Stetson hat','Put a twenty-dollar gold piece on my watch chain','So the boys\'ll know I died standing pat'],
+ s3:['Oh Shenandoah, I long to hear you','Away, you rolling river','Oh Shenandoah, I long to hear you','Away, I\'m bound away','\'Cross the wide Missouri','Oh Shenandoah, I love your daughter','Away, you rolling river','Oh Shenandoah, I love your daughter','Away, I\'m bound away','\'Cross the wide Missouri'],
+ s4:['If I had wings like Noah\'s dove','I\'d fly up the river to the one I love','Fare thee well, oh honey, fare thee well','If I had wings like Noah\'s dove','I\'d fly up the river to the one I love','Fare thee well, oh honey, fare thee well'],
+ s5:['Don\'t sing love songs, you\'ll wake my mother','She\'s sleeping here right by my side','And in her right hand a silver dagger','She says that I can\'t be your bride','All men are false, says my mother','They\'ll tell you wicked, lovin\' lies','And the very next evening they\'ll court another','Leave you alone to pine and sigh']
+};
+SONGS.forEach(x=>x.lyrics=LYRICS[x.id]||[]);
 const PLAYER=new Audio();PLAYER.preload='auto';PLAYER.volume=.62;
 PLAYER.addEventListener('ended',()=>next(true));
 PLAYER.addEventListener('error',()=>{PLAYER._err=true});
-const LISTS=[{id:'p1',n:'深夜通勤',d:'低频与长段落，适合路上听',ids:['s7','s1','s4'],g:0},
- {id:'p2',n:'午后缓听',d:'轻缓的吉他与环境感',ids:['s8','s2','s5'],g:2},
- {id:'p3',n:'周末布鲁斯',d:'木吉他、尘土和旧故事',ids:['s3','s6','s4'],g:3}];
-const HOTKW=['Wandering','lofi','blues','Dreamshifter','King of the Crow Tree'];
+const LISTS=[{id:'p1',n:'深夜通勤',d:'一段人声，一段器乐',ids:['s1','s7','s4'],g:0},
+ {id:'p2',n:'午后民谣',d:'公版民谣与木吉他',ids:['s3','s5','s2'],g:2},
+ {id:'p3',n:'深夜缓听',d:'器乐与 lofi，适合放空',ids:['s6','s7','s8'],g:3}];
+const HOTKW=['House of the Rising Sun','St. James Infirmary','Shenandoah','Silver Dagger','lofi'];
 
 /* ================= 状态 ================= */
 const DBK='sonora_db_v2';
@@ -425,7 +445,7 @@ function vRec(){
  return '<div class="pagehead"><div><div class="date">'+dateLabel()+'</div><h1>'+greet()+(nm?'，'+nm:'')+'</h1></div>'+
  '<button class="avatar" onclick="go(\'mine\')">'+(nm?nm.slice(0,1):'S')+'</button></div>'+
  '<div class="feature" onclick="playIt(\''+lead.id+'\')"><img src="'+lead.art+'" alt=""><div class="shade"></div>'+
- '<div class="copy"><div class="k">今日精选</div><h2>'+lead.t+'</h2><p>'+lead.a+' · 共 '+SONGS.length+' 首</p></div>'+
+ '<div class="copy"><div class="k">今日精选 · FOLK</div><h2>'+lead.t+'</h2><p>'+lead.a+' · '+lead.al+'</p></div>'+
  '<button class="fplay" onclick="event.stopPropagation();playIt(\''+lead.id+'\')"><svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z"/></svg></button></div>'+
  '<div class="feature-actions"><button class="pill dark" onclick="playIt(\'s1\')">播放今日精选</button>'+
  '<button class="pill" onclick="go(\'pl\')">我的歌单</button></div>'+
@@ -433,12 +453,12 @@ function vRec(){
  '<div>'+picks.map(s=>rowHtml(s,false)).join('')+'</div>'+
  '<div class="section-head"><h2>新近收录</h2><span class="more">'+SONGS.length+' 首</span></div>'+
  '<div>'+fresh.map(s=>rowHtml(s,false)).join('')+'</div>'+
- '<div class="editor-note">8 首真实录音已随安装包内置，离线可播；音频来自 Free Music Archive，均为 CC0 公共领域授权。</div>'}
+ '<div class="editor-note">8 首真实录音：5 首带人声、3 首纯音乐，全部随安装包离线播放。人声曲目采用公版民谣，歌词在播放页可查看。</div>'}
 function rowHtml(s,showCover,rank){
  const h='<svg viewBox="0 0 24 24"><path d="M12 20.2S4.8 15.6 4.8 10.6A4 4 0 0 1 12 8.4a4 4 0 0 1 7.2 2.2c0 5-7.2 9.6-7.2 9.6z"/></svg>';
  return '<div class="track" onclick="playIt(\''+s.id+'\')">'+
  (rank?'<span class="rank">'+rank+'</span>':'')+coverEl(s,52)+
- '<div class="grow"><div class="mtitle">'+s.t+'</div><div class="msub">'+s.a+' · '+s.al+'</div></div>'+
+ '<div class="grow"><div class="mtitle">'+s.t+'</div><div class="msub">'+(s.lyrics&&s.lyrics.length?'<span class="vtag">人声</span>':'')+s.a+' · '+s.al+'</div></div>'+
  '<button class="heartbtn '+(fav.includes(s.id)?'on':'')+'" onclick="event.stopPropagation();toggleFav(\''+s.id+'\')">'+h+'</button></div>'}
 
 function vSearch(){
@@ -556,8 +576,11 @@ function songMenu(id){const s=findSong(id);if(!s)return;
 function vPlayer(){
  const s=S.playing?findSong(S.playing):SONGS[0];
  const pct=(S.pos||0)/s.len*100;
- const bg="background-image:linear-gradient(180deg,rgba(10,9,8,.48) 0%,rgba(10,9,8,.82) 38%,rgba(11,10,9,.98) 78%),url('"+s.art+"')";
- return '<div class="player" style="'+bg+'">'+
+ const lyr=s.lyrics||[];
+ const lyricHtml=lyr.length?lyr.slice(0,3).map((l,i)=>'<span class="'+(i===0?'on':'')+'">'+l+'</span>').join('')+
+  '<span class="lyric-more" onclick="showLyrics(\''+s.id+'\')">查看完整歌词 · 共 '+lyr.length+' 行</span>':
+  '<span class="on">纯音乐 · 暂无歌词</span><span>'+s.a+' · '+s.al+'</span>';
+ return '<div class="player">'+'<div class="pbg" style="background-image:url('+s.art+')"></div>'+
  '<div class="ptop"><button onclick="go(\'rec\')"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>'+
  '<span>正在播放</span><button onclick="toggleFav(\''+s.id+'\');refreshPlayer()"><svg viewBox="0 0 24 24" style="'+(fav.includes(s.id)?'fill:#f4efe6;stroke:#f4efe6':'')+'"><path d="M12 20.2S4.8 15.6 4.8 10.6A4 4 0 0 1 12 8.4a4 4 0 0 1 7.2 2.2c0 5-7.2 9.6-7.2 9.6z"/></svg></button></div>'+
  '<img class="part" src="'+s.art+'" alt="">'+
@@ -568,12 +591,25 @@ function vPlayer(){
  '<div class="ctrl"><button onclick="prev()"><svg viewBox="0 0 24 24"><path d="M7 5v14M18 5l-9 7 9 7z"/></svg></button>'+
  '<button class="main" onclick="togglePlay()" id="mainBtn">'+(S.paused?'<svg viewBox="0 0 24 24"><path d="M8 5.2v13.6L19 12z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>')+'</button>'+
  '<button onclick="next()"><svg viewBox="0 0 24 24"><path d="M17 5v14M6 5l9 7-9 7z"/></svg></button></div>'+
- '<div class="player-tools"><button class="'+(S.shuffle?'on':'')+'" onclick="S.shuffle=!S.shuffle;refreshPlayer();toast(S.shuffle?\'随机播放已开\':\'随机播放已关\')">随机</button>'+
+ '<div class="player-tools"><button onclick="showLyrics(\''+s.id+'\')">歌词</button>'+
+ '<button class="'+(S.shuffle?'on':'')+'" onclick="S.shuffle=!S.shuffle;refreshPlayer();toast(S.shuffle?\'随机播放已开\':\'随机播放已关\')">随机</button>'+
  '<button class="'+(S.repeat?'on':'')+'" onclick="S.repeat=!S.repeat;refreshPlayer();toast(S.repeat?\'单曲循环已开\':\'单曲循环已关\')">单曲循环</button>'+
  '<button class="'+(S.sleepAt?'on':'')+'" onclick="sleepTimer()">'+(S.sleepAt?'定时 '+Math.max(0,Math.round((S.sleepAt-Date.now())/60000))+' 分':'定时关闭')+'</button></div>'+
  '<div class="volume"><span>音量</span><input type="range" min="0" max="100" value="'+Math.round((PLAYER.volume||.62)*100)+'" oninput="setVol(this.value)"><span id="volTxt">'+Math.round((PLAYER.volume||.62)*100)+'</span></div>'+
- '<div class="lyric"><span class="on">纯音乐 · 暂无歌词</span><span>录音：'+s.a+'</span><span>Free Music Archive · CC0 公共领域授权</span></div>'+
+ '<div class="lyric">'+lyricHtml+'</div>'+
  '<div class="foot"><span onclick="addToSheet(\''+s.id+'\')" style="cursor:pointer">加入歌单</span><span onclick="toggleFav(\''+s.id+'\');refreshPlayer()" style="cursor:pointer">'+(fav.includes(s.id)?'已收藏':'收藏这首')+'</span></div></div>'}
+function showLyrics(id){
+ const s=findSong(id);if(!s)return;
+ const lyr=s.lyrics||[];
+ const body=lyr.length?'<div class="lyric-sheet">'+lyr.map((l,i)=>'<p class="'+(i===0?'on':'')+'">'+l+'</p>').join('')+
+  '<div class="src">公版民谣歌词 · 录音：'+s.a+'<br>Free Music Archive · 随安装包离线播放</div></div>':
+  '<div class="empty">这首是纯音乐，暂无歌词<br>换一首带人声的试试</div>';
+ openSheet('<div class="kicker">LYRICS</div><h4>'+s.t+'</h4><div class="meta">'+s.a+' · '+s.al+'</div>'+body+
+  '<div class="acts"><button onclick="closeSheet()">关闭</button></div>')}
+function aboutApp(){
+ openSheet('<div class="kicker">ABOUT</div><h4>关于声屿 Sonora</h4><div class="meta">本地音乐播放器 · v1.0.1</div>'+
+ '<div class="about-copy">8 首曲目全部内置在安装包，离线可播；5 首带人声，其中 4 首为公版民谣。<br><br>音频来自 Free Music Archive：HoliznaCC0 与 Daniel William Lawrence 为 CC0；Austin Moffa 为 CC BY 4.0。封面使用专辑原始封面。<br><br>收藏、歌单、播放记录只保存在本机，不上传服务器。</div>'+
+ '<div class="acts"><button onclick="closeSheet()">关闭</button></div>')}
 function addToSheet(sid){const s=findSong(sid);
  openSheet('<h4>加入歌单 · '+s.t+'</h4>'+
  (lists.length?lists.map(l=>'<button class="btn" style="width:100%;margin-bottom:8px" onclick="addSong(\''+l.id+'\',\''+sid+'\');closeSheet()">'+l.n+' · '+l.ids.length+' 首</button>').join(''):'<div style="font-size:11.5px;color:#8b86a3">还没有歌单，先去「歌单」新建</div>')+
@@ -599,6 +635,7 @@ function vMine(){
  '<button class="pill" onclick="editProfile()">编辑资料</button>'+
  '<button class="pill" onclick="changePwdForm()">修改密码</button>'+
  '<button class="pill" onclick="exportData()">导出数据</button>'+
+ '<button class="pill" onclick="aboutApp()">关于与授权</button>'+
  '<button class="pill" onclick="logout()">退出登录</button></div>'+
  '<div class="mine-note">账号 '+S.user.acc+' · 收藏、歌单和播放记录按账号隔离保存在本机。</div>'}
 /* ================= 交互 ================= */
