@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>社团云 ClubHub · 校园学生社团管理系统</title>
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6fa;color:#1d2a3d;-webkit-font-smoothing:antialiased}
@@ -142,7 +141,6 @@ tr:hover td{background:#fbfdff}
 @media(max-width:900px){.roles,.club-grid,.cards,.split,.banner{grid-template-columns:1fr}.tabs{overflow:auto}}
 label.lf{font-size:12px;color:#5f7089;display:block}label.lf input,label.lf select,label.lf textarea{width:100%;margin-top:6px;padding:10px 12px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:13px;outline:none}
 </style>
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@600&display=swap">
 <style id="ep-theme">
 /* ================= v3 视觉系统：设计令牌 / 场景动效 / 组件质感 ================= */
 :root{
@@ -513,7 +511,7 @@ body{background:linear-gradient(180deg,#fcfdff 0%,#f3f6fa 100%) fixed!important}
  box-shadow:0 26px 54px -36px rgba(12,26,42,.6);transition:background .5s ease}
 #content>.page-head h2{color:var(--pg-ink,#fff)!important;font-size:27px!important;line-height:1.25;font-family:"Noto Serif SC","Songti SC",serif;letter-spacing:.03em}
 #content>.page-head h2::before{display:none!important}
-#content>.page-head .t{color:var(--pg-ink,#fff)!important;font-size:27px;font-family:"Noto Serif SC",serif}
+#content>.page-head .t{color:var(--pg-ink,#fff)!important;font-size:27px;font-family:"Songti SC","SimSun","Noto Serif SC",serif}
 #content>.page-head p{color:var(--pg-sub,rgba(255,255,255,.76))!important;margin-top:9px;font-size:12.5px;letter-spacing:.03em;line-height:1.7}
 #content>.page-head .pg-mark{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:0 0 auto;
  margin-left:18px;font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace}
@@ -672,7 +670,7 @@ body{background:linear-gradient(180deg,#fcfdff 0%,#f3f6fa 100%) fixed!important}
 <div class="ep-vbg" aria-hidden="true"><video src="assets/campus.mp4" poster="assets/campus.jpg" autoplay muted loop playsinline preload="auto"></video><div class="ep-vscrim"></div></div>
 <section id="login">
   <div class="lg-left">
-    <div class="bgimg" style="background-image:url('https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/OOQibvV3dop9ebxKv6zcAH4Gnwb')"></div>
+    <div class="bgimg" style="background-image:url('assets/club_zhaoxin.jpg')"></div>
     <div class="veil"></div>
     <div class="inner">
       <div class="logo-row"><div class="mk">云</div><div><h1>社团云 ClubHub</h1><div class="sub">CAMPUS CLUB MANAGEMENT SYSTEM</div></div></div>
@@ -739,12 +737,12 @@ body{background:linear-gradient(180deg,#fcfdff 0%,#f3f6fa 100%) fixed!important}
 <script>
 /* ========== 数据 ========== */
 const IMG={
- zhaoxin:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/OOQibvV3dop9ebxKv6zcAH4Gnwb',
- dance:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CPdpbWnN0oHpf1xXLecc2U7Pn2d',
- ball:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/H4fJbwqtOo9SvvxcqkAc4txOnub',
- volunteer:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/XCfAbSQPIoCERRxkfH6cSXuXnLg',
- guitar:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/E0Rxb7QSooLKQfxmO2acGNEAnDb',
- lib:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/NizrbFIrFo2dGVxHaUbcPjtgnuf'
+ zhaoxin:'assets/club_zhaoxin.jpg',
+ dance:'assets/club_dance.jpg',
+ ball:'assets/club_ball.jpg',
+ volunteer:'assets/club_volunteer.jpg',
+ guitar:'assets/club_guitar.jpg',
+ lib:'assets/lib_hall.jpg'
 };
 const clubs=[
  {id:1,name:'开源技术协会',cat:'学术科技',members:126,leader:'李承宇',img:IMG.zhaoxin,status:'运行中',founded:'2016-09',intro:'面向全校的技术交流社团，每周固定技术分享与开源项目共建，覆盖前端、后端与嵌入式方向。'},
@@ -1985,28 +1983,6 @@ function sbApply(d){
 
 sbBoot();
 
-/* 隐藏托管页注入的品牌角标文案 */
-(function(){
-  var words=['豆包工作','豆包生成','妙搭生成','AI 生成'];
-  function hideBrand(){
-    var nodes=document.querySelectorAll('body span,body a,body div,body img,body p');
-    for(var i=0;i<nodes.length;i++){
-      var el=nodes[i];
-      var t=(el.alt||el.textContent||'').trim();
-      if(!t||t.length>60)continue;
-      var hit=words.some(function(w){return t.indexOf(w)>-1});
-      if(!hit)continue;
-      var p=el;
-      while(p.parentElement&&p.parentElement!==document.body&&(p.parentElement.textContent||'').trim().length<=60){p=p.parentElement}
-      if(p===document.body)continue;
-      p.style.setProperty('display','none','important');
-      p.style.setProperty('visibility','hidden','important');
-    }
-  }
-  var n=0,t=setInterval(function(){hideBrand();if(++n>40)clearInterval(t)},250);
-  document.addEventListener('DOMContentLoaded',hideBrand);
-  window.addEventListener('load',hideBrand);
-})();
 </script>
 <script id="ep-pages-js">
 /* ================= v5 页面独立视觉系统 ================= */

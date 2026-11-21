@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>云借阅 · 在线图书借阅管理系统</title>
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;background:#f6f5f2;color:#262321;-webkit-font-smoothing:antialiased}
@@ -132,7 +131,6 @@ tr:hover td{background:#fdfdfb}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.hero,.side,.cards,.sheet .top{grid-template-columns:1fr}}
 label.lf{font-size:12px;color:#5f7089;display:block}label.lf input,label.lf select,label.lf textarea{width:100%;margin-top:6px;padding:10px 12px;border:1px solid #dae3f1;border-radius:8px;font-family:inherit;font-size:13px;outline:none}
 </style>
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@600&display=swap">
 <style id="ep-theme">
 /* ================= v3 视觉系统：设计令牌 / 场景动效 / 组件质感 ================= */
 :root{
@@ -505,7 +503,7 @@ body{background:linear-gradient(180deg,#fdfcf8 0%,#f5f2ea 100%) fixed!important}
  box-shadow:0 26px 54px -36px rgba(12,26,42,.6);transition:background .5s ease}
 #content>.page-head h2{color:var(--pg-ink,#fff)!important;font-size:27px!important;line-height:1.25;font-family:"Noto Serif SC","Songti SC",serif;letter-spacing:.03em}
 #content>.page-head h2::before{display:none!important}
-#content>.page-head .t{color:var(--pg-ink,#fff)!important;font-size:27px;font-family:"Noto Serif SC",serif}
+#content>.page-head .t{color:var(--pg-ink,#fff)!important;font-size:27px;font-family:"Songti SC","SimSun","Noto Serif SC",serif}
 #content>.page-head p{color:var(--pg-sub,rgba(255,255,255,.76))!important;margin-top:9px;font-size:12.5px;letter-spacing:.03em;line-height:1.7}
 #content>.page-head .pg-mark{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:0 0 auto;
  margin-left:18px;font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace}
@@ -628,7 +626,7 @@ body{background:linear-gradient(180deg,#fdfcf8 0%,#f5f2ea 100%) fixed!important}
 <div class="ep-vbg" aria-hidden="true"><img src="assets/lib_room.jpg" alt=""><div class="ep-vscrim"></div></div>
 <section id="login">
   <div class="lg-left">
-    <div class="bgimg" style="background-image:url('https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/NizrbFIrFo2dGVxHaUbcPjtgnuf')"></div>
+    <div class="bgimg" style="background-image:url('assets/lib_hall.jpg')"></div>
     <div class="veil"></div>
     <div class="inner">
       <div class="logo-row"><div class="mk">阅</div><div><h1>云借阅 Library</h1><div class="sub">ONLINE BOOK LENDING SYSTEM</div></div></div>
@@ -681,11 +679,11 @@ body{background:linear-gradient(180deg,#fdfcf8 0%,#f5f2ea 100%) fixed!important}
 
 <script>
 const IMG={
- santi:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Plxpbx8nwoO9uMxYLoicnCEJnJ3',
- huozhe:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/MNVPbJkyuoRGnMxopbJcx9n6nDg',
- sapiens:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Df1kb8OoWoOak5x7PiLcZObZnEf',
- java:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/IVaZb42aRoqos0xU9iRc94bxnbc',
- hall:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/NizrbFIrFo2dGVxHaUbcPjtgnuf'
+ santi:'assets/book_santi.jpg',
+ huozhe:'assets/book_huozhe.jpg',
+ sapiens:'assets/book_sapiens.jpg',
+ java:'assets/book_java.jpg',
+ hall:'assets/lib_hall.jpg'
 };
 let books=[
  {id:1,title:'三体',author:'刘慈欣',pub:'重庆出版社 · 2008',cls:'文学',code:'I247.5/L597',total:6,left:4,img:IMG.santi,abs:'文革期间，军方探寻外星文明的“红岸工程”取得突破，地球文明的命运自此改变。'},
@@ -1793,28 +1791,6 @@ function sbApply(d){
 
 sbBoot();
 
-/* 隐藏托管页注入的品牌角标文案 */
-(function(){
-  var words=['豆包工作','豆包生成','妙搭生成','AI 生成'];
-  function hideBrand(){
-    var nodes=document.querySelectorAll('body span,body a,body div,body img,body p');
-    for(var i=0;i<nodes.length;i++){
-      var el=nodes[i];
-      var t=(el.alt||el.textContent||'').trim();
-      if(!t||t.length>60)continue;
-      var hit=words.some(function(w){return t.indexOf(w)>-1});
-      if(!hit)continue;
-      var p=el;
-      while(p.parentElement&&p.parentElement!==document.body&&(p.parentElement.textContent||'').trim().length<=60){p=p.parentElement}
-      if(p===document.body)continue;
-      p.style.setProperty('display','none','important');
-      p.style.setProperty('visibility','hidden','important');
-    }
-  }
-  var n=0,t=setInterval(function(){hideBrand();if(++n>40)clearInterval(t)},250);
-  document.addEventListener('DOMContentLoaded',hideBrand);
-  window.addEventListener('load',hideBrand);
-})();
 </script>
 <script id="ep-pages-js">
 /* ================= v5 页面独立视觉系统 ================= */
