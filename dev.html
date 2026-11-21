@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DevRealm · 面向游戏开发者的综合服务平台</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080b12;--panel:#0f141d;--panel2:#131a25;--line:rgba(255,255,255,.08);--ink:#e8eef7;--sub:#8b98ad;
+ --a:#38e0c8;--a2:#5affd6;--soft:rgba(56,224,200,.12);--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace}
+html,body{height:100%}
+body{font-family:"Noto Sans SC","PingFang SC",sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit;color:inherit}
+.hide{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px}
+
+/* ================= 登录：真实代码现场 ================= */
+#login{position:fixed;inset:0;overflow:hidden}
+#login video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.9) brightness(.9)}
+#login .scrim{position:absolute;inset:0;background:
+ linear-gradient(90deg,rgba(6,9,14,.96) 0%,rgba(6,9,14,.80) 34%,rgba(6,9,14,.42) 62%,rgba(6,9,14,.86) 100%),
+ radial-gradient(900px 520px at 18% 20%,rgba(56,224,200,.16),transparent 62%)}
+#login .grid{position:absolute;inset:0;opacity:.16;background-image:
+ linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px);
+ background-size:52px 52px;mask-image:radial-gradient(circle at 30% 40%,#000 20%,transparent 76%)}
+#login .inner{position:relative;z-index:3;height:100%;display:flex;align-items:center;justify-content:space-between;
+ max-width:1180px;margin:0 auto;padding:0 56px;gap:40px}
+#login .left{max-width:520px}
+#login .logo{display:flex;align-items:center;gap:13px;margin-bottom:26px}
+#login .logo .mk{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+ background:linear-gradient(135deg,#123a38,#0d6b63);border:1px solid rgba(56,224,200,.4);box-shadow:0 12px 30px -14px rgba(56,224,200,.6)}
+#login .logo .mk svg{width:22px;height:22px;stroke:#5affd6;fill:none;stroke-width:1.8}
+#login .logo b{font-size:22px;letter-spacing:.04em}
+#login .logo small{display:block;font-size:10px;letter-spacing:.3em;color:rgba(232,238,247,.5);margin-top:3px}
+#login .left h1{font-size:38px;line-height:1.35;letter-spacing:.01em;font-weight:700}
+#login .left h1 em{font-style:normal;color:#5affd6}
+#login .left p{margin-top:16px;font-size:13px;line-height:2;color:rgba(232,238,247,.6)}
+#login .facts{display:flex;gap:26px;margin-top:26px}
+#login .facts div b{font-family:var(--mono);font-size:20px;color:#5affd6}
+#login .facts div span{display:block;font-size:10.5px;letter-spacing:.14em;color:rgba(232,238,247,.42);margin-top:5px}
+#login .card{width:378px;background:rgba(12,17,25,.88);border:1px solid rgba(255,255,255,.10);border-radius:18px;
+ padding:26px 26px 22px;backdrop-filter:blur(20px);box-shadow:0 50px 100px -44px #000}
+#login .card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:rgba(232,238,247,.44)}
+#login .card .top .dot{display:inline-flex;align-items:center;gap:6px;color:#5affd6}
+#login .card .top .dot i{width:6px;height:6px;border-radius:50%;background:#5affd6;box-shadow:0 0 10px #38e0c8}
+#login .sw{display:flex;gap:4px;background:rgba(255,255,255,.05);padding:4px;border-radius:10px;margin-bottom:18px}
+#login .sw button{flex:1;border:0;background:transparent;color:rgba(232,238,247,.55);font-size:12px;padding:8px 0;border-radius:7px;cursor:pointer;transition:.2s}
+#login .sw button.on{background:rgba(56,224,200,.16);color:#5affd6;font-weight:600}
+.fld{display:block;margin-bottom:12px}
+.fld span{display:block;font-size:10.5px;letter-spacing:.12em;color:rgba(232,238,247,.44);margin-bottom:6px;font-family:var(--mono)}
+.fld input{width:100%;padding:11px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);
+ color:#fff;font-size:13px;outline:none;transition:.2s;font-family:var(--mono)}
+.fld input:focus{border-color:rgba(56,224,200,.7);box-shadow:0 0 0 3px rgba(56,224,200,.12)}
+.fld .err{display:block;color:#ff8b8b;font-size:10.5px;margin-top:5px;font-family:var(--mono)}
+#login .submit{width:100%;margin-top:6px;padding:11px;border:0;border-radius:9px;cursor:pointer;font-size:13px;letter-spacing:.16em;
+ background:linear-gradient(135deg,#2fd6bd,#0f8f83);color:#04120f;font-weight:700;box-shadow:0 14px 30px -16px rgba(56,224,200,.75)}
+#login .submit:hover{transform:translateY(-1px)}
+#login .hint{margin-top:12px;font-size:10.5px;line-height:1.9;color:rgba(232,238,247,.42);font-family:var(--mono)}
+#login .foot{position:absolute;left:56px;bottom:22px;z-index:3;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:rgba(232,238,247,.3)}
+
+/* ================= 工作台骨架 ================= */
+#app{position:fixed;inset:0;display:grid;grid-template-columns:232px 1fr;background:
+ radial-gradient(1000px 500px at 78% -10%,rgba(56,224,200,.05),transparent 60%),#080b12}
+.side{border-right:1px solid var(--line);display:flex;flex-direction:column;padding:20px 14px 14px;background:#0a0e15}
+.side .brand{display:flex;align-items:center;gap:10px;padding:0 8px 18px}
+.side .brand .mk{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;
+ background:linear-gradient(135deg,#123a38,#0d6b63);border:1px solid rgba(56,224,200,.35)}
+.side .brand .mk svg{width:17px;height:17px;stroke:#5affd6;fill:none;stroke-width:1.8}
+.side .brand b{font-size:15px;letter-spacing:.04em}
+.side nav{flex:1;display:flex;flex-direction:column;gap:2px}
+.side nav button{display:flex;align-items:center;gap:10px;border:0;background:transparent;color:#8b98ad;font-size:12.5px;
+ padding:10px 10px;border-radius:8px;cursor:pointer;text-align:left;transition:.18s;position:relative}
+.side nav button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.side nav button:hover{background:rgba(255,255,255,.05);color:#cfd8e6}
+.side nav button.on{background:rgba(56,224,200,.10);color:#5affd6}
+.side nav button.on::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:2px;border-radius:2px;background:#5affd6}
+.side nav .group{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:rgba(139,152,173,.6);padding:16px 10px 6px}
+.side .me{border-top:1px solid var(--line);padding-top:12px;display:flex;align-items:center;gap:10px}
+.side .me .av{width:32px;height:32px;border-radius:9px;background:rgba(56,224,200,.14);color:#5affd6;display:grid;place-items:center;font-size:12px}
+.side .me .who b{display:block;font-size:12px}
+.side .me .who span{font-size:10px;color:var(--sub);font-family:var(--mono)}
+.side .me .out{margin-left:auto;border:0;background:transparent;color:#6f7d92;font-size:10.5px;cursor:pointer}
+
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:58px;flex:0 0 auto;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 26px;background:rgba(10,14,21,.7)}
+.topbar .crumb{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--sub)}
+.topbar .crumb b{color:#cfd8e6}
+.topbar .sp{flex:1}
+.topbar .pill{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;color:#7fe9d7;
+ border:1px solid rgba(56,224,200,.28);background:rgba(56,224,200,.08);padding:6px 11px;border-radius:999px}
+.topbar .pill i{width:5px;height:5px;border-radius:50%;background:#38e0c8;box-shadow:0 0 8px #38e0c8}
+.topbar .env{font-family:var(--mono);font-size:10.5px;color:var(--sub);border:1px solid var(--line);padding:6px 11px;border-radius:7px}
+.content{flex:1;overflow-y:auto;padding:26px 30px 48px}
+.page{max-width:1180px;margin:0 auto}
+
+/* 页头：每页不同的命令栏 */
+.ph{position:relative;padding:22px 24px;border-radius:14px;margin-bottom:22px;border:1px solid var(--line);overflow:hidden;
+ background:linear-gradient(120deg,rgba(255,255,255,.045),rgba(255,255,255,.012));color:var(--ink)}
+.ph::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--pg,#38e0c8),transparent 70%)}
+.ph .k{font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--pg,#38e0c8);opacity:.9}
+.ph h1{font-size:23px;margin-top:9px;letter-spacing:.02em}
+.ph p{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.8}
+.ph .mark{position:absolute;right:24px;top:22px;text-align:right;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:rgba(139,152,173,.7)}
+.ph .mark b{display:block;font-size:15px;color:var(--ink);margin-top:4px}
+
+/* 每页强调色 */
+.page[data-page="overview"]{--pg:#38e0c8}
+.page[data-page="assets"]{--pg:#a78bfa}
+.page[data-page="api"]{--pg:#7ee787}
+.page[data-page="link"]{--pg:#f3a15c}
+.page[data-page="monitor"]{--pg:#ff7b8a}
+.page[data-page="docs"]{--pg:#6aa9ff}
+.page[data-page="users"]{--pg:#c084fc}
+.page[data-page="settings"]{--pg:#8fb7ff}
+
+/* 卡片 / 面板 */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;position:relative;overflow:hidden}
+.kpi .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--sub)}
+.kpi .v{font-size:26px;margin-top:8px;font-weight:600;letter-spacing:-.01em}
+.kpi .d{font-size:10.5px;color:#7fe9d7;margin-top:6px;font-family:var(--mono)}
+.kpi::after{content:"";position:absolute;right:-30px;top:-30px;width:96px;height:96px;border-radius:50%;background:radial-gradient(circle,var(--soft),transparent 70%)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:16px}
+.panel .hd{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.panel .hd h3{font-size:13px;letter-spacing:.01em}
+.panel .hd .tag{font-family:var(--mono);font-size:10px;color:var(--sub)}
+.panel .bd{padding:14px 16px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{text-align:left;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--sub);font-weight:400;
+ padding:10px 10px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+tbody td{padding:11px 10px;border-bottom:1px solid rgba(255,255,255,.05);color:#c6d0de}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+tbody tr:last-child td{border-bottom:0}
+.mono{font-family:var(--mono)}
+.tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+ padding:3px 8px;border-radius:5px;border:1px solid var(--line);color:var(--sub)}
+.tag.ok{color:#7fe9d7;border-color:rgba(56,224,200,.3);background:rgba(56,224,200,.08)}
+.tag.warn{color:#ffcf8a;border-color:rgba(243,161,92,.3);background:rgba(243,161,92,.08)}
+.tag.bad{color:#ff9aa5;border-color:rgba(255,123,138,.3);background:rgba(255,123,138,.08)}
+.tag.acc{color:var(--pg,#38e0c8);border-color:color-mix(in srgb,var(--pg,#38e0c8) 34%,transparent)}
+
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.04);color:#cfd8e6;font-size:12px;padding:8px 14px;
+ border-radius:8px;cursor:pointer;transition:.18s;font-family:"Noto Sans SC",sans-serif}
+.btn:hover{border-color:rgba(56,224,200,.4);color:#7fe9d7}
+.btn-p{background:linear-gradient(135deg,#2fd6bd,#12897d);border:0;color:#04120f;font-weight:700}
+.btn-p:hover{transform:translateY(-1px);color:#04120f}
+.btn-r{border-color:rgba(255,123,138,.28);color:#ff9aa5}
+.btn-s{background:rgba(56,224,200,.10);border-color:rgba(56,224,200,.26);color:#7fe9d7}
+
+/* 概览图形 */
+.lines{height:126px;position:relative;display:flex;align-items:flex-end;gap:3px;padding-top:10px}
+.lines .b{flex:1;border-radius:2px 2px 0 0;background:linear-gradient(180deg,var(--pg,#38e0c8),rgba(56,224,200,.16));min-height:3px;transition:height .5s}
+.axis{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:rgba(139,152,173,.6);margin-top:8px}
+.health{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed rgba(255,255,255,.07)}
+.health .nm{width:118px;font-size:12px}
+.health .bar2{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.health .bar2 i{display:block;height:100%;background:linear-gradient(90deg,#38e0c8,#7ee787)}
+.health .pct{width:48px;text-align:right;font-family:var(--mono);font-size:11px;color:#8b98ad}
+
+/* API 调试 */
+.apiSplit{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+.apiBox{background:var(--panel2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.apiBox .bar{display:flex;align-items:center;gap:8px;padding:11px 12px;border-bottom:1px solid var(--line)}
+.apiBox select,.apiBox input{background:#0c1118;border:1px solid var(--line);border-radius:7px;padding:8px 10px;font-size:12px;outline:none;font-family:var(--mono)}
+.apiBox select{color:#7ee787}
+.apiBox input{flex:1}
+.apiBox textarea{width:100%;background:#0c1118;border:0;border-top:1px solid var(--line);color:#bfe8d8;font-family:var(--mono);
+ font-size:11.5px;line-height:1.8;padding:12px;outline:none;resize:vertical;min-height:132px}
+.resp{background:#0a0f16;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.resp .bar{display:flex;align-items:center;gap:10px;padding:11px 12px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px}
+.resp pre{margin:0;padding:14px;font-family:var(--mono);font-size:11.5px;line-height:1.9;color:#9fe7cf;overflow:auto;max-height:340px;white-space:pre-wrap}
+.hist{font-family:var(--mono);font-size:11px;color:var(--sub);padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.07);display:flex;gap:10px}
+.hist b{color:#c6d0de}
+
+/* 资源卡 / 接入卡 */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.rc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;transition:.2s}
+.rc:hover{transform:translateY(-2px);border-color:rgba(167,139,250,.35);box-shadow:0 22px 44px -34px #000}
+.rc .h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.rc h4{font-size:13.5px}
+.rc .ver{font-family:var(--mono);font-size:10px;color:var(--sub)}
+.rc p{font-size:11.5px;color:var(--sub);line-height:1.9;margin:10px 0 12px}
+.rc .acts{display:flex;gap:8px}
+.icard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.icard .top{display:flex;justify-content:space-between;align-items:center}
+.icard .nm{display:flex;align-items:center;gap:10px}
+.icard .nm .sq{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:rgba(243,161,92,.12);color:#f3a15c;font-family:var(--mono);font-size:11px}
+.icard b{font-size:13px}
+.icard .key{font-family:var(--mono);font-size:11px;color:var(--sub);background:#0b1017;border:1px solid var(--line);border-radius:7px;padding:8px 10px}
+.switch{position:relative;width:38px;height:21px;border-radius:999px;background:rgba(255,255,255,.10);cursor:pointer;transition:.2s;border:1px solid var(--line)}
+.switch.on{background:rgba(56,224,200,.28);border-color:rgba(56,224,200,.5)}
+.switch i{position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:.2s}
+.switch.on i{left:20px}
+
+/* 文档 */
+.docs .d{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.docs .d .h{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer}
+.docs .d .h .m{font-family:var(--mono);font-size:10px;padding:3px 7px;border-radius:4px;border:1px solid var(--line);color:#6aa9ff}
+.docs .d .h .p{font-family:var(--mono);font-size:12px;flex:1}
+.docs .d .body{padding:0 16px;max-height:0;overflow:hidden;transition:max-height .3s;color:var(--sub);font-size:11.5px;line-height:1.9}
+.docs .d.open .body{max-height:260px;padding:0 16px 14px}
+
+.toast{position:fixed;right:26px;bottom:26px;background:#0d1a18;border:1px solid rgba(56,224,200,.3);color:#9fe7cf;
+ font-family:var(--mono);font-size:11.5px;padding:11px 16px;border-radius:9px;opacity:0;transform:translateY(8px);transition:.25s;z-index:60}
+.toast.on{opacity:1;transform:none}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(4,7,11,.72);backdrop-filter:blur(5px);display:grid;place-items:center;padding:24px}
+.modal.hide{display:none}
+.sheet{width:min(420px,94vw);background:#0f141d;border:1px solid var(--line);border-radius:14px;padding:22px}
+.sheet h4{font-size:14px;margin-bottom:16px}
+.sheet label{display:block;margin-bottom:11px;font-size:10.5px;color:var(--sub);font-family:var(--mono);letter-spacing:.1em}
+.sheet input,.sheet select,.sheet textarea{width:100%;margin-top:6px;background:#0b1017;border:1px solid var(--line);border-radius:8px;
+ padding:9px 10px;font-size:12px;outline:none;font-family:var(--mono)}
+.sheet .acts{display:flex;justify-content:flex-end;gap:9px;margin-top:6px}
+
+@media(max-width:1080px){
+ #app{grid-template-columns:1fr}
+ .side{flex-direction:row;align-items:center;gap:6px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:10px}
+ .side .brand .mk{width:26px;height:26px}
+ .side .brand{padding:0 6px 0 2px}
+ .side .brand b{display:none}
+ .side nav{flex-direction:row;gap:4px}
+ .side nav .group{display:none}
+ .side .me{border-top:0;border-left:1px solid var(--line);padding:0 0 0 8px}
+ .apiSplit,.cards,.grid3,.grid4{grid-template-columns:1fr}
+ #login .inner{flex-direction:column;justify-content:center;padding:24px}
+ #login .left{max-width:none}
+ #login .left h1{font-size:26px}
+ #login .facts,#login .foot{display:none}
+}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <video src="assets/dev_code.mp4" poster="assets/dev_code.jpg" autoplay muted loop playsinline preload="auto"></video>
+  <div class="scrim"></div><div class="grid"></div>
+  <div class="inner">
+    <div class="left">
+      <div class="logo"><div class="mk"><svg viewBox="0 0 24 24"><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/></svg></div>
+        <div><b>DevRealm</b><small>PLATFORM FOR GAME DEVELOPERS</small></div></div>
+      <h1>把资源、接口、渠道<br><em>收进一个工作台</em></h1>
+      <p>面向独立游戏开发者的综合服务平台：资源库统一管理插件与美术素材，API 调试台直接压测接口，Steam / Discord / 发行渠道 一处接入，日志与延迟集中监控。</p>
+      <div class="facts">
+        <div><b>36</b><span>RESOURCES</span></div>
+        <div><b>12</b><span>OPEN APIS</span></div>
+        <div><b>99.94%</b><span>UPTIME 30D</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="top"><span>DEV CONSOLE</span><span class="dot"><i></i>ONLINE</span></div>
+      <div class="sw"><button id="swLogin" class="on" onclick="switchTab('login')">账号登录</button><button id="swReg" onclick="switchTab('reg')">申请开发者</button></div>
+      <form id="loginForm" onsubmit="return doLogin(event)">
+        <label class="fld"><span>ACCOUNT</span><input id="acc" placeholder="dev / admin"><em class="err" id="e-acc"></em></label>
+        <label class="fld"><span>PASSWORD</span><input id="pwd" type="password" placeholder="请输入密码"><em class="err" id="e-pwd"></em></label>
+        <label class="fld"><span>CAPTCHA</span>
+          <div style="display:flex;gap:9px;align-items:center"><input id="cap" maxlength="4" placeholder="右侧 4 位" style="flex:1">
+          <canvas id="capImg" width="104" height="40" onclick="drawCap()" style="border-radius:8px;cursor:pointer;background:#fff"></canvas></div>
+          <em class="err" id="e-cap"></em></label>
+        <button class="submit" type="submit">进 入 控 制 台</button>
+        <div class="hint">演示：admin / admin123 · 开发者 dev / dev123</div>
+      </form>
+      <form id="regForm" class="hide" onsubmit="return doReg(event)">
+        <label class="fld"><span>STUDIO NAME</span><input id="r-name" placeholder="如 陶云工作室"><em class="err" id="e-rname"></em></label>
+        <label class="fld"><span>EMAIL</span><input id="r-mail" placeholder="name@studio.com"><em class="err" id="e-rmail"></em></label>
+        <label class="fld"><span>PASSWORD</span><input id="r-pwd" type="password" placeholder="6–16 位字母或数字"><em class="err" id="e-rpwd"></em></label>
+        <label class="fld"><span>CAPTCHA</span>
+          <div style="display:flex;gap:9px;align-items:center"><input id="r-cap" maxlength="4" placeholder="右侧 4 位" style="flex:1">
+          <canvas id="capImg2" width="104" height="40" onclick="drawCap2()" style="border-radius:8px;cursor:pointer;background:#fff"></canvas></div>
+          <em class="err" id="e-rcap"></em></label>
+        <button class="submit" type="submit">提 交 申 请</button>
+        <div class="hint">申请后默认进入开发者角色，可管理自己的资源与接口密钥。</div>
+      </form>
+    </div>
+  </div>
+  <div class="foot">REAL FOOTAGE · CODING SESSION</div>
+</section>
+
+<div id="app" class="hide">
+  <aside class="side">
+    <div class="brand"><div class="mk"><svg viewBox="0 0 24 24"><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/></svg></div><b>DevRealm</b></div>
+    <nav id="nav"></nav>
+    <div class="me"><div class="av" id="meAv">陶</div>
+      <div class="who"><b id="meName">陶云</b><span id="meRole">ADMIN</span></div>
+      <button class="out" onclick="logout()">退出</button></div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb">DEVREALM / <b id="crumb">OVERVIEW</b></div>
+      <div class="sp"></div>
+      <div class="env">ENV · PROD</div>
+      <div class="pill"><i></i><span id="latency">12 MS</span></div>
+    </div>
+    <div class="content"><div class="page" id="page" data-page="overview"></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal hide" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+/* ================= 数据 ================= */
+const RES=[
+ {id:'r1',n:'Sprite Atlas Packer',t:'工具链',v:'2.4.1',d:'把散图自动打成图集，输出 Unity / Cocos 可直接引用的描述文件。',size:'18 MB'},
+ {id:'r2',n:'Pixel Shader Library',t:'美术素材',v:'1.8.0',d:'42 组可商用像素风着色器，含色板与示例场景。',size:'6 MB'},
+ {id:'r3',n:'Dialogue Graph Kit',t:'插件',v:'0.9.7',d:'可视化剧情分支编辑，导出 JSON 供运行时读取，支持多语言。',size:'3 MB'},
+ {id:'r4',n:'Live Ops Analytics SDK',t:'SDK',v:'3.2.0',d:'埋点、留存与付费漏斗统计，兼容 Unity 与 Unreal。',size:'2 MB'},
+ {id:'r5',n:'Retro SFX Bundle',t:'音效',v:'1.0.2',d:'8-bit 风格 120 条音效，已做归一化与去噪处理。',size:'24 MB'},
+ {id:'r6',n:'Build Pipeline CLI',t:'工具链',v:'1.4.3',d:'一条命令完成多平台打包、版本号递增与产物上传。',size:'9 MB'}
+];
+const DOCS=[
+ {m:'GET',p:'/v1/assets',d:'分页拉取资源列表，支持按类型与关键字过滤。参数：type、page、size。返回总数与条目数组。'},
+ {m:'POST',p:'/v1/assets/upload',d:'申请上传凭证，返回对象存储的临时地址与过期时间，前端直传后回传 file_id。'},
+ {m:'GET',p:'/v1/integrations',d:'获取第三方渠道接入状态，包含 steam / discord / itch 三个渠道的连通性与最近同步时间。'},
+ {m:'POST',p:'/v1/apilog',d:'写入一次接口调试记录，参数包含 method、path、status、cost_ms，用于压测统计。'},
+ {m:'GET',p:'/v1/health',d:'服务健康检查，返回各依赖组件（数据库 / 对象存储 / 消息队列）的响应耗时。'}
+];
+const CHANNELS=[
+ {id:'steam',n:'Steamworks',code:'STM',k:'stm_live_9f2c••••37a1',on:true,last:'2026-11-20 14:22'},
+ {id:'discord',n:'Discord Rich Presence',code:'DSC',k:'dsc_oauth_8b71••••c924',on:true,last:'2026-11-21 09:41'},
+ {id:'itch',n:'itch.io Butler',code:'ITCH',k:'itch_api_5e83••••11fd',on:false,last:'2026-11-12 17:08'}
+];
+let LOGS=[
+ {t:'09:41:02',lv:'INFO',m:'GET /v1/assets 200 34ms',u:'dev'},
+ {t:'09:38:47',lv:'WARN',m:'POST /v1/assets/upload 429 限流触发',u:'dev'},
+ {t:'09:31:15',lv:'INFO',m:'GET /v1/integrations 200 51ms',u:'admin'},
+ {t:'09:24:03',lv:'ERROR',m:'GET /v1/health 504 对象存储超时',u:'system'},
+ {t:'09:12:39',lv:'INFO',m:'POST /v1/apilog 201 8ms',u:'admin'},
+ {t:'09:02:10',lv:'INFO',m:'HANDSHAKE Steamworks 200 42ms',u:'admin'},
+ {t:'08:56:33',lv:'INFO',m:'SYNC Discord Rich Presence 200 63ms',u:'admin'}
+];
+const NAVS=[
+ {g:'核心',items:[['overview','概览','<rect x="3" y="3" width="8" height="8" rx="1.6"/><rect x="13" y="3" width="8" height="5" rx="1.6"/><rect x="3" y="13" width="8" height="8" rx="1.6"/><rect x="13" y="10" width="8" height="11" rx="1.6"/>'],
+  ['api','API 调试','<path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/>'],
+  ['assets','资源库','<path d="M4 7l8-3 8 3v10l-8 3-8-3z"/><path d="M4 7l8 3 8-3M12 10v10"/>'],
+  ['users','成员管理','<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.8-3.4 2.8-5.1 5.5-5.1S13.7 15.6 14.5 19"/><circle cx="17" cy="9" r="2.4"/><path d="M17 13.2c2 .2 3.2 1.7 3.7 4"/>']]},
+ {g:'集成',items:[['link','第三方接入','<path d="M9 15l6-6M7 17l-2 2M17 7l2-2"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="6" r="2.4"/>'],
+  ['monitor','监控日志','<path d="M4 18V8M9 18V5M14 18v-7M19 18V9"/>']]},
+ {g:'文档',items:[['docs','接口文档','<path d="M6 3.5h9l4 4v13H6z"/><path d="M9 10h7M9 14h5"/>']]},
+ {g:'账户',items:[['settings','账号设置','<circle cx="12" cy="12" r="3.1"/><path d="M12 3.5v2.4M12 18.1v2.4M3.5 12h2.4M18.1 12h2.4M6 6l1.7 1.7M16.3 16.3L18 18M18 6l-1.7 1.7M7.7 16.3L6 18"/>']]}
+];
+const PATHS={overview:'/v1/overview?range=24h',api:'/v1/assets',assets:'/v1/assets?page=1&size=12',link:'/v1/integrations',monitor:'/v1/health',docs:'/v1/docs'};
+const PERM={admin:['overview','api','assets','users','link','monitor','docs','settings'],dev:['overview','api','assets','monitor','docs','settings']};
+
+/* ================= 登录 ================= */
+const DB='devrealm_db_v1';
+let users=[{acc:'admin',pwd:'admin123',name:'陶云',role:'admin',created:'2026-11-01'},{acc:'dev',pwd:'dev123',name:'李承宇',role:'dev',created:'2026-11-08'}];
+let res=RES.slice(),logs=LOGS.slice(),chans=CHANNELS.map(x=>({...x})),apiHist=[],apiSaved=[];
+let prefs={mail:true,daily:false};
+function save(){try{localStorage.setItem(DB,JSON.stringify({users:users,res:res,logs:logs.slice(0,60),chans:chans,apiHist:apiHist.slice(0,20),apiSaved:apiSaved,prefs:prefs}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem(DB)||'{}');
+ if(Array.isArray(d.users)&&d.users.length)users=d.users;
+ if(Array.isArray(d.res)&&d.res.length)res=d.res;
+ if(Array.isArray(d.chans)&&d.chans.length)chans=d.chans;
+ if(Array.isArray(d.logs)&&d.logs.length)logs=d.logs;
+ if(Array.isArray(d.apiHist))apiHist=d.apiHist;
+ if(Array.isArray(d.apiSaved))apiSaved=d.apiSaved;
+ if(d.prefs&&typeof d.prefs==='object')prefs=Object.assign(prefs,d.prefs);}catch(e){}}
+let capCode='',capCode2='';const CH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function rc(){let s='';for(let i=0;i<4;i++)s+=CH[Math.floor(Math.random()*CH.length)];return s}
+function draw(cv,code){const c=cv.getContext('2d'),w=cv.width,h=cv.height;c.clearRect(0,0,w,h);
+ c.fillStyle='#f2fbf8';c.fillRect(0,0,w,h);
+ for(let i=0;i<5;i++){c.strokeStyle='rgba(56,200,180,.25)';c.beginPath();c.moveTo(Math.random()*w,Math.random()*h);c.lineTo(Math.random()*w,Math.random()*h);c.stroke()}
+ c.font='bold 21px "JetBrains Mono",monospace';c.textBaseline='middle';
+ for(let i=0;i<4;i++){c.save();c.translate(15+i*23,h/2+(Math.random()*6-3));c.rotate((Math.random()*22-11)*Math.PI/180);
+  c.fillStyle=['#0f6b63','#12897d','#0a4d47','#1aa392'][i%4];c.fillText(code[i],0,0);c.restore()}}
+function drawCap(){capCode=rc();draw(document.getElementById('capImg'),capCode)}
+function drawCap2(){capCode2=rc();draw(document.getElementById('capImg2'),capCode2)}
+function switchTab(m){document.getElementById('loginForm').classList.toggle('hide',m!=='login');
+ document.getElementById('regForm').classList.toggle('hide',m==='login');
+ document.getElementById('swLogin').classList.toggle('on',m==='login');
+ document.getElementById('swReg').classList.toggle('on',m!=='login');if(m!=='login')drawCap2()}
+function err(id,m){document.getElementById(id).textContent=m||''}
+function doLogin(e){e.preventDefault();['e-acc','e-pwd','e-cap'].forEach(i=>err(i,''));
+ const a=document.getElementById('acc'),p=document.getElementById('pwd'),c=document.getElementById('cap');let ok=true;
+ if(!a.value.trim()){err('e-acc','请输入账号');ok=false}
+ if(p.value.length<6){err('e-pwd','密码不少于 6 位');ok=false}
+ if(c.value.trim().toUpperCase()!==capCode){err('e-cap','验证码不正确');ok=false}
+ if(!ok){drawCap();c.value='';return false}
+ const u=users.find(x=>x.acc===a.value.trim());
+ if(!u){err('e-acc','账号不存在');drawCap();c.value='';return false}
+ if(u.pwd!==p.value){err('e-pwd','账号或密码错误');drawCap();c.value='';return false}
+ enter(u);return false}
+function doReg(e){e.preventDefault();['e-rname','e-rmail','e-rpwd','e-rcap'].forEach(i=>err(i,''));
+ const n=document.getElementById('r-name'),m=document.getElementById('r-mail'),
+ p=document.getElementById('r-pwd'),c=document.getElementById('r-cap');let ok=true;
+ if(!n.value.trim()){err('e-rname','请输入工作室名称');ok=false}
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.value.trim())){err('e-rmail','邮箱格式不正确');ok=false}
+ if(!/^[A-Za-z0-9]{6,16}$/.test(p.value)){err('e-rpwd','密码为 6–16 位字母或数字');ok=false}
+ if(c.value.trim().toUpperCase()!==capCode2){err('e-rcap','验证码不正确');ok=false}
+ if(!ok){drawCap2();c.value='';return false}
+ const acc=m.value.split('@')[0];if(users.some(x=>x.acc===acc)){err('e-rname','该邮箱已申请');return false}
+ const u={acc:acc,pwd:p.value,name:n.value.trim(),role:'dev'};users.push(u);save();enter(u);return false}
+let S={role:'dev',tab:'overview',method:'GET',filter:'',q:'',lv:'ALL',lq:''};
+function enter(u){S.role=u.role;S.user=u;
+ document.getElementById('login').classList.add('hide');
+ document.getElementById('app').classList.remove('hide');
+ const v=document.querySelector('#login video');if(v){try{v.pause()}catch(e){}}
+ document.getElementById('meAv').textContent=u.name.slice(0,1);
+ document.getElementById('meName').textContent=u.name;
+ document.getElementById('meRole').textContent=u.role.toUpperCase();
+ buildNav();go(PERM[u.role][0]);toast('WELCOME · '+u.name)}
+function logout(){document.getElementById('app').classList.add('hide');
+ document.getElementById('login').classList.remove('hide');
+ const v=document.querySelector('#login video');if(v){v.play().catch(()=>{})}drawCap()}
+
+/* ================= 框架 ================= */
+function buildNav(){const nav=document.getElementById('nav');
+ const allow=PERM[S.role];
+ nav.innerHTML=NAVS.map(g=>'<div class="group">'+g.g+'</div>'+g.items.filter(it=>allow.includes(it[0])).map(it=>
+  '<button data-t="'+it[0]+'" onclick="go(\''+it[0]+'\')"><svg viewBox="0 0 24 24">'+it[2]+'</svg><span>'+it[1]+'</span></button>').join('')).join('')}
+function go(t){if(!PERM[S.role].includes(t))t=PERM[S.role][0];
+ S.tab=t;const p=document.getElementById('page');p.setAttribute('data-page',t);p.innerHTML=view(t);
+ document.getElementById('crumb').textContent=t.toUpperCase();
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+ document.querySelector('.content').scrollTop=0;
+ if(t==='overview')grow();}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
+ clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2000)}
+function openSheet(h){document.getElementById('sheet').innerHTML=h;document.getElementById('modal').classList.remove('hide')}
+function closeSheet(){document.getElementById('modal').classList.add('hide')}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeSheet()});
+
+/* ================= 视图 ================= */
+function ph(k,title,sub,code){
+ return '<div class="ph"><div class="k">'+k+'</div><h1>'+title+'</h1><p>'+sub+'</p>'+
+ '<div class="mark">'+PATHMAP[S.tab]+'<b>'+code+'</b></div></div>'}
+const PATHMAP={overview:'SESSION / 24H',api:'ENDPOINT / TEST',assets:'REGISTRY / ASSETS',users:'TEAM / MEMBERS',link:'INTEGRATIONS',monitor:'OBSERVE / LOGS',docs:'REFERENCE / API',settings:'ACCOUNT / SETTINGS'};
+function view(t){
+ if(t==='overview')return vOverview();if(t==='api')return vApi();if(t==='assets')return vAssets();
+ if(t==='users')return vUsers();if(t==='link')return vLink();if(t==='monitor')return vMonitor();
+ if(t==='docs')return vDocs();return vSettings()}
+
+function vOverview(){
+ const bars=[38,52,41,68,74,63,88,79,92,71,84,96,88,102,94,110,98,121,108,132,119,141,128,150];
+ return ph('OVERVIEW','服务概览','过去 24 小时的接口调用、资源占用与依赖健康度','ALL SYSTEMS OPERATIONAL')+
+ '<div class="grid4">'+
+ '<div class="kpi"><div class="k">REQUESTS 24H</div><div class="v">18,204</div><div class="d">+12.4% vs 昨日</div></div>'+
+ '<div class="kpi"><div class="k">P95 LATENCY</div><div class="v">142 ms</div><div class="d">-18 ms 优化生效</div></div>'+
+ '<div class="kpi"><div class="k">ERROR RATE</div><div class="v">0.6 %</div><div class="d">429 限流占 61%</div></div>'+
+ '<div class="kpi"><div class="k">RESOURCES</div><div class="v" id="resCount">'+res.length+'</div><div class="d">36.2 GB 已存储</div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>调用量曲线 · 24H</h3><span class="tag acc">LIVE</span></div>'+
+ '<div class="bd"><div class="lines" id="lines">'+bars.map((b,i)=>'<div class="b" data-h="'+b+'"></div>').join('')+'</div>'+
+ '<div class="axis"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div></div></div>'+
+ '<div class="grid" style="display:grid;grid-template-columns:1.2fr .8fr;gap:16px">'+
+ '<div class="panel" style="margin-top:0"><div class="hd"><h3>依赖健康度</h3><span class="tag">5 MIN 采样</span></div><div class="bd">'+
+ [['PostgreSQL','99.9'],['对象存储','99.6'],['Redis 缓存','100'],['消息队列','99.2'],['Steamworks API','98.4']]
+  .map(x=>'<div class="health"><span class="nm">'+x[0]+'</span><span class="bar2"><i style="width:'+x[1]+'%"></i></span><span class="pct">'+x[1]+'%</span></div>').join('')+
+ '</div></div>'+
+ '<div class="panel" style="margin-top:0"><div class="hd"><h3>最近事件</h3><span class="tag">LOG</span></div><div class="bd">'+
+ logs.slice(0,4).map(l=>'<div class="hist"><b>'+l.t+'</b><span style="color:'+(l.lv==='ERROR'?'#ff9aa5':l.lv==='WARN'?'#ffcf8a':'#7fe9d7')+'">'+l.lv+'</span><span>'+l.m+'</span></div>').join('')+
+ '</div></div></div>'}
+function grow(){const ls=document.querySelectorAll('.lines .b');
+ ls.forEach((b,i)=>setTimeout(()=>{b.style.height=(parseInt(b.dataset.h,10)/160*100)+'%'},i*22))}
+
+function vApi(){
+ const m=S.method,path=S.pathVal||'/v1/assets';
+ const resp=S.resp||null;
+ return ph('API CONSOLE','接口调试台','构造请求、查看响应与耗时；记录会写入调试日志','READY')+
+ '<div class="apiSplit">'+
+ '<div class="apiBox"><div class="bar"><select id="mth" onchange="S.method=this.value">'+
+ ['GET','POST','PUT','DELETE'].map(x=>'<option '+(x===m?'selected':'')+'>'+x+'</option>').join('')+
+ '</select><input id="pth" value="'+path+'"><button class="btn btn-p" onclick="sendReq()">发送</button>'+
+ '<button class="btn" onclick="saveReq()">收藏</button></div>'+
+ '<textarea id="body" oninput="S.body=this.value" placeholder="'+(m==='GET'?'GET 请求一般无需请求体':'JSON 请求体，例如 type=shader、page=1')+'">'+(S.body||'')+'</textarea>'+
+ '<div style="padding:10px 12px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:#8b98ad">HEADERS · Content-Type: application/json · Authorization: Bearer ••••</div></div>'+
+ '<div class="resp"><div class="bar">'+(resp?('<span style="color:#7ee787">'+resp.status+'</span><span style="color:#8b98ad">'+resp.ms+' ms</span><span style="color:#8b98ad">'+resp.bytes+' B</span>'):'<span style="color:#8b98ad">等待发送请求</span>')+'</div>'+
+ '<pre>'+(resp?resp.body:'// 点击「发送」查看模拟响应<br>// 该演示使用本地 Mock，不会真实请求外网')+'</pre>'+
+ (resp?'<div style="padding:9px 12px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;color:#8b98ad">Content-Type: application/json · X-Trace-Id: tr_'+resp.ms+'a'+' · Cache-Control: no-store</div>':'')+
+ '</div></div>'+
+ '<div class="panel"><div class="hd"><h3>调试记录</h3><span class="tag">'+(apiHist.length)+' 条</span></div><table><thead><tr><th>TIME</th><th>METHOD</th><th>PATH</th><th>STATUS</th><th>COST</th></tr></thead><tbody>'+
+ (apiHist.length?apiHist.map((h,i)=>'<tr style="cursor:pointer" onclick="replayHist('+i+')"><td class="mono">'+h.t+'</td><td class="mono">'+h.m+'</td><td class="mono">'+h.p+'</td><td><span class="tag '+(h.s<300?'ok':h.s<500?'warn':'bad')+'">'+h.s+'</span></td><td class="mono">'+h.c+' ms</td></tr>').join(''):
+ '<tr><td colspan="5" style="color:#8b98ad">还没有调试记录，发一次请求试试（点记录可回填重发）</td></tr>')+'</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>已收藏请求</h3><span class="tag">'+apiSaved.length+'</span></div><div class="bd" style="display:flex;gap:8px;flex-wrap:wrap">'+
+ (apiSaved.length?apiSaved.map((r,i)=>'<button class="btn" onclick="loadSaved('+i+')"><span class="mono" style="font-size:11px">'+r.m+' '+r.p+'</span></button>').join(''):
+ '<span style="font-size:11.5px;color:#8b98ad">把常用接口收藏起来，下次一键载入；收藏项保存在本地。</span>')+'</div></div>'}
+function sendReq(){
+ const mEl=document.getElementById('mth'),pEl=document.getElementById('pth');
+ S.method=mEl?mEl.value:(S.method||'GET');
+ const path=(pEl?pEl.value.trim():S.pathVal||'/v1/assets')||'/v1/assets';
+ S.pathVal=path;
+ const ok=path.startsWith('/v1/');
+ const ms=ok?(28+Math.floor(Math.random()*70)):0;
+ const status=ok?200:404;
+ const payload=ok?({path:path,list:res.slice(0,3).map(r=>({id:r.id,name:r.n,type:r.t,version:r.v})),page:1,total:res.length,mock:true}):({error:'endpoint_not_found',path:path});
+ S.resp={status:status,ms:ms,bytes:JSON.stringify(payload).length,body:JSON.stringify(payload,null,2)};
+ const t=nowT();
+ apiHist.unshift({t:t,m:S.method,p:path,s:status,c:ms});
+ logs.unshift({t:t,lv:status<300?'INFO':'WARN',m:S.method+' '+path+' '+status+' '+ms+'ms',u:S.user.acc});
+ save();go('api');toast(status===200?'200 OK · '+ms+' ms':'404 · 路径不存在')}
+
+function saveReq(){const path=S.pathVal||'/v1/assets';
+ if(apiSaved.some(x=>x.p===path&&x.m===S.method)){toast('该请求已收藏');return}
+ apiSaved.unshift({m:S.method,p:path});apiSaved=apiSaved.slice(0,12);save();go('api');toast('已收藏请求')}
+function loadSaved(i){const r=apiSaved[i];S.method=r.m;S.pathVal=r.p;S.resp=null;go('api');toast('已载入 '+r.m+' '+r.p)}
+function replayHist(i){const h=apiHist[i];S.method=h.m;S.pathVal=h.p;S.resp=null;go('api');toast('已回填 '+h.m+' '+h.p)}
+
+function vAssets(){
+ const q=S.q.trim().toLowerCase();
+ const list=res.filter(r=>!q||(r.n+r.t+r.d).toLowerCase().includes(q));
+ return ph('REGISTRY','资源库','插件、SDK、美术与音效的统一仓库，支持新增、编辑、删除',''+res.length+' ITEMS')+
+ '<div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">'+
+ '<input id="aq" value="'+S.q+'" oninput="onQ(this.value)" placeholder="搜索资源名称 / 类型 / 描述" style="flex:1;background:#0c1118;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:12px;outline:none">'+
+ '<button class="btn btn-p" onclick="editRes()">+ 新增资源</button></div>'+
+ '<div class="cards">'+list.map(r=>'<div class="rc"><div class="h"><h4>'+r.n+'</h4><span class="ver">'+r.v+'</span></div>'+
+ '<p>'+r.d+'</p><div style="display:flex;gap:6px;margin-bottom:12px"><span class="tag acc">'+r.t+'</span><span class="tag">'+r.size+'</span></div>'+
+ '<div class="acts"><button class="btn btn-s" onclick="toast(\'已生成下载链接\')">下载</button>'+
+ '<button class="btn" onclick="editRes(\''+r.id+'\')">编辑</button>'+
+ '<button class="btn btn-r" onclick="delRes(\''+r.id+'\')">删除</button></div></div>').join('')+
+ (list.length?'':'<div class="rc" style="grid-column:1/-1;text-align:center;color:#8b98ad">没有匹配的资源</div>')+'</div>'}
+function onQ(v){S.q=v;const p=document.getElementById('page');const top=document.querySelector('.content').scrollTop;
+ p.innerHTML=vAssets();document.querySelector('.content').scrollTop=top;const i=document.getElementById('aq');i.focus();i.setSelectionRange(i.value.length,i.value.length)}
+function editRes(id){const r=id?res.find(x=>x.id===id):{n:'',t:'插件',v:'1.0.0',d:'',size:'-- MB'};
+ openSheet('<h4>'+(id?'编辑资源':'新增资源')+'</h4>'+
+ '<label>名称<input id="rn" value="'+r.n+'"></label>'+
+ '<label>类型<input id="rt" value="'+r.t+'"></label>'+
+ '<label>版本<input id="rv" value="'+r.v+'"></label>'+
+ '<label>描述<input id="rd" value="'+r.d+'"></label>'+
+ '<label>体积<input id="rs" value="'+r.size+'"></label>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-p" onclick="saveRes(\''+(id||'')+'\')">保存</button></div>')}
+function saveRes(id){const g=x=>document.getElementById(x).value.trim();
+ const n=g('rn'),t=g('rt'),v=g('rv'),d=g('rd'),s=g('rs');
+ if(!n){toast('名称不能为空');return}
+ if(id){const r=res.find(x=>x.id===id);Object.assign(r,{n:n,t:t,v:v,d:d,size:s})}
+ else res.unshift({id:'r'+Date.now(),n:n,t:t,v:v,d:d,size:s});
+ save();closeSheet();go('assets');toast('已保存到资源库')}
+function delRes(id){res=res.filter(r=>r.id!==id);save();go('assets');toast('资源已删除')}
+
+function vLink(){
+ return ph('INTEGRATIONS','第三方接入','Steam / Discord / 发行渠道 的密钥与连通状态集中管理',''+chans.filter(c=>c.on).length+' / '+chans.length+' CONNECTED')+
+ '<div class="cards">'+chans.map(c=>'<div class="icard"><div class="top"><div class="nm"><span class="sq">'+c.code+'</span><b>'+c.n+'</b></div>'+
+ '<span class="switch '+(c.on?'on':'')+'" onclick="toggleCh(\''+c.id+'\')"><i></i></span></div>'+
+ '<div class="key">'+c.k+'</div>'+
+ '<div style="display:flex;justify-content:space-between;font-size:11px;color:#8b98ad"><span>最近同步 '+c.last+'</span>'+
+ '<span class="tag '+(c.on?'ok':'warn')+'">'+(c.on?'已连接':'未连接')+'</span></div>'+
+ '<div style="display:flex;gap:8px"><button class="btn btn-s" onclick="testCh(\''+c.id+'\')">测试连通</button>'+
+ '<button class="btn" onclick="rotCh(\''+c.id+'\')">轮换密钥</button>'+
+ '<button class="btn" onclick="chDetail(\''+c.id+'\')">详情</button></div></div>').join('')+'</div>'+
+ '<div class="panel"><div class="hd"><h3>接入说明</h3><span class="tag">DOC</span></div><div class="bd" style="font-size:12px;color:#8b98ad;line-height:2">'+
+ '1. 密钥仅保存在服务端，前端只做掩码展示；轮换后旧密钥 10 分钟内失效。<br>'+
+ '2. 渠道未连接时，发行流程会自动跳过该渠道的构建上传步骤。<br>'+
+ '3. 测试连通会发起一次握手请求，结果写入监控日志。</div></div>'}
+function toggleCh(id){const c=chans.find(x=>x.id===id);c.on=!c.on;
+ logs.unshift({t:nowT(),lv:'INFO',m:(c.on?'ENABLE':'DISABLE')+' '+c.n,u:S.user.acc});save();go('link');toast(c.n+(c.on?' 已连接':' 已断开'))}
+function testCh(id){const c=chans.find(x=>x.id===id);
+ const ms=40+Math.floor(Math.random()*60);
+ logs.unshift({t:nowT(),lv:c.on?'INFO':'WARN',m:'HANDSHAKE '+c.n+' '+(c.on?'200':'403')+' '+ms+'ms',u:S.user.acc});
+ save();toast(c.n+' 握手 '+(c.on?'成功 · '+ms+'ms':'失败 · 未连接'))}
+function rotCh(id){const c=chans.find(x=>x.id===id);const rnd=Math.random().toString(36).slice(2,6);
+ c.k=c.code.toLowerCase()+'_api_'+rnd+'••••'+Math.random().toString(36).slice(2,6);
+ logs.unshift({t:nowT(),lv:'INFO',m:'ROTATE KEY '+c.n,u:S.user.acc});save();go('link');toast('密钥已轮换，旧密钥 10 分钟后失效')}
+function chDetail(id){const c=chans.find(x=>x.id===id);
+ const rel=logs.filter(l=>l.m.indexOf(c.n)>-1||l.m.indexOf(c.code)>-1).slice(0,6);
+ openSheet('<h4>'+c.n+'</h4>'+
+ '<div style="font-family:var(--mono);font-size:11px;color:#8b98ad;line-height:2;margin-bottom:14px">'+
+ 'KEY · '+c.k+'<br>STATUS · <span style="color:'+(c.on?'#7fe9d7':'#ffcf8a')+'">'+(c.on?'CONNECTED':'DISCONNECTED')+'</span><br>LAST SYNC · '+c.last+'</div>'+
+ '<div style="font-size:11px;color:#8b98ad;margin-bottom:6px">最近事件</div>'+
+ '<div style="max-height:160px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:10px">'+
+ (rel.length?rel.map(l=>'<div class="hist"><b>'+l.t+'</b><span>'+l.m+'</span></div>').join(''):'<div style="font-size:11px;color:#8b98ad">暂无相关事件</div>')+'</div>'+
+ '<div class="acts" style="margin-top:14px"><button class="btn" onclick="closeSheet()">关闭</button>'+
+ '<button class="btn btn-s" onclick="closeSheet();testCh(\''+c.id+'\')">测试连通</button>'+
+ '<button class="btn btn-p" onclick="closeSheet();toggleCh(\''+c.id+'\')">'+(c.on?'断开连接':'恢复连接')+'</button></div>')}
+
+function nowT(){const d=new Date(Date.now()+8*3600e3);return [d.getUTCHours(),d.getUTCMinutes(),d.getUTCSeconds()].map(x=>String(x).padStart(2,'0')).join(':')}
+
+function vMonitor(){
+ const err=logs.filter(l=>l.lv==='ERROR').length, warn=logs.filter(l=>l.lv==='WARN').length;
+ const q=S.lq.trim().toLowerCase();
+ const show=logs.filter(l=>(S.lv==='ALL'||l.lv===S.lv)&&(!q||(l.m+l.u).toLowerCase().includes(q)));
+ return ph('OBSERVE','监控与日志','接口调用、限流与依赖异常的集中视图',''+logs.length+' EVENTS')+
+ '<div class="grid4"><div class="kpi"><div class="k">EVENTS</div><div class="v">'+logs.length+'</div><div class="d">最近 60 条</div></div>'+
+ '<div class="kpi"><div class="k">ERROR</div><div class="v" style="color:#ff9aa5">'+err+'</div><div class="d">504 / 500</div></div>'+
+ '<div class="kpi"><div class="k">WARN</div><div class="v" style="color:#ffcf8a">'+warn+'</div><div class="d">429 限流为主</div></div>'+
+ '<div class="kpi"><div class="k">P99</div><div class="v">318 ms</div><div class="d">对象存储慢查询</div></div></div>'+
+ '<div style="display:flex;gap:8px;align-items:center;margin-top:16px;flex-wrap:wrap">'+
+ ['ALL','INFO','WARN','ERROR'].map(x=>'<button class="btn '+(S.lv===x?'btn-s':'')+'" onclick="setLv(\''+x+'\')">'+x+'</button>').join('')+
+ '<input id="lq" value="'+S.lq+'" oninput="onLogQ(this.value)" placeholder="搜索消息 / 操作人" style="flex:1;min-width:180px;background:#0c1118;border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:12px;outline:none">'+
+ '<button class="btn" onclick="exportCSV()">导出 CSV</button></div>'+
+ '<div class="panel"><div class="hd"><h3>日志流 · '+show.length+' 条</h3><span class="tag">TAIL -F</span></div>'+
+ '<table><thead><tr><th>TIME</th><th>LEVEL</th><th>MESSAGE</th><th>OPERATOR</th></tr></thead><tbody>'+
+ (show.length?show.map(l=>'<tr><td class="mono">'+l.t+'</td><td><span class="tag '+(l.lv==='ERROR'?'bad':l.lv==='WARN'?'warn':'ok')+'">'+l.lv+'</span></td>'+
+ '<td class="mono">'+l.m+'</td><td class="mono">'+l.u+'</td></tr>').join(''):'<tr><td colspan="4" style="color:#8b98ad">没有符合条件的日志</td></tr>')+
+ '</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>错误码分布</h3><span class="tag">7 DAYS</span></div><div class="bd">'+
+ [['200 OK','76'],['429 限流','12'],['504 超时','7'],['500 服务异常','5']].map(x=>
+ '<div class="health"><span class="nm mono">'+x[0]+'</span><span class="bar2"><i style="width:'+x[1]+'%"></i></span><span class="pct">'+x[1]+'%</span></div>').join('')+
+ '</div></div>'+
+ '<div style="margin-top:16px"><button class="btn" onclick="clearLogs()">清空日志</button></div>'}
+function setLv(x){S.lv=x;go('monitor')}
+function onLogQ(v){S.lq=v;const top=document.querySelector('.content').scrollTop;
+ document.getElementById('page').innerHTML=vMonitor();document.querySelector('.content').scrollTop=top;
+ const i=document.getElementById('lq');i.focus();i.setSelectionRange(i.value.length,i.value.length)}
+function exportCSV(){
+ const rows=[['TIME','LEVEL','MESSAGE','OPERATOR']].concat(logs.map(l=>[l.t,l.lv,l.m,l.u]));
+ const csv='\ufeff'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+ const b=new Blob([csv],{type:'text/csv;charset=utf-8'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='devrealm_logs_'+Date.now()+'.csv';
+ document.body.appendChild(a);a.click();a.remove();toast('已导出 '+logs.length+' 条日志')}
+function clearLogs(){logs=[];save();go('monitor');toast('日志已清空')}
+
+function vDocs(){
+ return ph('REFERENCE','接口文档','服务端 REST 接口说明，含参数与返回结构','v1 · 12 ENDPOINTS')+
+ '<div class="docs">'+DOCS.map((d,i)=>'<div class="d" id="doc'+i+'"><div class="h" onclick="toggleDoc('+i+')">'+
+ '<span class="m">'+d.m+'</span><span class="p">'+d.p+'</span>'+
+ '<button class="btn btn-s" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();tryDoc('+i+')">试一试</button>'+
+ '<span class="tag">'+(i===0?'OPEN':'EXPAND')+'</span></div>'+
+ '<div class="body">'+d.d+'<br><span class="mono" style="color:#7fe9d7">Response · 200 application/json</span></div></div>').join('')+'</div>'+
+ '<div class="panel"><div class="hd"><h3>约定</h3><span class="tag">CONVENTION</span></div><div class="bd" style="font-size:12px;color:#8b98ad;line-height:2">'+
+ '· 所有接口以 <span class="mono">/v1</span> 开头，鉴权使用 Bearer Token；<br>'+
+ '· 分页参数统一为 page / size，返回结构为 { list, total, page }；<br>'+
+ '· 错误返回包含 error 字段与 trace_id，便于关联监控日志。</div></div>'}
+function toggleDoc(i){document.getElementById('doc'+i).classList.toggle('open')}
+function tryDoc(i){const d=DOCS[i];S.method=d.m;S.pathVal=d.p;S.resp=null;go('api');toast('已载入 '+d.m+' '+d.p+'，点发送即可')}
+
+/* ================= 成员管理 ================= */
+function vUsers(){
+ const admin=S.role==='admin';
+ return ph('TEAM','成员管理','开发者账户、角色与权限；管理员可增删改查',''+users.length+' MEMBERS')+
+ '<div style="display:flex;gap:12px;align-items:center;margin-bottom:14px">'+
+ '<div style="flex:1;font-size:11.5px;color:var(--sub);line-height:1.9">管理员可见全部页面；开发者账号看不到「成员管理」与「第三方接入」，渠道密钥只对管理员开放。改角色或删账号后立刻生效。</div>'+
+ (admin?'<button class="btn btn-p" onclick="editUser()">+ 新增成员</button>':'')+'</div>'+
+ '<div class="panel" style="margin-top:0"><div class="hd"><h3>账户列表</h3><span class="tag">LOCAL DB</span></div>'+
+ '<table><thead><tr><th>ACCOUNT</th><th>名称</th><th>角色</th><th>创建</th><th style="text-align:right">操作</th></tr></thead><tbody>'+
+ users.map(u=>'<tr><td class="mono">'+u.acc+'</td><td>'+u.name+' '+(u.acc===S.user.acc?'<span class="tag acc">SELF</span>':'')+'</td>'+
+ '<td>'+(admin&&u.acc!==S.user.acc
+   ?'<select onchange="setRole(\''+u.acc+'\',this.value)" style="background:#0c1118;border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:11px;color:#cfd8e6"><option value="admin" '+(u.role==='admin'?'selected':'')+'>admin</option><option value="dev" '+(u.role==='dev'?'selected':'')+'>dev</option></select>'
+   :'<span class="tag '+(u.role==='admin'?'acc':'')+'">'+u.role+'</span>')+'</td>'+
+ '<td class="mono" style="color:var(--sub);font-size:10.5px">'+(u.created||'2026-11-01')+'</td>'+
+ '<td style="text-align:right">'+(admin
+   ?'<button class="btn" style="padding:5px 9px;font-size:11px" onclick="resetPwd(\''+u.acc+'\')">改密码</button> '+
+    '<button class="btn btn-r" style="padding:5px 9px;font-size:11px" onclick="delUser(\''+u.acc+'\')">删除</button>'
+   :'<span class="tag">只读</span>')+'</td></tr>').join('')+
+ '</tbody></table></div>'+
+ '<div class="panel"><div class="hd"><h3>角色说明</h3><span class="tag">RBAC</span></div><div class="bd" style="font-size:11.5px;color:var(--sub);line-height:2">'+
+ '· admin：概览、接口调试、资源库、成员管理、第三方接入、监控、文档、设置全部可见，可增删资源与成员。<br>'+
+ '· dev：可见概览、接口调试、资源库、监控、文档、设置；成员管理与第三方密钥接口返回 403。 </div></div>'}
+function editUser(){
+ openSheet('<h4>新增成员</h4>'+
+ '<label>账号<input id="ua" placeholder="字母或数字，如 studio01"></label>'+
+ '<label>显示名称<input id="un" placeholder="如 王工"></label>'+
+ '<label>初始密码<input id="up" placeholder="6–16 位字母或数字"></label>'+
+ '<label>角色<select id="ur"><option value="dev">dev</option><option value="admin">admin</option></select></label>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-p" onclick="saveUser()">创建</button></div>')}
+function saveUser(){const g=x=>document.getElementById(x).value.trim();
+ const a=g('ua'),n=g('un'),pw=g('up'),r=document.getElementById('ur').value;
+ if(!/^[A-Za-z0-9]{3,16}$/.test(a)){toast('账号为 3–16 位字母或数字');return}
+ if(users.some(u=>u.acc===a)){toast('该账号已存在');return}
+ if(!n){toast('请填写显示名称');return}
+ if(!/^[A-Za-z0-9]{6,16}$/.test(pw)){toast('密码为 6–16 位字母或数字');return}
+ const d=new Date(Date.now()+8*3600e3).toISOString().slice(0,10);
+ users.push({acc:a,name:n,pwd:pw,role:r,created:d});
+ save();closeSheet();go('users');toast('已创建成员 '+a)}
+function setRole(acc,r){const u=users.find(x=>x.acc===acc);if(!u)return;
+ if(u.acc===S.user.acc){toast('不能修改自己的角色');go('users');return}
+ if(u.role==='admin'&&users.filter(x=>x.role==='admin').length<=1){toast('至少要保留一个管理员');go('users');return}
+ u.role=r;save();go('users');toast(u.name+' 已设为 '+r+'，仅对下一次登录生效')}
+function resetPwd(acc){const u=users.find(x=>x.acc===acc);if(!u)return;
+ openSheet('<h4>重置密码 · '+u.name+'</h4><label>新密码<input id="np" placeholder="6–16 位字母或数字"></label>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-p" onclick="doReset(\''+acc+'\')">确认</button></div>')}
+function doReset(acc){const v=document.getElementById('np').value.trim();
+ if(!/^[A-Za-z0-9]{6,16}$/.test(v)){toast('密码为 6–16 位字母或数字');return}
+ const u=users.find(x=>x.acc===acc);u.pwd=v;save();closeSheet();go('users');toast('已重置 '+u.name+' 的密码')}
+function delUser(acc){
+ if(acc===S.user.acc){toast('不能删除当前登录账号');return}
+ const u=users.find(x=>x.acc===acc);
+ if(u&&u.role==='admin'&&users.filter(x=>x.role==='admin').length<=1){toast('至少要保留一个管理员');return}
+ openSheet('<h4>删除成员 · '+u.name+'</h4><div style="font-size:12px;color:var(--sub);line-height:1.9">账号 '+acc+' 将从成员库移除，其历史日志保留。</div>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="doDelUser(\''+acc+'\')">确认删除</button></div>')}
+function doDelUser(acc){users=users.filter(x=>x.acc!==acc);save();closeSheet();go('users');toast('成员已删除')}
+
+/* ================= 账号设置 ================= */
+function vSettings(){
+ const u=S.user;
+ return ph('ACCOUNT','账号设置','个人资料、密码、偏好与本地数据',''+u.role.toUpperCase())+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">'+
+ '<div class="panel" style="margin-top:0"><div class="hd"><h3>个人资料</h3><span class="tag">'+u.acc+'</span></div><div class="bd">'+
+ '<label class="fld" style="display:block"><span>显示名称</span><input id="sname" value="'+u.name+'"></label>'+
+ '<div style="font-size:11px;color:var(--sub);margin:10px 0 14px;line-height:1.9">账号 '+u.acc+' · 角色 '+u.role.toUpperCase()+' · 创建 '+(u.created||'2026-11-01')+'</div>'+
+ '<button class="btn btn-p" onclick="saveProfile()">保存资料</button></div></div>'+
+ '<div class="panel" style="margin-top:0"><div class="hd"><h3>修改密码</h3><span class="tag">SECURITY</span></div><div class="bd">'+
+ '<label class="fld" style="display:block"><span>当前密码</span><input id="opw" type="password" placeholder="当前密码"></label>'+
+ '<label class="fld" style="display:block"><span>新密码</span><input id="cpw" type="password" placeholder="6–16 位字母或数字"></label>'+
+ '<button class="btn btn-p" onclick="changePwd()">更新密码</button></div></div></div>'+
+ '<div class="panel"><div class="hd"><h3>通知偏好</h3><span class="tag">PREFERENCE</span></div><div class="bd">'+
+ [['mail','接口异常邮件告警','ERROR 级日志触发时发一封汇总邮件'],['daily','每日调用摘要','每天 09:00 推送昨日调用量与错误率']].map(x=>
+ '<div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed rgba(255,255,255,.07)">'+
+ '<div style="flex:1"><div style="font-size:12.5px">'+x[1]+'</div><div style="font-size:10.5px;color:var(--sub);margin-top:4px">'+x[2]+'</div></div>'+
+ '<span class="switch '+(prefs[x[0]]?'on':'')+'" onclick="togglePref(\''+x[0]+'\')"><i></i></span></div>').join('')+
+ '</div></div>'+
+ '<div class="panel"><div class="hd"><h3>本地数据</h3><span class="tag">LOCAL DB</span></div><div class="bd" style="display:flex;gap:10px;flex-wrap:wrap">'+
+ '<button class="btn" onclick="exportConfig()">导出配置 JSON</button>'+
+ '<button class="btn btn-r" onclick="confirmReset()">清空并恢复种子数据</button></div>'+
+ '<div class="bd" style="font-size:11px;color:var(--sub);line-height:1.9;padding-top:0">演示版把成员、资源、日志存在浏览器 localStorage（key: devrealm_db_v1）；导出后可换设备导入备份。清空会重新写入 6 条资源与 2 个演示账号。</div></div>'}
+function saveProfile(){const n=document.getElementById('sname').value.trim();
+ if(!n){toast('名称不能为空');return}
+ S.user.name=n;const u=users.find(x=>x.acc===S.user.acc);if(u)u.name=n;
+ document.getElementById('meName').textContent=n;
+ document.getElementById('meAv').textContent=n.slice(0,1);
+ save();go('settings');toast('资料已保存')}
+function changePwd(){const o=document.getElementById('opw').value.trim(),n=document.getElementById('cpw').value.trim();
+ if(!o||!n){toast('请填写当前密码与新密码');return}
+ if(S.user.pwd!==o){toast('当前密码不正确');return}
+ if(!/^[A-Za-z0-9]{6,16}$/.test(n)){toast('新密码为 6–16 位字母或数字');return}
+ S.user.pwd=n;const u=users.find(x=>x.acc===S.user.acc);if(u)u.pwd=n;
+ save();go('settings');toast('密码已更新')}
+function togglePref(k){prefs[k]=!prefs[k];save();go('settings');toast((k==='mail'?'邮件告警':'每日摘要')+(prefs[k]?' 已开启':' 已关闭'))}
+function exportConfig(){
+ const data={users:users,res:res,logs:logs,chans:chans,apiSaved:apiSaved,prefs:prefs,exported_at:new Date(Date.now()+8*3600e3).toISOString()};
+ const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='devrealm_config_'+Date.now()+'.json';
+ document.body.appendChild(a);a.click();a.remove();toast('配置已导出')}
+function confirmReset(){
+ openSheet('<h4>恢复种子数据</h4><div style="font-size:12px;color:var(--sub);line-height:1.9">会清空当前成员、资源、日志与收藏，恢复为初始演示数据，操作不可撤销。</div>'+
+ '<div class="acts"><button class="btn" onclick="closeSheet()">取消</button><button class="btn btn-r" onclick="resetAll()">确认恢复</button></div>')}
+function resetAll(){localStorage.removeItem(DB);location.reload()}
+
+/* ================= 启动 ================= */
+load();drawCap();drawCap2();
+if(!localStorage.getItem(DB))save();
+</script>
+</body>
+</html>
